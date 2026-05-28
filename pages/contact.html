@@ -1,0 +1,280 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | Macemay custom</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="pages.css">
+    <link rel="stylesheet" href="../site-refonte.css?v=macemay-21">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+                        <a href="../index.html" class="logo brand-logo-link">
+                <img src="../images/logo-macemay.png" alt="Macemay custom" class="brand-logo-img">
+                <span class="logo-text">Macemay custom</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="../catalogue.html">Plaques</a></li>
+                <li><a href="../accessoires.html">Accessoires</a></li>
+                <li><a href="../textile.html">Floquage</a></li>
+                <li><a href="../textile-entreprise.html">Textile d'entreprise</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+            </ul>
+            <button class="mobile-menu-btn" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </nav>
+    </header>
+
+    <main class="page-content">
+        <div class="container">
+            <div class="page-header">
+                <h1>Contactez-nous</h1>
+                <p class="page-intro">Notre équipe est à votre disposition pour répondre à toutes vos questions</p>
+            </div>
+
+            <div class="contact-page-grid">
+                <div class="contact-info-section">
+                    <h2>Nos coordonnées</h2>
+                    
+                    <div class="contact-cards">
+                        <div class="contact-card">
+                            <div class="contact-card-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                    <polyline points="22,6 12,13 2,6"/>
+                                </svg>
+                            </div>
+                            <div class="contact-card-content">
+                                <h3>Email</h3>
+                                <a href="mailto:plaqueimmatriculationperso@gmail.com">plaqueimmatriculationperso@gmail.com</a>
+                                <p class="contact-note">Réponse sous 24-48h</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-card">
+                            <div class="contact-card-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                            </div>
+                            <div class="contact-card-content">
+                                <h3>Horaires</h3>
+                                <p><strong>Du lundi au vendredi</strong></p>
+                                <p>9h00 - 18h00</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-card">
+                            <div class="contact-card-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                            </div>
+                            <div class="contact-card-content">
+                                <h3>Adresse</h3>
+                                <p>310 chemin de vacaresse</p>
+                                <p>30220 Saint-Laurent-D'Aigouze</p>
+                                <p>France</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quick-links">
+                        <h3>Questions fréquentes</h3>
+                        <p>Avant de nous contacter, consultez peut-être notre FAQ pour trouver une réponse rapide :</p>
+                        <a href="faq.html" class="btn btn-secondary">Voir la FAQ</a>
+                    </div>
+                </div>
+
+                <div class="contact-form-section">
+                    <h2>Envoyez-nous un message</h2>
+                    <form class="contact-form" id="contactPageForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">Prénom *</label>
+                                <input type="text" id="firstName" name="firstName" placeholder="Jean" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Nom *</label>
+                                <input type="text" id="lastName" name="lastName" placeholder="Dupont" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Adresse email *</label>
+                            <input type="email" id="email" name="email" placeholder="jean.dupont@exemple.fr" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Téléphone (optionnel)</label>
+                            <input type="tel" id="phone" name="phone" placeholder="06 12 34 56 78">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="orderNumber">Numéro de commande (si applicable)</label>
+                            <input type="text" id="orderNumber" name="orderNumber" placeholder="#12345">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Sujet *</label>
+                            <select id="subject" name="subject" required>
+                                <option value="">Sélectionnez un sujet</option>
+                                <option value="commande">Question sur une commande</option>
+                                <option value="produit">Question sur un produit</option>
+                                <option value="accessoire">Accessoire</option>
+                                <option value="livraison">Livraison / Suivi</option>
+                                <option value="retour">Retour / Remboursement</option>
+                                <option value="technique">Problème technique</option>
+                                <option value="floquage">Projet floquage</option>
+                                <option value="textile-entreprise">Textile d'entreprise</option>
+                                <option value="autre">Autre</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Votre message *</label>
+                            <textarea id="message" name="message" rows="6" placeholder="Décrivez votre demande en détail..." required></textarea>
+                        </div>
+
+                        <div class="form-group checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="privacy" required>
+                                <span class="checkmark"></span>
+                                J'accepte que mes données soient traitées conformément à la <a href="politique-confidentialite.html">politique de confidentialité</a> *
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-large">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13"/>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                            </svg>
+                            <span>Envoyer le message</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="../index.html" class="logo">
+                        <img src="../images/logo-macemay.png" alt="Macemay custom" class="brand-logo-img">
+                                <span class="logo-text">Macemay custom</span>
+                    </a>
+                    <p>Spécialiste des plaques Plexiglas, accessoires et floquage premium.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>À propos</h4>
+                    <ul>
+                        <li><a href="mentions-legales.html">Mentions légales</a></li>
+                        <li><a href="cgv.html">CGV</a></li>
+                        <li><a href="politique-confidentialite.html">Confidentialité</a></li>
+                        <li><a href="politique-retour.html">Retours</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Informations</h4>
+                    <ul>
+                        <li><a href="reglementation.html">Réglementation</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Service client</h4>
+                    <p class="footer-contact">
+                        Du lundi au vendredi : 9h - 18h<br>
+                        <a href="mailto:plaqueimmatriculationperso@gmail.com">plaqueimmatriculationperso@gmail.com</a>
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Macemay custom. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../script.js?v=macemay-8"></script>
+    <script>
+        const contactParams = new URLSearchParams(window.location.search);
+        const subjectSelect = document.getElementById('subject');
+        const messageField = document.getElementById('message');
+        const requestedProduct = contactParams.get('product');
+
+        if (['textile-entreprise', 'devis-societe'].includes(contactParams.get('subject'))) {
+            subjectSelect.value = 'textile-entreprise';
+            messageField.placeholder = 'Indiquez le nom de la société, les vêtements souhaités, les quantités, les tailles, les couleurs, le délai et les informations sur votre logo.';
+            messageField.focus();
+        }
+
+        if (contactParams.get('subject') === 'floquage') {
+            subjectSelect.value = 'floquage';
+            messageField.placeholder = 'Indiquez le type de textile, le logo ou texte à floquer, l’emplacement souhaité, la quantité, les tailles et le délai attendu.';
+            messageField.focus();
+        }
+
+        if (contactParams.get('subject') === 'accessoire') {
+            subjectSelect.value = 'accessoire';
+            messageField.placeholder = 'Indiquez l’accessoire souhaité, le véhicule concerné et votre besoin de fixation ou de finition.';
+            if (requestedProduct && !messageField.value) {
+                messageField.value = `Bonjour, je souhaite des renseignements pour l'accessoire : ${requestedProduct}.\n\n`;
+            }
+            messageField.focus();
+        }
+
+        document.getElementById('contactPageForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Show success notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 90px;
+                right: 20px;
+                z-index: 10000;
+                padding: 16px 20px;
+                background: #10b981;
+                color: white;
+                border-radius: 12px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                max-width: 400px;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.innerHTML = `
+                <span style="font-size: 20px;">✓</span>
+                <span>Message envoyé avec succès ! Nous vous répondrons dans les plus brefs délais.</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Reset form
+            this.reset();
+            
+            // Remove notification after 5 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        });
+    </script>
+</body>
+</html>

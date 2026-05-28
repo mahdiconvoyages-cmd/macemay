@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurateur plaques Plexiglas | Macemay custom</title>
+    <meta name="description" content="Configurez une plaque Plexiglas Macemay custom : Auto, Moto, SUV ou Collection noire avec aperçu premium.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;600;700&family=Archivo+Black&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="configurateur.css">
+    <link rel="stylesheet" href="configurateur-premium.css">
+    <link rel="stylesheet" href="configurateur-wizard.css?v=macemay-3">
+    <link rel="stylesheet" href="site-refonte.css?v=macemay-21">
+    <script src="site-config.js?v=macemay-5"></script>
+</head>
+<body class="configurator-page">
+    <header class="config-header">
+        <a href="index.html" class="config-logo brand-logo-link">
+            <img src="images/logo-macemay.png" alt="Macemay custom" class="brand-logo-img">
+            <span>Macemay custom</span>
+        </a>
+        <nav class="config-header-nav">
+            <a href="catalogue.html">Plaques</a>
+            <a href="accessoires.html">Accessoires</a>
+            <a href="textile.html">Floquage</a>
+            <a href="textile-entreprise.html">Textile d'entreprise</a>
+            <a href="pages/faq.html">FAQ</a>
+            <a href="pages/contact.html">Contact</a>
+        </nav>
+        <div class="config-header-actions">
+            <button class="cart-btn" id="cartBtn" aria-label="Panier">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+            <button type="button" class="mobile-menu-btn" aria-label="Menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <main class="wizard-layout">
+        <!-- APERÇU -->
+        <section class="wizard-preview bg-dark">
+            <div class="preview-intro">
+                <div class="wizard-preview-badge">
+                    <span class="badge-dot"></span>
+                    <span id="previewBadgeText">Auto Homologuée · 520×110mm</span>
+                </div>
+                <h1>Votre plaque, prête à fabriquer</h1>
+                <p>Plexiglas brillant, marquage haute précision, finition nette et expédition rapide.</p>
+            </div>
+
+            <div class="wizard-plaque-stage" aria-label="Aperçu de la plaque personnalisée">
+                <div class="stage-ruler" id="previewFormatMeta">520 × 110 mm</div>
+                <div class="plaque-preview format-auto" id="plaquePreviewEl">
+                    <!-- Reflet Plexiglas réaliste -->
+                    <div class="plaque-reflection"></div>
+                    <!-- Contour de couleur dynamique -->
+                    <div class="plaque-contour"></div>
+                    <div class="official-plate-svg" id="officialPlateSvg" aria-hidden="true" hidden></div>
+
+                    <div class="plaque-band plaque-band-left" id="bandLeft">
+                        <div class="band-eu">
+                            <div class="eu-stars" aria-hidden="true"></div>
+                            <span class="eu-letter">F</span>
+                        </div>
+                    </div>
+                    <div class="plaque-content">
+                        <div class="decor-image-slot" id="decorImageSlot" hidden>
+                            <img id="decorImagePreview" alt="Image décorative importée">
+                            <div class="decor-image-empty" id="decorImageEmpty">
+                                <span>Image décorative</span>
+                            </div>
+                        </div>
+                        <span class="plaque-text" id="plaqueText">AB-123-CD</span>
+                        <span class="plaque-message" id="plaqueMsg"></span>
+                    </div>
+                    <div class="plaque-band plaque-band-right" id="bandRight">
+                        <div class="band-dept">
+                            <div class="dept-logo" id="deptLogo"></div>
+                            <span class="dept-num" id="deptNum">75</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contrôles premium pour l'aperçu 3D et arrière-plan -->
+            <div class="preview-premium-controls">
+                <div class="premium-control-group">
+                    <span class="premium-control-label">Support :</span>
+                    <div class="premium-bg-options">
+                        <button type="button" class="premium-bg-btn active" data-bg="dark" title="Studio Sombre"></button>
+                        <button type="button" class="premium-bg-btn bg-carbon" data-bg="carbon" title="Fibre de Carbone"></button>
+                        <button type="button" class="premium-bg-btn bg-white" data-bg="white" title="Carrosserie Blanche"></button>
+                        <button type="button" class="premium-bg-btn bg-garage" data-bg="garage" title="Brique de Garage-Atelier"></button>
+                    </div>
+                </div>
+                <button type="button" class="premium-action-btn" id="toggle3DBtn" title="Activer ou désactiver l'effet relief 3D acrylique">
+                    <span class="premium-action-icon">3D</span>
+                    <span>Effet Relief 3D</span>
+                </button>
+            </div>
+
+            <div class="preview-meta-grid">
+                <div class="preview-meta-card">
+                    <span id="previewPrimaryMetaLabel">Département</span>
+                    <strong class="preview-meta-value-with-logo">
+                        <span class="preview-region-logo" id="previewRegionLogo"></span>
+                        <span id="previewDeptMeta">75 · Paris</span>
+                    </strong>
+                </div>
+                <div class="preview-meta-card">
+                    <span>Matière</span>
+                    <strong>Plexiglas® 3 mm</strong>
+                </div>
+                <div class="preview-meta-card">
+                    <span>Production</span>
+                    <strong>Fabrication 24/48h</strong>
+                </div>
+                <div class="preview-meta-card preview-price-card">
+                    <span>Prix unitaire</span>
+                    <strong><span id="unitPriceDisplay">15,90 €</span> <em>TTC</em></strong>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANNEAU CONFIG -->
+        <section class="wizard-panel">
+            <div class="wizard-live-summary" aria-label="Résumé de configuration">
+                <div class="wizard-live-summary-item">
+                    <span>Format</span>
+                    <strong id="liveSummaryFormat">Auto</strong>
+                </div>
+                <div class="wizard-live-summary-item">
+                    <span>Région</span>
+                    <strong id="liveSummaryRegion">Île-de-France</strong>
+                </div>
+                <div class="wizard-live-summary-item">
+                    <span>Total</span>
+                    <strong id="liveSummaryPrice">15,90 €</strong>
+                </div>
+            </div>
+
+            <div class="wizard-steps" id="wizardSteps">
+                <button type="button" class="wizard-step active" data-step="1">
+                    <span class="wizard-step-icon"><span class="wizard-step-num">1</span></span>Plaque
+                </button>
+                <button type="button" class="wizard-step" data-step="2">
+                    <span class="wizard-step-icon"><span class="wizard-step-num">2</span></span>Esthétique
+                </button>
+                <button type="button" class="wizard-step" data-step="3">
+                    <span class="wizard-step-icon"><span class="wizard-step-num">3</span></span>Message
+                </button>
+                <button type="button" class="wizard-step" data-step="4">
+                    <span class="wizard-step-icon"><span class="wizard-step-num">4</span></span>Validation
+                </button>
+            </div>
+
+            <div class="wizard-body">
+
+                <!-- ÉTAPE 1 : CENTRE -->
+                <div class="wizard-pane active" data-pane="1">
+                    <h2 class="wizard-pane-title" id="paneOneTitle">Type & immatriculation</h2>
+                    <p class="wizard-pane-desc" id="paneOneDesc">Choisissez le format de votre plaque puis renseignez son texte central.</p>
+
+                    <div class="wizard-field" id="formatField">
+                        <label class="wizard-field-label">Format</label>
+                        <div class="selected-product-card" id="selectedProductCard" hidden></div>
+                        <div class="wizard-grid cols-2" id="formatGrid">
+                            <button type="button" class="wizard-card selected" data-format="auto">
+                                <span class="format-thumb format-thumb-auto" aria-hidden="true"><span></span></span>
+                                <span class="wizard-card-title">Auto</span>
+                                <span class="wizard-card-sub">520 × 110 mm</span>
+                                <span class="wizard-card-price">15,90 €</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-format="moto">
+                                <span class="format-thumb format-thumb-moto" aria-hidden="true"><span></span></span>
+                                <span class="wizard-card-title">Moto</span>
+                                <span class="wizard-card-sub">210 × 130 mm</span>
+                                <span class="wizard-card-price">15,90 €</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-format="4x4">
+                                <span class="format-thumb format-thumb-4x4" aria-hidden="true"><span></span></span>
+                                <span class="wizard-card-title">SUV</span>
+                                <span class="wizard-card-sub">275 × 200 mm</span>
+                                <span class="wizard-card-price">19,90 €</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-format="usa">
+                                <span class="format-thumb format-thumb-usa" aria-hidden="true"><span></span></span>
+                                <span class="wizard-card-title">Collection noire</span>
+                                <span class="wizard-card-sub">Look rétro</span>
+                                <span class="wizard-card-price">19,90 €</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-format="ww">
+                                <span class="format-thumb format-thumb-provisional" aria-hidden="true"><span></span></span>
+                                <span class="wizard-card-title">Provisoire WW</span>
+                                <span class="wizard-card-sub">Fond rose</span>
+                                <span class="wizard-card-price">15,90 €</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-format="wgarage">
+                                <span class="format-thumb format-thumb-provisional" aria-hidden="true"><span></span></span>
+                                <span class="wizard-card-title">W garage</span>
+                                <span class="wizard-card-sub">Fond rose</span>
+                                <span class="wizard-card-price">15,90 €</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="wizard-field" id="homologField">
+                        <label class="wizard-field-label">Homologation</label>
+                        <div class="selected-mode-card" id="selectedModeCard" hidden></div>
+                        <div class="wizard-toggle" id="homologToggle">
+                            <button type="button" class="wizard-toggle-btn active" data-homolog="yes">Homologuée</button>
+                            <button type="button" class="wizard-toggle-btn" data-homolog="no">Décorative</button>
+                        </div>
+                        <span class="wizard-field-hint" id="homologHint">Une plaque homologuée est conforme à la réglementation française et utilisable sur la route.</span>
+                    </div>
+
+                    <div class="wizard-field" id="immatModeField">
+                        <label class="wizard-field-label">Format d'immatriculation</label>
+                        <div class="wizard-toggle" id="immatModeToggle">
+                            <button type="button" class="wizard-toggle-btn active" data-immat-mode="siv">Actuel SIV</button>
+                            <button type="button" class="wizard-toggle-btn" data-immat-mode="fni">Ancien format</button>
+                        </div>
+                        <span class="wizard-field-hint" id="immatModeHint">Format actuel : AB-123-CD.</span>
+                    </div>
+
+                    <div class="wizard-field" id="immatField">
+                        <label class="wizard-field-label" for="immatInput">Immatriculation</label>
+                        <input type="text" id="immatInput" class="wizard-input wizard-input-plaque" placeholder="AB-123-CD" maxlength="9" autocomplete="off" spellcheck="false">
+                        <span class="wizard-field-hint" id="immatHint">Format SIV : AB-123-CD</span>
+                    </div>
+
+                    <div class="wizard-field wizard-decor-field" id="decorUploadField" hidden>
+                        <label class="wizard-field-label" for="decorImageInput">Image décorative</label>
+                        <label class="decor-upload-card" for="decorImageInput">
+                            <input type="file" id="decorImageInput" accept="image/png,image/jpeg,image/webp,image/svg+xml">
+                            <span class="decor-upload-icon" aria-hidden="true">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            </span>
+                            <span class="decor-upload-title">Importer une image</span>
+                            <span class="decor-upload-sub">JPG, PNG, WebP ou SVG · 3 Mo max</span>
+                        </label>
+                        <div class="wizard-field decor-admin-message-field">
+                            <label class="wizard-field-label" for="decorAdminMessageInput">Message pour l'atelier</label>
+                            <textarea id="decorAdminMessageInput" class="wizard-input decor-admin-message" rows="4" maxlength="300" placeholder="Ex : placement souhaité, couleur à respecter, consigne pour l'image..."></textarea>
+                            <div class="wizard-char-counter" id="decorAdminMsgCounter">0 / 300</div>
+                            <span class="wizard-field-hint">Ce message sera visible dans l'espace administrateur avec l'image après paiement.</span>
+                        </div>
+                        <div class="decor-file-row" id="decorImageStatus" hidden>
+                            <span id="decorImageName">Aucune image</span>
+                            <button type="button" id="decorImageRemove">Retirer</button>
+                        </div>
+                        <span class="wizard-field-hint">L’image et le texte du client seront utilisés pour fabriquer la plaque.</span>
+                    </div>
+
+                </div>
+
+                <!-- ÉTAPE 2 : ESTHÉTIQUE -->
+                <div class="wizard-pane" data-pane="2">
+                    <h2 class="wizard-pane-title" id="paneTwoTitle">Esthétique & Localisation</h2>
+                    <p class="wizard-pane-desc" id="paneTwoDesc">Choisissez l'identité géographique de votre plaque et ajoutez des finitions haut de gamme.</p>
+
+                    <div class="wizard-field">
+                        <label class="wizard-field-label">Département actuel</label>
+                        <button type="button" class="wizard-dept-current" id="deptToggleBtn">
+                            <div class="wizard-dept-current-logo" id="deptCurrentLogo"></div>
+                            <div class="wizard-dept-current-info">
+                                <div class="wizard-dept-current-num" id="deptCurrentNum">75</div>
+                                <div class="wizard-dept-current-name" id="deptCurrentName">Paris · Île-de-France</div>
+                            </div>
+                            <svg class="wizard-dept-current-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                    </div>
+
+                    <div class="wizard-field">
+                        <label class="wizard-field-label" for="deptSearch">Rechercher un département</label>
+                        <div class="wizard-dept-search">
+                            <input type="text" id="deptSearch" class="wizard-input" placeholder="Numéro ou nom (ex: 75, Paris…)" autocomplete="off">
+                            <div class="wizard-dept-list" id="deptList"></div>
+                        </div>
+                    </div>
+
+                    <div class="wizard-field" id="carLogoField">
+                        <label class="wizard-field-label">Logo à la place de la région (optionnel)</label>
+                        <p class="wizard-field-hint" style="margin-bottom: 8px;">Remplace le logo régional à droite par un logo constructeur, sans modifier la partie gauche.</p>
+                        <div class="wizard-grid cols-4" id="carLogoGrid">
+                            <button type="button" class="wizard-card selected" data-car="none">
+                                <span class="wizard-card-title">Aucun</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="peugeot">
+                                <span class="wizard-card-title">Peugeot</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="renault">
+                                <span class="wizard-card-title">Renault</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="citroen">
+                                <span class="wizard-card-title">Citroën</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="audi">
+                                <span class="wizard-card-title">Audi</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="bmw">
+                                <span class="wizard-card-title">BMW</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="mercedes">
+                                <span class="wizard-card-title">Mercedes</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="volkswagen">
+                                <span class="wizard-card-title">Volkswagen</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="porsche">
+                                <span class="wizard-card-title">Porsche</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="tesla">
+                                <span class="wizard-card-title">Tesla</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="toyota">
+                                <span class="wizard-card-title">Toyota</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="ford">
+                                <span class="wizard-card-title">Ford</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="opel">
+                                <span class="wizard-card-title">Opel</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="fiat">
+                                <span class="wizard-card-title">Fiat</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="nissan">
+                                <span class="wizard-card-title">Nissan</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="honda">
+                                <span class="wizard-card-title">Honda</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="alfa-romeo">
+                                <span class="wizard-card-title">Alfa Romeo</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="alpine">
+                                <span class="wizard-card-title">Alpine</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="ferrari">
+                                <span class="wizard-card-title">Ferrari</span>
+                            </button>
+                            <button type="button" class="wizard-card" data-car="custom">
+                                <span class="wizard-card-title">Autre ?</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="wizard-field" id="customCarLogoField" style="display:none; margin-top: 15px;">
+                        <label class="wizard-field-label" for="customCarLogoInput">Nom de votre marque</label>
+                        <input type="text" id="customCarLogoInput" class="wizard-input" placeholder="Ex: JAGUAR, JEEP, PORSCHE..." maxlength="10" autocomplete="off" style="text-transform: uppercase;">
+                        <span class="wizard-field-hint">Le texte s'affichera dans l'emplacement du logo régional à droite.</span>
+                    </div>
+
+                    <div class="wizard-field" style="margin-top: 24px; border-top: 1px dashed #e2e8f0; padding-top: 24px;">
+                        <label class="wizard-field-label">Liseré de couleur du contour (+2,00 €)</label>
+                        <p class="wizard-field-hint" style="margin-bottom: 8px;">Ajoutez un liseré décoratif intérieur ou extérieur (non homologué à l'exception du blanc et noir selon législation).</p>
+                        <div class="wizard-toggle" id="contourTypeToggle">
+                            <button type="button" class="wizard-toggle-btn active" data-contour="none">Aucun</button>
+                            <button type="button" class="wizard-toggle-btn" data-contour="int">Intérieur</button>
+                            <button type="button" class="wizard-toggle-btn" data-contour="ext">Extérieur</button>
+                        </div>
+                    </div>
+
+                    <div class="wizard-field" id="contourColorField" style="display:none; margin-top: 15px;">
+                        <label class="wizard-field-label">Nuancier de couleur du liseré</label>
+                        <div class="wizard-color-palette" id="contourPalette">
+                            <button type="button" class="wizard-color-swatch selected" data-color="#c9a227" style="background:#c9a227" title="Or"></button>
+                            <button type="button" class="wizard-color-swatch" data-color="#1a1a2e" style="background:#1a1a2e" title="Noir"></button>
+                            <button type="button" class="wizard-color-swatch" data-color="#ffffff" style="background:#fff;border-color:#d1d5db" title="Blanc"></button>
+                            <button type="button" class="wizard-color-swatch" data-color="#cc0000" style="background:#cc0000" title="Rouge"></button>
+                            <button type="button" class="wizard-color-swatch" data-color="#003399" style="background:#003399" title="Bleu"></button>
+                            <button type="button" class="wizard-color-swatch" data-color="#006633" style="background:#006633" title="Vert"></button>
+                            <button type="button" class="wizard-color-swatch" data-color="#f5c518" style="background:#f5c518" title="Jaune"></button>
+                            <button type="button" class="wizard-color-swatch" data-color="#ff6b00" style="background:#ff6b00" title="Orange"></button>
+                            <button type="button" class="wizard-color-swatch" data-color="#9333ea" style="background:#9333ea" title="Violet"></button>
+                            <button type="button" class="wizard-color-swatch" data-color="#ec4899" style="background:#ec4899" title="Rose"></button>
+                            <button type="button" class="wizard-color-swatch" data-color="#06b6d4" style="background:#06b6d4" title="Cyan"></button>
+                            <button type="button" class="wizard-color-swatch" data-color="#a3a3a3" style="background:linear-gradient(135deg,#d1d5db,#737373)" title="Argent"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ÉTAPE 3 : MESSAGE -->
+                <div class="wizard-pane" data-pane="3">
+                    <h2 class="wizard-pane-title">Message personnalisé</h2>
+                    <p class="wizard-pane-desc" id="messagePaneDesc">Ajoutez un petit texte, slogan ou lien (ex: site internet, garage, réseau social) sous l'immatriculation (optionnel, 30 caractères max).</p>
+
+                    <div class="wizard-field">
+                        <label class="wizard-field-label" for="messageInput">Votre message</label>
+                        <input type="text" id="messageInput" class="wizard-input" placeholder="Ex : WWW.VOTRE-SITE.FR, GARAGE DU MIDI…" maxlength="30" autocomplete="off">
+                        <div class="wizard-char-counter" id="msgCounter">0 / 30</div>
+                    </div>
+                </div>
+
+                <!-- ÉTAPE 4 : CONTOUR -->
+                <!-- ÉTAPE 4 : RECAPITULATIF / VALIDATION -->
+                <div class="wizard-pane" data-pane="4">
+                    <h2 class="wizard-pane-title">Récapitulatif</h2>
+                    <p class="wizard-pane-desc">Vérifiez votre plaque avant de l'ajouter au panier.</p>
+
+                    <div class="wizard-recap" id="wizardRecap"></div>
+
+                    <div class="wizard-trust">
+                        <div class="wizard-trust-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Plexiglas® premium
+                        </div>
+                        <div class="wizard-trust-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Garantie 5 ans
+                        </div>
+                        <div class="wizard-trust-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Livraison 48h
+                        </div>
+                        <div class="wizard-trust-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Satisfait ou remboursé
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="wizard-footer">
+                <button type="button" class="wizard-btn wizard-btn-ghost" id="wizardPrev">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>Précédent
+                </button>
+                <div class="wizard-qty" id="qtyWrap" style="display:none;">
+                    <button type="button" id="qtyMinus">−</button>
+                    <span id="qtyValue">1</span>
+                    <button type="button" id="qtyPlus">+</button>
+                </div>
+                <button type="button" class="wizard-btn wizard-btn-primary" id="wizardNext">
+                    Suivant
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+                <button type="button" class="wizard-btn wizard-btn-cta" id="addToCartBtn" style="display:none;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>Ajouter au panier
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Cart Drawer -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h2>Votre Panier</h2>
+            <button class="close-cart" id="closeCart">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="empty-cart-message">Votre panier est vide</div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total</span>
+                <span id="cartTotal">0,00€</span>
+            </div>
+            <button class="btn btn-primary btn-large" id="checkoutBtn">Commander</button>
+        </div>
+    </div>
+
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Finaliser votre commande</h2>
+            <div class="order-summary"></div>
+            <div id="mollie-payment-container"></div>
+        </div>
+    </div>
+
+    <script src="script.js?v=macemay-8"></script>
+    <script src="configurateur.js?v=macemay-28"></script>
+    <script src="cookies.js"></script>
+</body>
+</html>

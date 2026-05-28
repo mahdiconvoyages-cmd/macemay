@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120">
+  <rect width="100" height="120" fill="#ffffff" />
+  <!-- Nouvelle-Aquitaine official brand logo used on plates -->
+  <!-- Stylized outline red lion shape representing region coast border -->
+  <g transform="translate(0, -2)">
+    <path d="M 52 22 Q 44 22, 42 27 Q 44 32, 50 32 Q 54 28, 52 22 Z" fill="#9D0208" />
+    <path d="M 50 32 Q 54 36, 56 42 Q 48 48, 45 42 M 56 42 Q 62 45, 68 38 Q 72 45, 65 52 Q 58 55, 54 52" fill="none" stroke="#9D0208" stroke-width="4.5" stroke-linecap="round" />
+    <path d="M 54 52 C 54 52, 44 65, 38 72 C 34 78, 42 82, 45 78 C 48 74, 56 68, 56 68" fill="none" stroke="#9D0208" stroke-width="5" stroke-linecap="round" />
+    <path d="M 45 42 Q 38 48, 30 52 C 26 55, 28 62, 34 58" fill="none" stroke="#9D0208" stroke-width="4" stroke-linecap="round" />
+    <!-- Three wave bands representing the Atlantic coast on bottom left -->
+    <path d="M 18 78 Q 30 75, 45 82" fill="none" stroke="#00A1B0" stroke-width="3" stroke-linecap="round" />
+    <path d="M 18 84 Q 30 81, 45 88" fill="none" stroke="#005C9E" stroke-width="2.5" stroke-linecap="round" />
+  </g>
+  <!-- Text signatures -->
+  <text x="50" y="101" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="bold" font-size="5.5" fill="#4B5563" text-anchor="middle" letter-spacing="1">RÉGION</text>
+  <text x="50" y="113" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="950" font-size="8.5" fill="#9D0208" text-anchor="middle" letter-spacing="0.2">Nouvelle-Aquitaine</text>
+</svg>

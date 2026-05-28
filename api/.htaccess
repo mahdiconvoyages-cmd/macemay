@@ -1,0 +1,11 @@
+<Files "_bootstrap.php">
+    Require all denied
+</Files>
+
+<Files "config.local.php">
+    Require all denied
+</Files>
+
+<Files "config.sample.php">
+    Require all denied
+</Files>

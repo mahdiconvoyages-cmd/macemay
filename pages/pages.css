@@ -1,0 +1,611 @@
+/* ============================================
+   PAGES SPECIFIC STYLES
+   For legal pages, FAQ, Contact, etc.
+   ============================================ */
+
+/* Page Content Container */
+.page-content {
+    padding-top: 120px;
+    padding-bottom: 80px;
+    min-height: calc(100vh - 300px);
+    background: var(--gray-50);
+}
+
+/* Page Header */
+.page-header {
+    text-align: center;
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.page-header h1 {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    margin-bottom: 16px;
+    color: var(--gray-900);
+}
+
+.page-intro {
+    font-size: 1.125rem;
+    color: var(--gray-600);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Legal Content */
+.legal-content {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--white);
+    padding: 48px;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.intro-text {
+    font-size: 1.125rem;
+    color: var(--gray-700);
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+/* Legal Sections */
+.legal-section {
+    margin-bottom: 40px;
+}
+
+.legal-section:last-of-type {
+    margin-bottom: 24px;
+}
+
+.legal-section h2 {
+    font-size: 1.375rem;
+    color: var(--primary);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--primary);
+    display: inline-block;
+}
+
+.legal-section h3 {
+    font-size: 1.125rem;
+    color: var(--gray-800);
+    margin: 24px 0 12px;
+}
+
+.legal-section p {
+    color: var(--gray-700);
+    line-height: 1.8;
+    margin-bottom: 12px;
+}
+
+.legal-section ul {
+    margin: 16px 0;
+    padding-left: 24px;
+}
+
+.legal-section ul li {
+    color: var(--gray-700);
+    margin-bottom: 8px;
+    line-height: 1.7;
+}
+
+.legal-section a {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+.legal-section a:hover {
+    color: var(--primary-dark);
+}
+
+/* Info Cards */
+.info-card {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 16px 0;
+}
+
+.info-card.highlight {
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(37, 99, 235, 0.02) 100%);
+    border-color: var(--primary);
+    border-left-width: 4px;
+}
+
+.info-card.highlight-green {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0.02) 100%);
+    border-color: var(--success);
+    border-left-width: 4px;
+}
+
+.info-card.highlight-orange {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(245, 158, 11, 0.02) 100%);
+    border-color: var(--warning);
+    border-left-width: 4px;
+}
+
+.info-card p {
+    margin-bottom: 8px;
+}
+
+.info-card p:last-child {
+    margin-bottom: 0;
+}
+
+.info-list {
+    list-style: none;
+    padding-left: 0 !important;
+}
+
+.info-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.info-list li:last-child {
+    border-bottom: none;
+}
+
+/* Two Columns Layout */
+.two-columns {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin: 24px 0;
+}
+
+@media (max-width: 768px) {
+    .two-columns {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Rights Grid (Privacy Page) */
+.rights-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.right-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    background: var(--gray-50);
+    border-radius: 12px;
+    border: 1px solid var(--gray-200);
+}
+
+.right-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.right-item strong {
+    display: block;
+    color: var(--gray-800);
+    margin-bottom: 4px;
+}
+
+.right-item p {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .rights-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Return Cases */
+.return-case {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 20px 0;
+}
+
+.return-case.warning {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(245, 158, 11, 0.02) 100%);
+    border-color: var(--warning);
+}
+
+.return-case h3 {
+    margin-top: 0;
+    color: var(--gray-900);
+}
+
+/* Steps List */
+.steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.step {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px;
+    background: var(--gray-50);
+    border-radius: 12px;
+    border: 1px solid var(--gray-200);
+}
+
+.step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--primary);
+    color: var(--white);
+    border-radius: 50%;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.step p {
+    margin: 0;
+    padding-top: 6px;
+}
+
+/* Update Date */
+.update-date {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--gray-200);
+    text-align: center;
+}
+
+.update-date p {
+    color: var(--gray-500);
+    font-size: 0.875rem;
+}
+
+/* ============================================
+   REGULATION PAGE SPECIFIC
+   ============================================ */
+
+.warning-section h2 {
+    color: var(--warning);
+    border-color: var(--warning);
+}
+
+.warning-box {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(239, 68, 68, 0.02) 100%);
+    border: 2px solid var(--danger);
+    border-radius: 16px;
+    padding: 32px;
+    margin: 24px 0;
+}
+
+.warning-box p {
+    font-size: 1.0625rem;
+}
+
+/* Penalties Grid */
+.penalties-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.penalty-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.penalty-icon {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.penalty-value {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--danger);
+    margin-bottom: 4px;
+}
+
+.penalty-label {
+    font-size: 0.75rem;
+    color: var(--gray-600);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+    .penalties-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Specs Grid */
+.specs-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.spec-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 24px 16px;
+    text-align: center;
+}
+
+.spec-icon {
+    font-size: 32px;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.spec-title {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.spec-value {
+    display: block;
+    font-weight: 600;
+    color: var(--gray-900);
+}
+
+@media (max-width: 768px) {
+    .specs-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ============================================
+   FAQ PAGE SPECIFIC
+   ============================================ */
+
+.faq-page-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.faq-category {
+    margin-bottom: 48px;
+}
+
+.faq-category h2 {
+    font-size: 1.375rem;
+    color: var(--gray-900);
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--primary);
+}
+
+.faq-cta {
+    text-align: center;
+    padding: 48px;
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.faq-cta p {
+    font-size: 1.125rem;
+    color: var(--gray-700);
+    margin-bottom: 24px;
+}
+
+/* ============================================
+   CONTACT PAGE SPECIFIC
+   ============================================ */
+
+.contact-page-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 48px;
+    align-items: start;
+}
+
+@media (max-width: 968px) {
+    .contact-page-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.contact-info-section h2,
+.contact-form-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+    color: var(--gray-900);
+}
+
+/* Contact Cards */
+.contact-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.contact-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 24px;
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--gray-200);
+    transition: all 0.2s ease;
+}
+
+.contact-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.contact-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.contact-card-icon svg {
+    color: var(--white);
+}
+
+.contact-card-content h3 {
+    font-size: 1rem;
+    color: var(--gray-900);
+    margin-bottom: 4px;
+}
+
+.contact-card-content a {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.contact-card-content p {
+    color: var(--gray-600);
+    margin: 0;
+    font-size: 0.9375rem;
+}
+
+.contact-note {
+    font-size: 0.8125rem !important;
+    color: var(--gray-500) !important;
+    margin-top: 4px !important;
+}
+
+/* Quick Links */
+.quick-links {
+    background: var(--white);
+    padding: 24px;
+    border-radius: 12px;
+    border: 1px solid var(--gray-200);
+}
+
+.quick-links h3 {
+    font-size: 1rem;
+    margin-bottom: 12px;
+    color: var(--gray-900);
+}
+
+.quick-links p {
+    color: var(--gray-600);
+    margin-bottom: 16px;
+    font-size: 0.9375rem;
+}
+
+/* Contact Form Section */
+.contact-form-section {
+    background: var(--white);
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.contact-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 576px) {
+    .contact-form .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Checkbox Styling */
+.checkbox-group {
+    margin: 24px 0;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    line-height: 1.5;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    accent-color: var(--primary);
+}
+
+.checkbox-label a {
+    color: var(--primary);
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+    .page-content {
+        padding-top: 100px;
+        padding-bottom: 60px;
+    }
+    
+    .legal-content {
+        padding: 24px;
+        border-radius: 12px;
+    }
+    
+    .contact-form-section {
+        padding: 24px;
+    }
+    
+    .warning-box {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-header h1 {
+        font-size: 1.75rem;
+    }
+    
+    .legal-section h2 {
+        font-size: 1.25rem;
+    }
+    
+    .penalties-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .specs-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}

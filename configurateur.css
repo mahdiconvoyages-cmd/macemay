@@ -1,0 +1,950 @@
+/* ============================================
+   CONFIGURATEUR - CSS DÉDIÉ
+   Design moderne et professionnel
+   ============================================ */
+
+/* Police style FE-Schrift pour plaques françaises */
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Oswald:wght@500;600;700&display=swap');
+
+/* Page layout */
+.configurator-page {
+    min-height: 100vh;
+    background: var(--gray-50);
+}
+
+/* Header simplifié */
+.config-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.5rem;
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.config-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--gray-900);
+    font-weight: 600;
+}
+
+.config-logo img {
+    height: 36px;
+    width: auto;
+    border-radius: 6px;
+}
+
+.config-logo span {
+    font-size: 1rem;
+}
+
+.config-header-actions .cart-btn {
+    position: relative;
+    background: var(--gray-100);
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    z-index: 100;
+    pointer-events: auto;
+}
+
+.config-header-actions .cart-btn:hover {
+    background: var(--gray-200);
+}
+
+.config-header-actions .cart-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--accent, #c9a227);
+    color: var(--primary, #1a1a2e);
+    font-size: 0.7rem;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Main layout : split view */
+.configurator {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    min-height: 100vh;
+    padding-top: 61px; /* header height */
+}
+
+@media (max-width: 1024px) {
+    .configurator {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+    }
+}
+
+/* Preview panel */
+.config-preview {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f1a 100%);
+    padding: 2rem;
+    position: sticky;
+    top: 61px;
+    height: calc(100vh - 61px);
+}
+
+@media (max-width: 1024px) {
+    .config-preview {
+        position: relative;
+        top: 0;
+        height: auto;
+        min-height: 300px;
+        padding: 1.5rem;
+    }
+}
+
+.preview-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 600px;
+}
+
+.preview-badge {
+    background: linear-gradient(135deg, #c9a227 0%, #d4af37 100%);
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1a1a2e;
+    box-shadow: 0 4px 15px rgba(201, 162, 39, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Plaque wrapper */
+.plaque-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    perspective: 1000px;
+}
+
+.plaque-preview {
+    display: flex;
+    align-items: stretch;
+    background: var(--white);
+    /* Bords arrondis officiels FR */
+    border-radius: 4px;
+    overflow: hidden;
+    /* Ombre et bordure réalistes */
+    box-shadow: 
+        0 2px 4px rgba(0,0,0,0.12),
+        0 8px 24px rgba(0,0,0,0.18),
+        inset 0 1px 0 rgba(255,255,255,0.5),
+        inset 0 -1px 0 rgba(0,0,0,0.1);
+    border: 2.5px solid #0a0a0a;
+    transform-style: preserve-3d;
+    transition: transform 0.4s ease, box-shadow 0.3s ease;
+    /* Dimensions réalistes plaque auto FR (520×110mm) */
+    min-width: 520px;
+    height: 110px;
+    /* Fond blanc cassé par défaut */
+    background: #f8f8f8;
+}
+
+.plaque-preview:hover {
+    transform: rotateX(1deg) rotateY(-1deg) scale(1.01);
+    box-shadow: 
+        0 4px 8px rgba(0,0,0,0.12),
+        0 16px 40px rgba(0,0,0,0.18);
+}
+
+/* Plaque bands - Style officiel FR */
+.plaque-band {
+    width: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.plaque-band-left {
+    background: linear-gradient(180deg, #003894 0%, #002d74 100%);
+    border-right: 1px solid #001a4d;
+}
+
+.plaque-band-right {
+    background: linear-gradient(180deg, #003894 0%, #002d74 100%);
+    border-left: 1px solid #001a4d;
+}
+
+.band-eu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    height: 100%;
+    padding: 8px 0;
+    gap: 4px;
+}
+
+.eu-stars {
+    width: 30px;
+    height: 30px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Cercle d'étoiles EU réaliste */
+.eu-stars::before {
+    content: '';
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='none'/%3E%3Cg fill='%23FFCC00'%3E%3Cpolygon points='50,5 52,12 59,12 53,17 56,24 50,20 44,24 47,17 41,12 48,12' transform='rotate(0 50 50)'/%3E%3Cpolygon points='50,5 52,12 59,12 53,17 56,24 50,20 44,24 47,17 41,12 48,12' transform='rotate(30 50 50)'/%3E%3Cpolygon points='50,5 52,12 59,12 53,17 56,24 50,20 44,24 47,17 41,12 48,12' transform='rotate(60 50 50)'/%3E%3Cpolygon points='50,5 52,12 59,12 53,17 56,24 50,20 44,24 47,17 41,12 48,12' transform='rotate(90 50 50)'/%3E%3Cpolygon points='50,5 52,12 59,12 53,17 56,24 50,20 44,24 47,17 41,12 48,12' transform='rotate(120 50 50)'/%3E%3Cpolygon points='50,5 52,12 59,12 53,17 56,24 50,20 44,24 47,17 41,12 48,12' transform='rotate(150 50 50)'/%3E%3Cpolygon points='50,5 52,12 59,12 53,17 56,24 50,20 44,24 47,17 41,12 48,12' transform='rotate(180 50 50)'/%3E%3Cpolygon points='50,5 52,12 59,12 53,17 56,24 50,20 44,24 47,17 41,12 48,12' transform='rotate(210 50 50)'/%3E%3Cpolygon points='50,5 52,12 59,12 53,17 56,24 50,20 44,24 47,17 41,12 48,12' transform='rotate(240 50 50)'/%3E%3Cpolygon points='50,5 52,12 59,12 53,17 56,24 50,20 44,24 47,17 41,12 48,12' transform='rotate(270 50 50)'/%3E%3Cpolygon points='50,5 52,12 59,12 53,17 56,24 50,20 44,24 47,17 41,12 48,12' transform='rotate(300 50 50)'/%3E%3Cpolygon points='50,5 52,12 59,12 53,17 56,24 50,20 44,24 47,17 41,12 48,12' transform='rotate(330 50 50)'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.eu-stars.has-car-logo::before {
+    display: none;
+}
+
+/* Texte personnalisé dans le mini-logo d'immatriculation */
+.eu-stars.is-custom-text {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 8px;
+    font-weight: 800;
+    color: #ffffff;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+    text-transform: uppercase;
+    text-align: center;
+    word-break: break-all;
+    overflow: hidden;
+    line-height: 1.1;
+    max-width: 32px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.eu-letter {
+    font-family: Arial, sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+}
+
+.band-dept {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    height: 100%;
+    padding: 6px 0;
+    gap: 2px;
+}
+
+.dept-logo {
+    width: 30px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s;
+    border-radius: 2px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.1);
+    padding: 2px;
+}
+
+.dept-logo svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.dept-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: brightness(1.1);
+}
+
+.dept-num {
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+}
+
+/* Plaque content - Centre blanc réfléchissant style officiel */
+.plaque-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    /* Fond blanc réfléchissant officiel */
+    background: 
+        linear-gradient(180deg, 
+            #ffffff 0%, 
+            #fafafa 30%, 
+            #f5f5f5 70%, 
+            #efefef 100%);
+    transition: background 0.3s;
+    position: relative;
+}
+
+/* Effet texture réfléchissante + relief */
+.plaque-content::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+        /* Reflet haut */
+        linear-gradient(180deg, 
+            rgba(255,255,255,0.7) 0%, 
+            rgba(255,255,255,0.3) 8%,
+            transparent 25%, 
+            transparent 75%,
+            rgba(0,0,0,0.03) 95%,
+            rgba(0,0,0,0.06) 100%),
+        /* Texture micro-prismatique réfléchissante */
+        repeating-linear-gradient(90deg,
+            transparent 0px,
+            rgba(255,255,255,0.15) 1px,
+            transparent 2px
+        );
+    pointer-events: none;
+}
+
+.plaque-text {
+    font-family: 'Archivo Black', 'Oswald', sans-serif;
+    font-size: 64px;
+    font-weight: 400;
+    letter-spacing: 6px;
+    color: #000;
+    text-transform: uppercase;
+    line-height: 1;
+    transition: all 0.2s ease;
+    /* Effet embossé réaliste */
+    text-shadow: 
+        0 1px 0 rgba(255,255,255,0.9),
+        0 2px 2px rgba(0,0,0,0.15),
+        1px 1px 0 rgba(255,255,255,0.5),
+        -1px -1px 0 rgba(0,0,0,0.08);
+    position: relative;
+    z-index: 1;
+}
+
+.plaque-message {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #444;
+    margin-top: 2px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+}
+
+/* Plaque variants - Moto (210x130mm format français officiel) */
+/* Les plaques moto FR sont verticales avec immatriculation sur 2 lignes */
+.plaque-preview.moto {
+    width: 210px;
+    height: 130px;
+    flex-direction: row !important;
+}
+
+.plaque-preview.moto .plaque-band {
+    width: 28px !important;
+    height: calc(100% - 12px) !important;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+    padding-bottom: 12px;
+    border-radius: 4px;
+}
+
+.plaque-preview.moto .plaque-band-left {
+    margin-left: 6px;
+    border-right: none;
+}
+
+.plaque-preview.moto .plaque-band-right {
+    margin-right: 6px;
+    border-left: none;
+}
+
+.plaque-preview.moto .band-eu,
+.plaque-preview.moto .band-dept {
+    flex-direction: column !important;
+    gap: 4px;
+    padding: 6px 0;
+    height: 100%;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.plaque-preview.moto .eu-stars {
+    width: 18px;
+    height: 18px;
+    font-size: 5px;
+    line-height: 1.1;
+    max-width: 24px;
+}
+
+.plaque-preview.moto .eu-stars::before {
+    width: 18px;
+    height: 18px;
+}
+
+.plaque-preview.moto .eu-letter {
+    font-size: 11px;
+    margin-bottom: auto;
+}
+
+.plaque-preview.moto .dept-logo {
+    width: 20px;
+    height: 25px;
+    border: none;
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+}
+
+.plaque-preview.moto .dept-num {
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    background: transparent;
+    padding: 0;
+    min-width: 0;
+}
+
+.plaque-preview.moto .plaque-content {
+    padding: 12px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    gap: 4px;
+}
+
+/* Conteneur pour le texte sur 2 lignes */
+.plaque-preview.moto .plaque-text {
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: 1px;
+    white-space: pre-line;
+    text-align: center;
+    color: #111827;
+}
+
+.plaque-preview.moto .plaque-message {
+    font-size: 7px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-top: 2px;
+    max-width: 100%;
+    color: #4b5563;
+    letter-spacing: 0.5px;
+}
+
+/* Colors */
+.plaque-preview.bg-white .plaque-content { background: #fff; }
+.plaque-preview.bg-black .plaque-content { background: #1a1a1a; }
+.plaque-preview.bg-black .plaque-text { color: #fff; }
+.plaque-preview.bg-black .plaque-message { color: #aaa; }
+.plaque-preview.bg-yellow .plaque-content { background: #f5c518; }
+.plaque-preview.bg-blue .plaque-content { background: #003399; }
+.plaque-preview.bg-blue .plaque-text { color: #fff; }
+.plaque-preview.bg-blue .plaque-message { color: #ccc; }
+.plaque-preview.bg-red .plaque-content { background: #cc0000; }
+.plaque-preview.bg-red .plaque-text { color: #fff; }
+.plaque-preview.bg-red .plaque-message { color: #fcc; }
+
+/* Effects */
+.plaque-preview.effect-carbon .plaque-content {
+    background-image: 
+        linear-gradient(45deg, rgba(0,0,0,0.03) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(0,0,0,0.03) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(0,0,0,0.03) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(0,0,0,0.03) 75%);
+    background-size: 4px 4px;
+}
+
+.plaque-preview.effect-glossy .plaque-content::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.3) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.plaque-preview.effect-glossy .plaque-content {
+    position: relative;
+}
+
+/* Band visibility */
+.plaque-preview.bands-left .plaque-band-right,
+.plaque-preview.bands-right .plaque-band-left,
+.plaque-preview.bands-none .plaque-band {
+    display: none;
+}
+
+/* Price display */
+.preview-price {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.price-label {
+    font-size: 0.8rem;
+    color: var(--gray-500);
+}
+
+.price-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+/* Config panel */
+.config-panel {
+    background: var(--white);
+    border-left: 1px solid var(--gray-200);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 1024px) {
+    .config-panel {
+        border-left: none;
+        border-top: 1px solid var(--gray-200);
+    }
+}
+
+.config-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.config-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.config-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.title-badge {
+    font-size: 0.65rem;
+    font-weight: 500;
+    background: var(--gray-100);
+    color: var(--gray-500);
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Type selector */
+.type-selector {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.type-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 1rem 0.5rem;
+    background: var(--gray-50);
+    border: 2px solid var(--gray-200);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.type-btn:hover {
+    background: var(--gray-100);
+    border-color: var(--gray-300);
+}
+
+.type-btn.active {
+    background: var(--primary-light);
+    border-color: var(--primary);
+}
+
+.type-icon {
+    font-size: 1.5rem;
+}
+
+.type-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--gray-800);
+}
+
+.type-size {
+    font-size: 0.7rem;
+    color: var(--gray-500);
+}
+
+/* Input group */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.config-input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+    border: 2px solid var(--gray-200);
+    border-radius: 10px;
+    background: var(--white);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.config-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.config-input-large {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: 'Oswald', sans-serif;
+}
+
+.input-hint {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    padding-left: 0.25rem;
+}
+
+/* Dept grid */
+.dept-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
+    align-items: start;
+}
+
+.dept-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(180deg, #003894 0%, #002d74 100%);
+    border-radius: 10px;
+    min-width: 90px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.dept-preview-logo {
+    width: 50px;
+    height: 50px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s;
+    padding: 4px;
+}
+
+.dept-preview-logo svg {
+    width: 100%;
+    height: 100%;
+}
+
+.dept-preview-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: brightness(1.1);
+}
+
+.dept-preview-name {
+    font-size: 0.65rem;
+    color: #fff;
+    font-weight: 500;
+    text-align: center;
+    max-width: 90px;
+    line-height: 1.2;
+}
+
+/* Option group */
+.option-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.option-label {
+    font-size: 0.8rem;
+    color: var(--gray-600);
+    font-weight: 500;
+}
+
+/* Color picker */
+.color-picker {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.color-swatch {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 3px solid var(--gray-200);
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.color-swatch:hover {
+    transform: scale(1.1);
+}
+
+.color-swatch.active {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.color-swatch[data-color="white"] {
+    border-color: var(--gray-300);
+}
+
+/* Toggle group */
+.toggle-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.toggle-btn {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--gray-600);
+}
+
+.toggle-btn:hover {
+    background: var(--gray-200);
+}
+
+.toggle-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
+}
+
+/* Sticky footer section */
+.config-section-sticky {
+    position: sticky;
+    bottom: 0;
+    background: var(--white);
+    padding-top: 1rem;
+    margin-top: auto;
+    border-top: 1px solid var(--gray-100);
+}
+
+.quantity-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.quantity-label {
+    font-size: 0.85rem;
+    color: var(--gray-600);
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--gray-100);
+    border-radius: 10px;
+    padding: 0.25rem;
+}
+
+.qty-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+    background: var(--white);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+    color: var(--gray-700);
+}
+
+.qty-btn:hover {
+    background: var(--gray-200);
+}
+
+.qty-value {
+    font-size: 1rem;
+    font-weight: 600;
+    min-width: 2rem;
+    text-align: center;
+}
+
+.quantity-total {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--gray-900);
+}
+
+/* Add to cart button */
+.add-to-cart-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a1a2e;
+    background: linear-gradient(135deg, #c9a227 0%, #b8941f 100%);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(201, 162, 39, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.add-to-cart-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201, 162, 39, 0.5);
+    background: linear-gradient(135deg, #d4af37 0%, #c9a227 100%);
+}
+
+.add-to-cart-btn:active {
+    transform: translateY(0);
+}
+
+/* Animation for adding to cart */
+@keyframes cartPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+.cart-btn.pulse {
+    animation: cartPulse 0.4s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .config-header {
+        padding: 0.5rem 1rem;
+    }
+    
+    .config-logo span {
+        display: none;
+    }
+    
+    .config-scroll {
+        padding: 1rem;
+    }
+    
+    .plaque-text {
+        font-size: 2.5rem;
+    }
+    
+    .type-selector {
+        gap: 0.5rem;
+    }
+    
+    .type-btn {
+        padding: 0.75rem 0.25rem;
+    }
+    
+    .type-icon {
+        font-size: 1.25rem;
+    }
+    
+    .type-label {
+        font-size: 0.8rem;
+    }
+}

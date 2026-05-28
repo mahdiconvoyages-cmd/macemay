@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://macemaycustom.fr/sitemap.xml

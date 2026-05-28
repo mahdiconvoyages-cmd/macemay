@@ -1,0 +1,39 @@
+# Fichiers à ignorer dans Git
+# Ne pas committer de secrets ou fichiers sensibles
+
+# Configuration locale (secrets)
+api/config.local.php
+.env
+.env.local
+.env.*.local
+
+# Environnements
+.venv/
+venv/
+node_modules/
+__pycache__/
+
+# Données sensibles
+data/orders/*
+!data/orders/.gitkeep
+!data/orders/.htaccess
+
+# IDE & Système
+.vscode/
+.idea/
+.DS_Store
+thumbs.db
+*.log
+*.swp
+*.swo
+*~
+
+# Build & Package
+dist/
+build/
+*.zip
+
+# Temporaires
+.tmp/
+temp/
+*.temp

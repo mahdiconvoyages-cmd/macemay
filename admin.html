@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration - Macemay custom</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css?v=macemay-7">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-card">
+            <div class="login-logo">
+                <img src="images/logo-macemay.png" alt="Macemay custom" class="login-logo-img">
+            </div>
+            <h1>Macemay custom</h1>
+            <p>Connectez-vous pour gérer la boutique</p>
+            <p class="login-hint" id="loginHint"></p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" placeholder="Entrez le mot de passe" required>
+                </div>
+                <button type="submit" class="btn-login">
+                    <span>Se connecter</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                <p class="login-error" id="loginError"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-dashboard" id="adminDashboard" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <img src="images/logo-macemay.png" alt="Macemay custom" class="sidebar-logo">
+                <span>Macemay admin</span>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-section="hero">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                    <span>Images Hero</span>
+                </button>
+                <button class="nav-item" data-section="realisations">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                    <span>Floquage</span>
+                </button>
+                <button class="nav-item" data-section="products">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                        <line x1="12" y1="22.08" x2="12" y2="12"/>
+                    </svg>
+                    <span>Produits</span>
+                </button>
+                <button class="nav-item" data-section="orders">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 2h12l2 4v16H4V6l2-4z"/>
+                        <path d="M6 6h14"/>
+                        <path d="M9 10h6"/>
+                        <path d="M9 14h6"/>
+                    </svg>
+                    <span>Commandes</span>
+                </button>
+                <button class="nav-item" data-section="settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    <span>Paramètres</span>
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="btn-logout" id="logoutBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    <span>Déconnexion</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <header class="admin-header">
+                <h1 id="sectionTitle">Images Hero</h1>
+                <a href="index.html" target="_blank" class="btn-view-site">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        <polyline points="15 3 21 3 21 9"/>
+                        <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                    <span>Voir le site</span>
+                </a>
+            </header>
+
+            <!-- Hero Images Section -->
+            <section class="admin-section active" id="heroSection">
+                <div class="section-header">
+                    <h2>Gérer les images du diaporama</h2>
+                    <p>Ces images s'affichent en arrière-plan de la page d'accueil</p>
+                </div>
+                
+                <div class="hero-images-grid" id="heroImagesGrid">
+                    <!-- Images chargées dynamiquement -->
+                </div>
+
+                <div class="upload-zone" id="heroUploadZone">
+                    <input type="file" id="heroFileInput" accept="image/*" multiple hidden>
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    <h3>Ajouter des images</h3>
+                    <p>Glissez-déposez des images ici ou cliquez pour parcourir</p>
+                    <span class="upload-hint">PNG, JPG jusqu'à 5MB • Recommandé: 1920×1080px</span>
+                </div>
+            </section>
+
+            <!-- Réalisations Section -->
+            <section class="admin-section" id="realisationsSection">
+                <div class="section-header">
+                    <h2>Réalisations floquage</h2>
+                    <p>Gérez les images, supports et descriptions affichés sur la page Floquage.</p>
+                </div>
+
+                <div class="product-admin-layout realisation-admin-layout">
+                    <div class="settings-card product-editor-card">
+                        <h3 id="realisationFormTitle">Ajouter une réalisation</h3>
+                        <input type="hidden" id="realisationId">
+                        <input type="hidden" id="realisationImageData">
+
+                        <div class="form-group">
+                            <label for="realisationTitle">Titre</label>
+                            <input type="text" id="realisationTitle" placeholder="Ex : T-shirts événement">
+                        </div>
+                        <div class="form-group">
+                            <label for="realisationSupport">Support</label>
+                            <input type="text" id="realisationSupport" placeholder="Ex : T-shirt, veste, casquette">
+                        </div>
+                        <div class="form-group">
+                            <label for="realisationDesc">Description</label>
+                            <textarea id="realisationDesc" rows="4" placeholder="Expliquez le besoin, le rendu ou le type de marquage."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="realisationImageInput">Image de la réalisation</label>
+                            <input type="file" id="realisationImageInput" accept="image/*">
+                            <div class="product-image-preview" id="realisationImagePreview">Aucune image</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="realisationActive" checked>
+                                <span>Réalisation publiée</span>
+                            </label>
+                        </div>
+                        <div class="product-form-actions">
+                            <button class="btn-save" id="saveRealisationBtn" type="button">Enregistrer la réalisation</button>
+                            <button class="btn-secondary-admin" id="resetRealisationBtn" type="button">Réinitialiser</button>
+                        </div>
+                    </div>
+
+                    <div class="settings-card product-list-card">
+                        <h3>Réalisations publiées</h3>
+                        <div class="realisations-grid" id="realisationsGrid"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section class="admin-section" id="productsSection">
+                <div class="section-header">
+                    <h2>Mini boutique accessoires</h2>
+                    <p>La page accessoires publique démarre vide. Ajoutez ici les produits réels quand le client saura ce qu'il veut vendre.</p>
+                </div>
+
+                <div class="settings-card admin-guidance-card">
+                    <h3>Principe de cette mini boutique</h3>
+                    <div class="admin-guidance-grid">
+                        <span>1. Créer l'accessoire avec nom, badge, description, prix indicatif et image.</span>
+                        <span>2. Publier uniquement les produits validés par le client.</span>
+                        <span>3. Le bouton public ouvre une demande vendeur, jamais un paiement en ligne.</span>
+                    </div>
+                </div>
+
+                <div class="product-admin-layout">
+                    <div class="settings-card product-editor-card">
+                        <h3 id="productFormTitle">Ajouter un accessoire</h3>
+                        <input type="hidden" id="productId">
+                        <input type="hidden" id="productImageData">
+
+                        <div class="form-group">
+                            <label for="productCategory">Catégorie</label>
+                            <select id="productCategory">
+                                <option value="accessoire">Accessoires</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="productName">Nom de l'accessoire</label>
+                            <input type="text" id="productName" placeholder="Ex : Rivets noirs, support moto, cache finition">
+                        </div>
+                        <div class="form-group">
+                            <label for="productTag">Badge court</label>
+                            <input type="text" id="productTag" placeholder="Ex : Fixation, Moto, Finition" maxlength="24">
+                        </div>
+                        <div class="form-group">
+                            <label for="productDesc">Description courte</label>
+                            <textarea id="productDesc" rows="4" placeholder="Texte visible sur la mini boutique. Indiquer uniquement ce qui est utile au client."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">Prix indicatif TTC</label>
+                            <input type="number" id="productPrice" min="0" step="0.01" placeholder="29.90">
+                        </div>
+                        <div class="form-group">
+                            <label for="productImageInput">Image accessoire</label>
+                            <input type="file" id="productImageInput" accept="image/*">
+                            <div class="product-image-preview" id="productImagePreview">Aucune image</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="productActive" checked>
+                                <span>Accessoire publié sur le site</span>
+                            </label>
+                        </div>
+                        <div class="product-form-actions">
+                            <button class="btn-save" id="saveProductBtn" type="button">Enregistrer l'accessoire</button>
+                            <button class="btn-secondary-admin" id="resetProductBtn" type="button">Réinitialiser</button>
+                        </div>
+                    </div>
+
+                    <div class="settings-card product-list-card">
+                        <h3>Accessoires publiés ou brouillons</h3>
+                        <div class="admin-products-grid" id="adminProductsGrid"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="admin-section" id="ordersSection">
+                <div class="section-header">
+                    <h2>Commandes payées</h2>
+                    <p>Retrouvez les commandes validées avec les images décoratives et les messages atelier.</p>
+                </div>
+
+                <div class="admin-orders-list" id="adminOrdersList"></div>
+            </section>
+
+            <section class="admin-section" id="settingsSection">
+                <div class="section-header">
+                    <h2>Paramètres du site</h2>
+                    <p>Configurez les options générales</p>
+                </div>
+
+                <div class="settings-card">
+                    <h3>Informations générales</h3>
+                    <div class="form-group">
+                        <label for="siteName">Nom du site</label>
+                        <input type="text" id="siteName" value="Macemay custom">
+                    </div>
+                    <div class="form-group">
+                        <label for="sitePhone">Téléphone</label>
+                        <input type="tel" id="sitePhone" placeholder="01 23 45 67 89">
+                    </div>
+                    <div class="form-group">
+                        <label for="siteEmail">Email de contact</label>
+                        <input type="email" id="siteEmail" placeholder="contact@example.com">
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3>Diaporama Hero</h3>
+                    <div class="form-group">
+                        <label for="slideDuration">Durée par image (secondes)</label>
+                        <input type="number" id="slideDuration" value="5" min="2" max="15">
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="slideAutoplay" checked>
+                            <span>Défilement automatique</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="settings-card">
+                    <h3>Sécurité</h3>
+                    <div class="form-group">
+                        <label for="newPassword">Nouveau mot de passe</label>
+                        <input type="password" id="newPassword" placeholder="Laisser vide pour ne pas changer">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirmer le mot de passe</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirmer le nouveau mot de passe">
+                    </div>
+                    <button class="btn-save" id="changePasswordBtn">Changer le mot de passe</button>
+                </div>
+
+                <button class="btn-save btn-save-all" id="saveSettingsBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                        <polyline points="17 21 17 13 7 13 7 21"/>
+                        <polyline points="7 3 7 8 15 8"/>
+                    </svg>
+                    <span>Enregistrer les paramètres</span>
+                </button>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span class="toast-message"></span>
+    </div>
+
+    <!-- Image Preview Modal -->
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <img src="" alt="Preview" id="modalImage">
+            <div class="modal-actions">
+                <button class="btn-delete" id="modalDelete">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+                    <span>Supprimer</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="site-config.js?v=macemay-5"></script>
+    <script src="shop-products.js?v=macemay-10"></script>
+    <script src="admin.js?v=macemay-8"></script>
+</body>
+</html>

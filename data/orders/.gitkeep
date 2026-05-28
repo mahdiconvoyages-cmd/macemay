@@ -1,0 +1,5 @@
+# .gitkeep - Fichier vide pour assurer que ce répertoire existe en git
+
+# Ce répertoire stocke les commandes JSON
+# Il doit être vide sur git mais présent sur le serveur Ionos
+# Permissions Ionos : 755 (r-xr-xr-x)

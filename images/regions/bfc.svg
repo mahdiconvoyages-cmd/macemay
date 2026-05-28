@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120">
+  <rect width="100" height="120" fill="#ffffff" />
+  <!-- Bourgogne-Franche-Comté official logo: shield of arms -->
+  <g stroke="#E5A93C" stroke-width="1.5" stroke-linejoin="round">
+    <path d="M 12 15 H 88 V 65 C 88 88, 50 104, 50 104 C 50 104, 12 88, 12 65 Z" fill="#ffffff" />
+  </g>
+  <!-- Left Half: Bourgogne (fleurs-de-lys and bordure componée) -->
+  <g clip-path="url(#left-shield)">
+    <path d="M 12 15 H 50 V 104 C 50 104, 12 88, 12 65 Z" fill="#0F417A" />
+    <path d="M 12 15 L 50 53 M 12 35 L 50 73 M 12 55 L 45 88" stroke="#E5A93C" stroke-width="6" />
+    <!-- Compony border -->
+    <path d="M 12 15 V 65 C 12 75, 20 85, 30 90" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-dasharray="5,5" />
+    <path d="M 12 15 H 50" fill="none" stroke="#E59A30" stroke-width="4" stroke-dasharray="5,5" />
+  </g>
+  <!-- Right Half: Franche-Comté (Azure, bilayered billety Or, a lion rampant Or) -->
+  <g clip-path="url(#right-shield)">
+    <path d="M 50 15 H 88 V 65 C 88 88, 50 104, 50 104 Z" fill="#0F417A" />
+    <!-- Billets -->
+    <rect x="55" y="25" width="4" height="8" fill="#E5A93C" rx="0.5" />
+    <rect x="75" y="25" width="4" height="8" fill="#E5A93C" rx="0.5" />
+    <rect x="65" y="42" width="4" height="8" fill="#E5A93C" rx="0.5" />
+    <rect x="80" y="55" width="4" height="8" fill="#E5A93C" rx="0.5" />
+    <rect x="58" y="65" width="4" height="8" fill="#E5A93C" rx="0.5" />
+    <rect x="72" y="78" width="4" height="8" fill="#E5A93C" rx="0.5" />
+    <!-- Lion rampant -->
+    <path d="M 68 76 C 65 76, 62 70, 62 64 C 62 55, 68 53, 68 47 C 68 43, 64 43, 70 38 C 76 38, 80 45, 80 50 C 80 57, 74 60, 76 67 C 78 74, 85 74, 87 70 C 87 80, 78 84, 73 84 Z" fill="#E5A93C" />
+  </g>
+  <line x1="50" y1="15" x2="50" y2="104" stroke="#E5A93C" stroke-width="2" />
+  <text x="50" y="115" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="950" font-size="6.2" fill="#0F417A" text-anchor="middle">BOURGOGNE-FRANCHE-COMTÉ</text>
+  <defs>
+    <clipPath id="left-shield">
+      <path d="M 12 15 H 50 V 104 C 50 104, 12 88, 12 65 Z" />
+    </clipPath>
+    <clipPath id="right-shield">
+      <path d="M 50 15 H 88 V 104 C 50 104, 12 88, 12 65 Z" />
+    </clipPath>
+  </defs>
+</svg>

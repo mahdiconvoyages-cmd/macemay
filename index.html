@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Macemay custom | Plaques Plexiglas et floquage</title>
+    <meta name="description" content="Macemay custom configure des plaques Plexiglas premium et accompagne les demandes d'accessoires, floquage et textile d'entreprise sur mesure.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="site-refonte.css?v=macemay-23">
+    <script src="site-config.js?v=macemay-5"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <a href="index.html" class="logo brand-wordmark brand-logo-link">
+                <img src="images/logo-macemay.png" alt="Macemay custom" class="brand-logo-img">
+                <span class="logo-text">Macemay custom</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="catalogue.html">Plaques</a></li>
+                <li><a href="accessoires.html">Accessoires</a></li>
+                <li><a href="textile.html">Floquage</a></li>
+                <li><a href="textile-entreprise.html">Textile d'entreprise</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="cart-btn" id="cartBtn" aria-label="Panier">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+                <button class="mobile-menu-btn" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero home-hero-refined">
+            <div class="hero-bg">
+                <img src="hero-1.png" alt="Plaque Plexiglas Macemay custom" class="hero-bg-img active">
+                <img src="hero-2.png" alt="Plaque moto Plexiglas" class="hero-bg-img">
+                <img src="hero-3.png" alt="Plaque collection noire" class="hero-bg-img">
+                <div class="hero-overlay"></div>
+            </div>
+            <div class="container hero-content home-hero-content">
+                <div class="hero-text">
+                    <span class="badge">Macemay custom</span>
+                    <h1><span class="hero-title-gold">Plaques Plexiglas premium</span>, service custom</h1>
+                    <p class="hero-description">
+                        Configurez vos plaques auto, moto, SUV, collection noire, provisoires ou décoratives en ligne. Pour les accessoires, le floquage et le textile d'entreprise, Macemay custom vous conseille directement avec une réponse adaptée à votre projet.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="catalogue.html" class="btn btn-primary btn-pulse">
+                            <span>Voir les plaques</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14M12 5l7 7-7 7"/>
+                            </svg>
+                        </a>
+                        <a href="textile-entreprise.html" class="btn btn-secondary">Textile d'entreprise</a>
+                    </div>
+                    <div class="hero-trust">
+                        <div class="trust-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                            <span>Plexiglas uniquement</span>
+                        </div>
+                        <div class="trust-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="5" width="20" height="14" rx="2"/>
+                                <path d="M2 10h20"/>
+                            </svg>
+                            <span>Paiement plaques via Mollie</span>
+                        </div>
+                        <div class="trust-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 7l-8-4-8 4v10l8 4 8-4V7z"/>
+                                <path d="M12 3v18"/>
+                            </svg>
+                            <span>Logo client sur textile</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="home-hero-stack" aria-label="Aperçu des univers Macemay custom">
+                    <a class="home-stack-card home-stack-card-main" href="catalogue.html">
+                        <span>Plaques</span>
+                        <strong>AB-123-CD</strong>
+                        <small>Auto, moto, SUV, collection</small>
+                    </a>
+                    <a class="home-stack-card home-stack-card-accessory" href="accessoires.html">
+                        <span>Accessoires</span>
+                        <strong>Kits & fixations</strong>
+                    </a>
+                    <a class="home-stack-card home-stack-card-textile" href="textile.html">
+                        <span>Floquage</span>
+                        <strong>T-shirts, vestes, casquettes</strong>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="home-offer-section" id="avantages">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-badge">Boutique</span>
+                    <h2>Quatre entrées, une offre plus lisible</h2>
+                    <p>La page d'accueil sert maintenant à orienter vite vers le bon univers, sans mélanger commande directe et demande sur mesure.</p>
+                </div>
+                <div class="home-service-grid">
+                    <a class="home-service-card" href="catalogue.html#plaques-homologuees">
+                        <span>Plaques Plexiglas</span>
+                        <h3>Homologuées, collection, WW et W-garage</h3>
+                        <p>Formats auto, moto et SUV avec les variantes nécessaires pour chaque usage.</p>
+                    </a>
+                    <a class="home-service-card" href="catalogue.html#plaques-non-homologuees">
+                        <span>Plaques décoratives</span>
+                        <h3>Auto, moto, 4x4 et USA</h3>
+                        <p>Des plaques déco à personnaliser avec image et message atelier.</p>
+                    </a>
+                    <a class="home-service-card" href="accessoires.html">
+                        <span>Accessoires</span>
+                        <h3>Fixations, supports et finitions</h3>
+                        <p>Rivets, kits et compléments utiles autour des plaques Plexiglas.</p>
+                    </a>
+                    <a class="home-service-card" href="textile-entreprise.html">
+                        <span>Textile d'entreprise</span>
+                        <h3>Vêtements avec votre logo</h3>
+                        <p>Demande dédiée pour sociétés, clubs, équipes et séries professionnelles.</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="product product-selection home-plates-section" id="produit">
+            <div class="container">
+                <div class="product-grid product-grid-clean">
+                    <div class="product-images home-plates-visual">
+                        <div class="home-plate-preview official-preview">
+                            <span>AB-123-CD</span>
+                            <small>Auto homologuée</small>
+                        </div>
+                        <div class="home-plate-preview provisional-preview">
+                            <span>WW-123-AA</span>
+                            <small>Fond rose provisoire</small>
+                        </div>
+                        <div class="home-plate-preview black-preview">
+                            <span>1234 AB 75</span>
+                            <small>Collection noire</small>
+                        </div>
+                    </div>
+                    <div class="product-info product-info-clean">
+                        <span class="product-badge">Plaques Plexiglas</span>
+                        <h2>Le catalogue devient le point de départ</h2>
+                        <p class="product-description">
+                            Chaque carte plaque ouvre le bon parcours avec le format déjà choisi. Le client arrive directement sur la plaque auto, moto, SUV, collection, provisoire ou décorative adaptée.
+                        </p>
+                        <div class="format-showcase" aria-label="Types de plaques disponibles">
+                            <a class="format-card-home" href="catalogue.html#plaques-homologuees">
+                                <span class="format-card-label">Homologuées</span>
+                                <strong>Auto, moto, SUV</strong>
+                                <em>Dès 15,90 €</em>
+                            </a>
+                            <a class="format-card-home" href="catalogue.html#plaques-homologuees">
+                                <span class="format-card-label">Provisoires</span>
+                                <strong>WW et W-garage</strong>
+                                <em>Fond rose</em>
+                            </a>
+                            <a class="format-card-home" href="catalogue.html#plaques-homologuees">
+                                <span class="format-card-label">Collection</span>
+                                <strong>Plaques noires</strong>
+                                <em>Look rétro</em>
+                            </a>
+                            <a class="format-card-home" href="catalogue.html#plaques-non-homologuees">
+                                <span class="format-card-label">Décoratives</span>
+                                <strong>Image client</strong>
+                                <em>Usage déco</em>
+                            </a>
+                        </div>
+                        <div class="product-cta-row">
+                            <a href="catalogue.html" class="btn btn-primary btn-large">
+                                <span>Ouvrir le catalogue</span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                                </svg>
+                            </a>
+                            <a href="pages/reglementation.html" class="btn btn-secondary product-secondary-link">Réglementation</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="home-process-section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-badge">Commande</span>
+                    <h2>Un parcours plus direct</h2>
+                    <p>La page d'accueil n'essaie plus de tout configurer. Elle envoie le client au bon endroit.</p>
+                </div>
+                <div class="home-process-grid">
+                    <article class="home-process-card">
+                        <span>01</span>
+                        <h3>Choisir l'univers</h3>
+                        <p>Plaques, accessoires, réalisations floquage ou textile d'entreprise.</p>
+                    </article>
+                    <article class="home-process-card">
+                        <span>02</span>
+                        <h3>Payer les plaques</h3>
+                        <p>Seules les plaques passent au panier et au paiement sécurisé Mollie.</p>
+                    </article>
+                    <article class="home-process-card">
+                        <span>03</span>
+                        <h3>Envoyer une demande</h3>
+                        <p>Le textile d'entreprise passe par une demande claire avec logo, quantités et tailles.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="home-textile-section">
+            <div class="container home-textile-layout">
+                <div>
+                    <span class="section-badge">Floquage</span>
+                    <h2>Floquage et textile sur demande</h2>
+                    <p>Le floquage est présenté en réalisations pour donner des idées, puis chaque demande passe par contact ou devis selon le support, le logo et la quantité.</p>
+                </div>
+                <div class="home-textile-actions">
+                    <a href="textile.html" class="home-textile-card">
+                        <span>Réalisations floquage</span>
+                        <strong>T-shirt, veste, casquette, bonnet</strong>
+                    </a>
+                    <a href="textile-entreprise.html" class="home-textile-card featured">
+                        <span>Textile d'entreprise</span>
+                        <strong>Logo client, tailles, quantités, devis</strong>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq" id="faq">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-badge">FAQ</span>
+                    <h2>Questions utiles avant de commander</h2>
+                    <p>Quelques repères rapides, le reste est détaillé dans les pages d'information.</p>
+                </div>
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>Les plaques homologuées et décoratives sont-elles séparées ?</span>
+                            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Oui. Les plaques homologuées sont destinées à l'usage routier selon les règles applicables. Les plaques décoratives sont réservées à un usage déco, exposition ou intérieur.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>Comment fonctionne le textile d'entreprise ?</span>
+                            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Le client transmet son logo, les supports souhaités, les quantités, les tailles et le délai. Macemay custom prépare ensuite une réponse adaptée.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span>Quels moyens de paiement sont prévus ?</span>
+                            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p>Le paiement en ligne passe par Mollie pour les plaques. Les accessoires, le floquage et le textile d'entreprise sont traités par contact vendeur.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="home-contact-section contact" id="contact">
+            <div class="container home-contact-panel">
+                <div>
+                    <span class="section-badge">Contact</span>
+                    <h2>Besoin d'une précision avant commande ?</h2>
+                    <p>Pour une question produit, une commande ou un projet textile avec logo, utilisez la page contact dédiée.</p>
+                </div>
+                <div class="home-contact-actions">
+                    <a href="pages/contact.html" class="btn btn-primary">Contacter Macemay custom</a>
+                    <a href="mailto:plaqueimmatriculationperso@gmail.com" class="btn btn-secondary">Envoyer un email</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Finaliser votre commande</h2>
+            <div class="order-summary">
+                <h3>Récapitulatif</h3>
+                <p><strong>Immatriculation:</strong> <span id="summaryImmat"></span></p>
+                <p><strong>Département:</strong> <span id="summaryDept"></span></p>
+                <p><strong>Quantité:</strong> <span id="summaryQty"></span></p>
+                <p class="summary-total">Total à payer: <span id="summaryTotal"></span></p>
+            </div>
+            <div id="mollie-payment-container"></div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo brand-logo-link">
+                        <img src="images/logo-macemay.png" alt="Macemay custom" class="brand-logo-img">
+                        <span class="logo-text">Macemay custom</span>
+                    </a>
+                    <p>Boutique de plaques Plexiglas, accessoires, floquage personnalisé et textile d'entreprise avec logo.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>À propos</h4>
+                    <ul>
+                        <li><a href="pages/mentions-legales.html">Mentions légales</a></li>
+                        <li><a href="pages/cgv.html">Conditions Générales de Vente</a></li>
+                        <li><a href="pages/politique-confidentialite.html">Politique de confidentialité</a></li>
+                        <li><a href="pages/politique-retour.html">Politique de retour</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Informations</h4>
+                    <ul>
+                        <li><a href="pages/reglementation.html">Réglementation</a></li>
+                        <li><a href="pages/faq.html">FAQ</a></li>
+                        <li><a href="pages/contact.html">Contact</a></li>
+                        <li><a href="textile.html">Floquage personnalisé</a></li>
+                        <li><a href="textile-entreprise.html">Textile d'entreprise</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Service client</h4>
+                    <p class="footer-contact">
+                        <strong>Du lundi au vendredi</strong><br>
+                        9h - 18h<br><br>
+                        <a href="mailto:plaqueimmatriculationperso@gmail.com">plaqueimmatriculationperso@gmail.com</a>
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Macemay custom. Tous droits réservés.</p>
+                <div class="payment-methods">
+                    <span>Paiement sécurisé</span>
+                    <div class="payment-icons">
+                        <span class="payment-icon">CB</span>
+                        <span class="payment-icon">SSL</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-admin">
+                <a href="admin.html" class="admin-link">Admin</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Drawer -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h2>Votre Panier</h2>
+            <button class="close-cart" id="closeCart">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Items will be injected here -->
+            <div class="empty-cart-message">Votre panier est vide</div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total</span>
+                <span id="cartTotal">0,00€</span>
+            </div>
+            <button class="btn btn-primary btn-large" id="checkoutBtn">
+                Commander
+            </button>
+        </div>
+    </div>
+
+    <!-- Back to top button -->
+    <button class="back-to-top" id="backToTop" aria-label="Retour en haut">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="18 15 12 9 6 15"/>
+        </svg>
+    </button>
+
+    <script src="script.js?v=macemay-8"></script>
+    <script src="cookies.js"></script>
+</body>
+</html>

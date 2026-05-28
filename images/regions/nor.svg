@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120">
+  <rect width="100" height="120" fill="#E3001B" />
+  <!-- Normandy official plate logo: shield with 2 leopards -->
+  <g stroke="#ffffff" stroke-width="1.5" stroke-linejoin="round">
+    <path d="M 18 15 H 82 V 65 C 82 85, 50 98, 50 95 C 50 98, 18 85, 18 65 Z" fill="#E3001B" stroke="#F6C300" stroke-width="2.5" />
+  </g>
+  <!-- Leopard 1 (Top) -->
+  <g fill="#F6C300">
+    <path d="M 30 35 C 28 35, 27 32, 29 29 C 31 25, 37 25, 40 29 C 43 25, 47 26, 51 29 C 53 32, 51 35, 53 38 C 56 36, 60 36, 63 33 C 66 28, 62 21, 68 22 C 67 29, 60 38, 53 38 L 48 38 C 43 38, 40 35, 37 35 C 34 35, 32 34, 30 34" />
+    <path d="M 28 33 Q 25 38, 22 41 M 42 36 Q 40 43, 37 45" stroke="#F6C300" stroke-width="2" stroke-linecap="round" />
+  </g>
+  <!-- Leopard 2 (Bottom) -->
+  <g fill="#F6C300">
+    <path d="M 30 58 C 28 58, 27 55, 29 52 C 31 48, 37 48, 40 52 C 43 48, 47 49, 51 52 C 53 55, 51 58, 53 61 C 56 59, 60 59, 63 56 C 66 51, 62 44, 68 45 C 67 52, 60 61, 53 61 L 48 61 C 43 61, 40 58, 37 58 C 34 58, 32 57, 30 57" />
+    <path d="M 28 56 Q 25 61, 22 64 M 42 59 Q 40 66, 37 68" stroke="#F6C300" stroke-width="2" stroke-linecap="round" />
+  </g>
+  <!-- Blue accents for tongues/claws -->
+  <circle cx="30" cy="29" r="1.2" fill="#005C9E" />
+  <circle cx="30" cy="52" r="1.2" fill="#005C9E" />
+  <text x="50" y="112" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="950" font-size="10.5" fill="#ffffff" text-anchor="middle" letter-spacing="1">NORMANDIE</text>
+</svg>

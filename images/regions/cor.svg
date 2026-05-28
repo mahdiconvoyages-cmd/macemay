@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120">
+  <rect width="100" height="120" fill="#ffffff" />
+  <!-- Corsica / Corse Moor's head official license plate layout -->
+  <g fill="#18181B">
+    <!-- Moor's profile silhouette -->
+    <path d="M 40 22 C 30 22, 25 35, 25 48 C 25 58, 28 62, 32 65 C 28 72, 28 85, 42 90 C 48 92, 58 92, 65 82 C 72 82, 75 75, 75 68 C 75 62, 72 58, 70 54 C 74 48, 72 38, 65 30 C 58 22, 48 22, 40 22 Z" />
+    <!-- White bandana -->
+    <path d="M 28 42 C 38 34, 55 34, 68 42 L 67 48 C 54 41, 38 41, 29 48 Z" fill="#ffffff" />
+    <!-- Bandana tails at the back -->
+    <path d="M 25 45 C 20 45, 18 52, 16 58 C 20 56, 22 51, 24 48" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" fill="none" />
+    <path d="M 25 49 C 18 52, 16 60, 15 66 C 18 64, 21 59, 23 53" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" fill="none" />
+  </g>
+  <text x="50" y="112" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-weight="950" font-size="11" fill="#18181B" text-anchor="middle" letter-spacing="1">CORSICA</text>
+</svg>
