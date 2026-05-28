@@ -900,13 +900,17 @@
 .plaque-preview.format-4x4,
 .plaque-preview.format-usa,
 .plaque-preview.format-ww,
-.plaque-preview.format-wgarage {
+.plaque-preview.format-wgarage,
+.plaque-preview.format-auto {
     min-width: 0 !important;
 }
 
 .plaque-preview.format-auto,
 .plaque-preview.format-ww,
-.plaque-preview.format-wgarage { width: 520px; height: 110px; }
+.plaque-preview.format-wgarage {
+    width: 520px;
+    height: 110px;
+}
 
 /* Moto : 2 lignes, bandes à gauche et à droite de taille égale, format carré/hauteur */
 .plaque-preview.format-moto,
@@ -1098,6 +1102,39 @@
     .plaque-preview.format-wgarage { transform: scale(0.7); transform-origin: center; }
     .plaque-preview.format-4x4  { transform: scale(0.85); transform-origin: center; }
     .plaque-preview.format-usa  { transform: scale(0.85); transform-origin: center; }
+}
+
+@media (max-width: 1024px) {
+    .plaque-preview.format-auto,
+    .plaque-preview.format-ww,
+    .plaque-preview.format-wgarage {
+        width: min(100%, 520px);
+        max-width: 100%;
+        height: auto;
+        aspect-ratio: 4.727 / 1;
+    }
+
+    .plaque-preview.format-4x4 {
+        width: min(100%, 275px);
+        max-width: 100%;
+        height: auto;
+        aspect-ratio: 275 / 200;
+    }
+
+    .plaque-preview.format-usa {
+        width: min(100%, 305px);
+        max-width: 100%;
+        height: auto;
+        aspect-ratio: 305 / 152;
+    }
+
+    .plaque-preview.format-moto,
+    .plaque-preview.moto {
+        width: min(100%, 210px);
+        max-width: 100%;
+        height: auto;
+        aspect-ratio: 210 / 130;
+    }
 }
 
 /* ============================================

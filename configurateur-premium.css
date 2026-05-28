@@ -199,6 +199,16 @@
         0 0 120px rgba(201, 162, 39, 0.15);
 }
 
+@media (max-width: 1024px) {
+    .plaque-preview {
+        min-width: auto;
+        width: min(100%, 520px);
+        max-width: 100%;
+        height: auto;
+        aspect-ratio: 4.727 / 1;
+    }
+}
+
 /* Plaque bands - Style officiel FR Premium */
 .plaque-band {
     width: 46px;

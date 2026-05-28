@@ -5,5 +5,8 @@
     mollieCreatePaymentUrl: 'api/create-mollie-payment.php',
     mollieOrderStatusUrl: 'api/order-status.php',
     adminOrdersUrl: 'api/admin-orders.php',
+    paypalClientId: '',
+    paypalCreateOrderUrl: 'api/create-paypal-order.php',
+    paypalCaptureOrderUrl: 'api/capture-paypal-order.php',
     ionosPublicApiKey: ''
 };

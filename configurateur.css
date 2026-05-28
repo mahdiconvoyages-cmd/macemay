@@ -947,4 +947,52 @@
     .type-label {
         font-size: 0.8rem;
     }
+
+    .configurator {
+        grid-template-columns: 1fr;
+    }
+
+    .config-preview {
+        position: relative;
+        top: 0;
+        height: auto;
+        min-height: 0;
+        padding: 1rem;
+    }
+
+    .preview-container {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .plaque-wrapper {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .plaque-preview {
+        min-width: auto;
+        width: min(100%, 520px);
+        max-width: 100%;
+        height: auto;
+        aspect-ratio: 4.727 1;
+    }
+
+    .plaque-preview.moto {
+        width: min(100%, 210px);
+        aspect-ratio: 210 / 130;
+    }
+
+    .plaque-content {
+        padding: 0.75rem;
+    }
+
+    .plaque-text {
+        font-size: clamp(1.3rem, 5vw, 2.25rem);
+        letter-spacing: 0.12em;
+    }
+
+    .plaque-message {
+        font-size: 0.75rem;
+    }
 }

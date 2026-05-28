@@ -621,12 +621,49 @@ function escapeHTML(value) {
         .replace(/'/g, '&#039;');
 }
 
-const NON_PAYABLE_CART_MESSAGE = 'Seules les plaques sont payables en ligne. Pour les accessoires, le floquage ou le textile, contactez le vendeur.';
+const NON_PAYABLE_CART_MESSAGE = 'Cet article ne peut pas être payé en ligne. Utilisez la boutique (PayPal) ou le configurateur plaques (Mollie), ou contactez le vendeur.';
+const MIXED_CART_MESSAGE = 'Panier mixte impossible : payez les plaques (Mollie) et la boutique (PayPal) en deux commandes séparées.';
 
-function isOnlinePayableItem(item) {
+function isBoutiqueCartItem(item) {
     if (!item || typeof item !== 'object') return false;
+    if (item.type === 'boutique' || item.type === 'accessoire') return true;
+    const category = item.details?.category;
+    return category === 'boutique' || category === 'accessoire';
+}
+
+function isPlaqueCartItem(item) {
+    if (!item || typeof item !== 'object') return false;
+    if (isBoutiqueCartItem(item)) return false;
     if (item.type === 'plaque') return true;
     return Boolean(item.immatriculation || item.details?.immat || item.details?.formatPlaque);
+}
+
+function isOnlinePayableItem(item) {
+    return isPlaqueCartItem(item) || isBoutiqueCartItem(item);
+}
+
+function getItemPaymentMode(item) {
+    if (isBoutiqueCartItem(item)) return 'boutique';
+    if (isPlaqueCartItem(item)) return 'plaque';
+    return null;
+}
+
+function getCartPaymentMode() {
+    syncCartFromStorage();
+    if (!cart.length) return null;
+
+    let hasPlaque = false;
+    let hasBoutique = false;
+
+    cart.forEach(item => {
+        if (isBoutiqueCartItem(item)) hasBoutique = true;
+        else if (isPlaqueCartItem(item)) hasPlaque = true;
+    });
+
+    if (hasPlaque && hasBoutique) return 'mixed';
+    if (hasBoutique) return 'boutique';
+    if (hasPlaque) return 'plaque';
+    return 'invalid';
 }
 
 function getNonPayableCartItems() {
@@ -634,7 +671,8 @@ function getNonPayableCartItems() {
 }
 
 function hasOnlyPayableItems() {
-    return cart.length > 0 && getNonPayableCartItems().length === 0;
+    const mode = getCartPaymentMode();
+    return mode === 'plaque' || mode === 'boutique';
 }
 
 function initCart() {
@@ -665,6 +703,11 @@ function initCart() {
             syncCartFromStorage();
             if (cart.length === 0) {
                 showNotification('Votre panier est vide', 'error');
+                return;
+            }
+            const paymentMode = getCartPaymentMode();
+            if (paymentMode === 'mixed') {
+                showNotification(MIXED_CART_MESSAGE, 'error');
                 return;
             }
             if (!hasOnlyPayableItems()) {
@@ -716,8 +759,8 @@ function updateCartUI() {
         total += itemTotal;
         const title = item.name || (item.type === 'textile'
             ? 'Article floqué'
-            : item.type === 'accessoire'
-                ? 'Accessoire'
+            : isBoutiqueCartItem(item)
+                ? 'Article boutique'
                 : item.type === 'deco'
                     ? 'Plaque Déco'
                     : item.type === 'moto'
@@ -762,12 +805,19 @@ function removeFromCart(index) {
 
 // Global addToCart for configurateur.js
 window.addToCart = function(item) {
-    if (!isOnlinePayableItem(item)) {
+    const incomingMode = getItemPaymentMode(item);
+    if (!incomingMode) {
         showNotification('Cet article se commande en contactant le vendeur.', 'info');
         return;
     }
 
     syncCartFromStorage();
+    const currentMode = getCartPaymentMode();
+    if (currentMode && currentMode !== incomingMode) {
+        showNotification(MIXED_CART_MESSAGE, 'error');
+        return;
+    }
+
     cart.push(item);
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
     updateCartUI();
@@ -775,6 +825,11 @@ window.addToCart = function(item) {
 };
 
 window.updateCartUI = updateCartUI;
+window.getMacemayCart = function() {
+    syncCartFromStorage();
+    return JSON.parse(JSON.stringify(cart));
+};
+window.getCartPaymentMode = getCartPaymentMode;
 
 function updatePlaqueWithAnimation(element, newValue) {
     if (!element) return;
@@ -1039,37 +1094,55 @@ function initForms() {
 function openPaymentModal() {
     syncCartFromStorage();
     const modal = document.getElementById('paymentModal');
+    const paymentMode = getCartPaymentMode();
+
+    if (paymentMode === 'mixed') {
+        showNotification(MIXED_CART_MESSAGE, 'error');
+        return;
+    }
     if (!hasOnlyPayableItems()) {
         showNotification(NON_PAYABLE_CART_MESSAGE, 'error');
         return;
     }
     
-    // Calculate total from cart
     const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const totalString = totalAmount.toFixed(2).replace('.', ',') + '€';
     
-    // Generate summary HTML
     let summaryHTML = '';
     cart.forEach(item => {
-        const label = item.name || item.immatriculation || 'Article boutique';
-        const detail = item.departement ? ` - Dépt ${item.departement}` : '';
-        summaryHTML += `<p><strong>${escapeHTML(label)}</strong> (x${escapeHTML(item.quantity)})${escapeHTML(detail)}</p>`;
+        const label = item.name || item.immatriculation || 'Article';
+        const detail = item.departement
+            ? ` - Dépt ${item.departement}`
+            : (item.details?.tag ? ` - ${item.details.tag}` : '');
+        summaryHTML += `<p><strong>${escapeHTML(label)}</strong> (x${escapeHTML(item.quantity)})${escapeHTML(detail)} — ${escapeHTML((item.price * item.quantity).toFixed(2).replace('.', ',') + '€')}</p>`;
     });
     
-    // Update Modal Content
     const summaryContainer = document.querySelector('.order-summary');
-    summaryContainer.innerHTML = `
-        <h3>Récapitulatif de la commande</h3>
-        <div class="summary-items">
-            ${summaryHTML}
-        </div>
-        <p class="summary-total">Total à payer: <span id="summaryTotal">${totalString}</span></p>
-    `;
+    if (summaryContainer) {
+        summaryContainer.innerHTML = `
+            <h3>Récapitulatif de la commande</h3>
+            <div class="summary-items">
+                ${summaryHTML}
+            </div>
+            <p class="summary-total">Total à payer: <span id="summaryTotal">${totalString}</span></p>
+        `;
+    }
     
-    modal.style.display = "flex";
+    if (modal) modal.style.display = 'flex';
     
     const container = document.getElementById('mollie-payment-container');
-    if (container) renderMolliePaymentButton(container, totalString);
+    if (!container) return;
+
+    if (paymentMode === 'boutique') {
+        if (window.MacemayPaypal && typeof window.MacemayPaypal.renderPayPalButtons === 'function') {
+            window.MacemayPaypal.renderPayPalButtons(container);
+        } else {
+            container.innerHTML = '<p class="payment-error">Ouvrez la page boutique pour payer avec PayPal.</p>';
+        }
+        return;
+    }
+
+    renderMolliePaymentButton(container, totalString);
 }
 
 function saveCompletedOrder(paymentData, paymentDetails) {
@@ -1123,8 +1196,8 @@ async function startMolliePayment(button) {
         showNotification('Votre panier est vide', 'error');
         return;
     }
-    if (!hasOnlyPayableItems()) {
-        showNotification(NON_PAYABLE_CART_MESSAGE, 'error');
+    if (getCartPaymentMode() !== 'plaque') {
+        showNotification('Le paiement Mollie concerne uniquement les plaques configurées.', 'error');
         return;
     }
 
@@ -1159,6 +1232,8 @@ async function startMolliePayment(button) {
         showNotification('Le paiement Mollie est indisponible pour le moment.', 'error');
     }
 }
+
+window.saveCompletedOrder = saveCompletedOrder;
 
 /* ============================================
    NOTIFICATIONS

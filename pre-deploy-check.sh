@@ -41,7 +41,7 @@ log_info() {
 echo "🔍 1. Vérification Fichiers HTML"
 echo "--------------------------------"
 
-HTML_FILES=("index.html" "catalogue.html" "configurateur.html" "accessoires.html" "textile.html" "textile-entreprise.html" "paiement-retour.html" "admin.html")
+HTML_FILES=("index.html" "catalogue.html" "configurateur.html" "boutique.html" "accessoires.html" "textile.html" "textile-entreprise.html" "paiement-retour.html" "admin.html")
 
 for file in "${HTML_FILES[@]}"; do
     if [ -f "$file" ]; then
@@ -141,7 +141,7 @@ echo ""
 echo "⚙️  4. Vérification API PHP"
 echo "---------------------------"
 
-API_FILES=("api/_bootstrap.php" "api/config.sample.php" "api/create-mollie-payment.php" "api/mollie-webhook.php" "api/order-status.php" "api/admin-orders.php")
+API_FILES=("api/_bootstrap.php" "api/config.sample.php" "api/create-mollie-payment.php" "api/mollie-webhook.php" "api/create-paypal-order.php" "api/capture-paypal-order.php" "api/order-status.php" "api/admin-orders.php")
 
 for file in "${API_FILES[@]}"; do
     if [ -f "$file" ]; then

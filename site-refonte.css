@@ -3424,6 +3424,14 @@ input::placeholder {
     justify-content: center;
 }
 
+.paypal-payment-container {
+    min-height: 120px;
+}
+
+.paypal-payment-container #paypal-buttons-host {
+    margin-top: 0.75rem;
+}
+
 .mollie-pay-btn:disabled {
     cursor: wait;
     opacity: 0.75;

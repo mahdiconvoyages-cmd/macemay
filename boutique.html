@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boutique | Macemay custom</title>
+    <meta name="description" content="Boutique Macemay custom : produits publiés par le vendeur, prix TTC et paiement sécurisé via PayPal.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="configurateur.css">
+    <link rel="stylesheet" href="site-refonte.css?v=macemay-31">
+    <script src="site-config.js?v=macemay-6"></script>
+</head>
+<body class="shop-page boutique-page" data-payment-mode="boutique">
+    <header class="config-header">
+        <a href="index.html" class="config-logo brand-logo-link">
+            <img src="images/logo-macemay.png" alt="Macemay custom" class="brand-logo-img">
+            <span>Macemay custom</span>
+        </a>
+        <nav class="config-header-nav">
+            <a href="catalogue.html">Plaques</a>
+            <a href="boutique.html" class="active">Boutique</a>
+            <a href="textile.html">Floquage</a>
+            <a href="textile-entreprise.html">Textile d'entreprise</a>
+            <a href="pages/faq.html">FAQ</a>
+            <a href="pages/contact.html">Contact</a>
+        </nav>
+        <div class="config-header-actions">
+            <button class="cart-btn" id="cartBtn" aria-label="Panier">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span class="cart-count">0</span>
+            </button>
+            <button type="button" class="mobile-menu-btn" aria-label="Menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="shop-managed-section" id="boutique-catalogue">
+            <div class="container">
+                <div class="accessory-catalog-head accessory-catalog-head-simple">
+                    <span class="section-badge">Boutique en ligne</span>
+                    <p class="accessory-head-link">Paiement sécurisé via PayPal</p>
+                </div>
+                <div class="shop-products-grid" id="boutiqueGrid"></div>
+            </div>
+        </section>
+
+        <section class="accessory-mini-note-section">
+            <div class="container accessory-mini-note">
+                <div>
+                    <span class="section-badge">Comment commander</span>
+                    <h2>Ajoutez vos articles au panier, puis payez avec PayPal.</h2>
+                    <p>Chaque produit affiche le prix TTC défini par le vendeur dans l’espace admin. PayPal calcule automatiquement le montant total de votre panier au moment du paiement.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-bottom">
+            <p>© 2026 Macemay custom. Plaques Plexiglas, boutique et floquage personnalisé.</p>
+        </div>
+    </footer>
+
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <aside class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h3>Votre panier boutique</h3>
+            <button class="close-cart" id="closeCart" aria-label="Fermer">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-footer">
+            <div class="cart-total"><span>Total</span><strong id="cartTotal">0,00€</strong></div>
+            <button class="btn btn-primary btn-checkout" id="checkoutBtn">Payer avec PayPal</button>
+        </div>
+    </aside>
+
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Finaliser votre commande boutique</h2>
+            <div class="order-summary"></div>
+            <div id="mollie-payment-container" class="paypal-payment-container"></div>
+        </div>
+    </div>
+
+    <script src="shop-products.js?v=macemay-12"></script>
+    <script src="script.js?v=macemay-9"></script>
+    <script src="paypal-checkout.js?v=macemay-1"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            window.MacemayShop.renderProducts('boutiqueGrid', 'boutique', 'Aucun produit en boutique pour le moment.', {
+                emptyTitle: 'Boutique vide'
+            });
+        });
+    </script>
+</body>
+</html>

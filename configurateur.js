@@ -15,6 +15,7 @@
         wgarage: 15.90
     };
     const CONTOUR_EXTRA = 2.00;
+    const RIVETS_UNIT_PRICE = 1.50;
     const FONT_EXTRA = { officiel: 0 };
     const TOTAL_STEPS = 4;
     const FORMAT_LABELS = { auto: 'Auto', moto: 'Moto', '4x4': 'SUV', usa: 'Collection noire', ww: 'Provisoire WW', wgarage: 'W garage' };
@@ -77,6 +78,7 @@
         decorAdminMessage: '',
         contour: 'none',       // none | int | ext
         contourColor: '#c9a227',
+        rivets: false,
         quantity: 1,
         previewBg: 'dark',
         enable3D: false,
@@ -270,6 +272,7 @@
             contourTypeToggle: document.getElementById('contourTypeToggle'),
             contourColorField: document.getElementById('contourColorField'),
             contourPalette: document.getElementById('contourPalette'),
+            rivetsOption: document.getElementById('rivetsOption'),
 
             // Étape 5
             recap: document.getElementById('wizardRecap'),
@@ -398,6 +401,7 @@
         if ($.decorAdminMsgCounter) $.decorAdminMsgCounter.textContent = `${state.decorAdminMessage.length} / 300`;
         $.contourColorField.style.display = state.contour === 'none' ? 'none' : '';
         $.qtyValue.textContent = state.quantity;
+        if ($.rivetsOption) $.rivetsOption.checked = state.rivets;
 
         // Afficher ou masquer le champ texte personnalisé voiture
         if (state.carLogo === 'custom') {
@@ -986,6 +990,9 @@
 
         // Étape 3 - message
         $.message.addEventListener('input', handleMessage);
+        if ($.rivetsOption) {
+            $.rivetsOption.addEventListener('change', handleRivetsToggle);
+        }
 
         // Étape 4 - contour
         $.contourTypeToggle.querySelectorAll('.wizard-toggle-btn').forEach(b => {
@@ -1287,6 +1294,12 @@
         updatePreview();
     }
 
+    function handleRivetsToggle() {
+        state.rivets = !!($.rivetsOption && $.rivetsOption.checked);
+        updatePrice();
+        if (state.step === 4) buildRecap();
+    }
+
     /* ---------- ÉTAPE 4 : CONTOUR ---------- */
     function selectContour(type) {
         state.contour = type;
@@ -1354,6 +1367,9 @@
                 ['Message', state.message || '—'],
                 ['Contour', labels.contour[state.contour] + (state.contour !== 'none' ? ' (+2€)' : '')]
             ];
+        if (state.rivets) {
+            rows.push(['Rivets', `Lot de 2 rivets blancs (+${RIVETS_UNIT_PRICE.toFixed(2).replace('.', ',')}€ par plaque)`]);
+        }
         $.recap.innerHTML = rows.map(([k, v]) => `
             <div class="wizard-recap-row">
                 <span class="label">${escapeHTML(k)}</span>
@@ -1378,6 +1394,7 @@
         let p = PRICES[state.format] || 15.90;
         if (state.contour !== 'none') p += CONTOUR_EXTRA;
         p += FONT_EXTRA[state.font] || 0;
+        if (state.rivets) p += RIVETS_UNIT_PRICE;
         return p;
     }
 
@@ -1536,7 +1553,9 @@
                 decorImageSource: isDecorative() ? 'upload' : '',
                 decorAdminMessage: isDecorative() ? state.decorAdminMessage : '',
                 contour: state.contour,
-                contourColor: state.contourColor
+                contourColor: state.contourColor,
+                rivets: state.rivets,
+                rivetsUnitPrice: state.rivets ? RIVETS_UNIT_PRICE : 0
             },
             price: unitPrice,
             quantity: state.quantity

@@ -3,110 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accessoires plaques | Macemay custom</title>
-    <meta name="description" content="Accessoires Macemay custom pour plaques Plexiglas : rivets, fixations, supports et finitions sur contact.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="configurateur.css">
-    <link rel="stylesheet" href="site-refonte.css?v=macemay-30">
-    <script src="site-config.js?v=macemay-5"></script>
+    <title>Redirection boutique | Macemay custom</title>
+    <link rel="canonical" href="boutique.html">
+    <meta http-equiv="refresh" content="0;url=boutique.html">
+    <script>location.replace('boutique.html');</script>
 </head>
-<body class="shop-page accessories-page">
-    <header class="config-header">
-        <a href="index.html" class="config-logo brand-logo-link">
-            <img src="images/logo-macemay.png" alt="Macemay custom" class="brand-logo-img">
-            <span>Macemay custom</span>
-        </a>
-        <nav class="config-header-nav">
-            <a href="catalogue.html">Plaques</a>
-            <a href="accessoires.html" class="active">Accessoires</a>
-            <a href="textile.html">Floquage</a>
-            <a href="textile-entreprise.html">Textile d'entreprise</a>
-            <a href="pages/faq.html">FAQ</a>
-            <a href="pages/contact.html">Contact</a>
-        </nav>
-        <div class="config-header-actions">
-            <button class="cart-btn" id="cartBtn" aria-label="Panier">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="9" cy="21" r="1"></circle>
-                    <circle cx="20" cy="21" r="1"></circle>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                </svg>
-                <span class="cart-count">0</span>
-            </button>
-            <button type="button" class="mobile-menu-btn" aria-label="Menu" aria-expanded="false">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </header>
-
-    <main>
-        <section class="shop-managed-section" id="accessoires-boutique">
-            <div class="container">
-                <div class="accessory-catalog-head accessory-catalog-head-simple">
-                    <span class="section-badge">Accessoires disponibles</span>
-                    <a href="pages/contact.html?subject=accessoire" class="accessory-head-link">Demande accessoire</a>
-                </div>
-                <div class="shop-products-grid" id="accessoriesGrid"></div>
-            </div>
-        </section>
-
-        <section class="accessory-mini-note-section">
-            <div class="container accessory-mini-note">
-                <div>
-                    <span class="section-badge">Commande accessoires</span>
-                    <h2>Un produit vous intéresse ? Envoyez simplement une demande.</h2>
-                    <p>Indiquez l'accessoire souhaité et le véhicule concerné. Le vendeur répond avec la disponibilité et les modalités.</p>
-                </div>
-                <div class="accessory-advice-actions">
-                    <a href="pages/contact.html?subject=accessoire" class="btn btn-primary">Contacter le vendeur</a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <div class="container footer-bottom">
-            <p>© 2026 Macemay custom. Plaques Plexiglas, accessoires et floquage personnalisé.</p>
-        </div>
-    </footer>
-
-    <div class="cart-overlay" id="cartOverlay"></div>
-    <aside class="cart-drawer" id="cartDrawer">
-        <div class="cart-header">
-            <h3>Votre panier</h3>
-            <button class="close-cart" id="closeCart" aria-label="Fermer">&times;</button>
-        </div>
-        <div class="cart-items" id="cartItems"></div>
-        <div class="cart-footer">
-            <div class="cart-total"><span>Total</span><strong id="cartTotal">0,00€</strong></div>
-            <button class="btn btn-primary btn-checkout" id="checkoutBtn">Commander</button>
-        </div>
-    </aside>
-
-    <div id="paymentModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>Finaliser votre commande</h2>
-            <div class="order-summary"></div>
-            <div id="mollie-payment-container"></div>
-        </div>
-    </div>
-
-    <script src="shop-products.js?v=macemay-11"></script>
-    <script src="script.js?v=macemay-8"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            window.MacemayShop.renderContactProducts('accessoriesGrid', 'accessoire', 'Aucun accessoire disponible pour le moment.', {
-                subject: 'accessoire',
-                actionLabel: 'Demander',
-                emptyTitle: 'Aucun accessoire disponible'
-            });
-        });
-    </script>
+<body>
+    <p>Redirection vers la <a href="boutique.html">boutique</a>…</p>
 </body>
 </html>

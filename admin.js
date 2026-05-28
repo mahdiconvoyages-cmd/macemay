@@ -205,7 +205,7 @@
         const titles = {
             hero: 'Images Hero',
             realisations: 'Floquage',
-            products: 'Mini boutique accessoires',
+            products: 'Boutique en ligne',
             orders: 'Commandes',
             settings: 'Paramètres'
         };
@@ -651,7 +651,7 @@
         const price = parseFloat(document.getElementById('productPrice').value);
 
         if (!name) {
-            showToast('Le nom de l\'accessoire est obligatoire', 'error');
+            showToast('Le nom du produit est obligatoire', 'error');
             return;
         }
 
@@ -682,7 +682,7 @@
         window.MacemayShop.saveAllProducts(products);
         renderProductsAdmin();
         resetProductForm();
-        showToast('Accessoire enregistré', 'success');
+        showToast('Produit boutique enregistré', 'success');
     }
 
     function renderProductImagePreview(src) {
@@ -692,9 +692,9 @@
     }
 
     function resetProductForm() {
-        document.getElementById('productFormTitle').textContent = 'Ajouter un accessoire';
+        document.getElementById('productFormTitle').textContent = 'Ajouter un produit boutique';
         document.getElementById('productId').value = '';
-        document.getElementById('productCategory').value = 'accessoire';
+        document.getElementById('productCategory').value = 'boutique';
         document.getElementById('productName').value = '';
         document.getElementById('productTag').value = '';
         document.getElementById('productDesc').value = '';
@@ -710,9 +710,9 @@
         const grid = document.getElementById('adminProductsGrid');
         if (!grid) return;
 
-        const products = window.MacemayShop.getAllProducts().filter(product => product.category === 'accessoire');
+        const products = window.MacemayShop.getAllProducts().filter(product => window.MacemayShop.isBoutiqueCategory(product.category));
         if (!products.length) {
-            grid.innerHTML = '<div class="admin-empty">Boutique vide. Ajoutez un premier accessoire quand le client aura validé son offre.</div>';
+            grid.innerHTML = '<div class="admin-empty">Boutique vide. Ajoutez votre premier produit avec un prix TTC.</div>';
             return;
         }
 
@@ -722,7 +722,7 @@
                     ${product.imageData ? `<img src="${product.imageData}" alt="${product.name}">` : `<span>${(product.name || 'MC').slice(0, 2).toUpperCase()}</span>`}
                 </div>
                 <div class="admin-product-info">
-                    <span class="admin-product-category">Accessoires${product.active === false ? ' · masqué' : ''}</span>
+                    <span class="admin-product-category">Boutique${product.active === false ? ' · masqué' : ''}</span>
                     <strong>${product.name}</strong>
                     <small>${window.MacemayShop.formatPrice(product.price)}</small>
                 </div>
@@ -738,7 +738,8 @@
         const product = window.MacemayShop.getAllProducts().find(item => item.id === id);
         if (!product) return;
 
-        document.getElementById('productFormTitle').textContent = 'Modifier l\'accessoire';
+        document.getElementById('productFormTitle').textContent = 'Modifier le produit boutique';
+        if (product.category === 'accessoire') product.category = 'boutique';
         document.getElementById('productId').value = product.id;
         document.getElementById('productCategory').value = product.category;
         document.getElementById('productName').value = product.name;
@@ -752,11 +753,11 @@
     };
 
     window.adminDeleteProduct = function(id) {
-        if (!confirm('Supprimer cet accessoire ?')) return;
+        if (!confirm('Supprimer ce produit boutique ?')) return;
         const products = window.MacemayShop.getAllProducts().filter(product => product.id !== id);
         window.MacemayShop.saveAllProducts(products);
         renderProductsAdmin();
-        showToast('Accessoire supprimé', 'success');
+        showToast('Produit supprimé', 'success');
     };
 
     /* ============================================

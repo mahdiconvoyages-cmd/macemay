@@ -1,12 +1,14 @@
 /* ======================================================================
-   Macemay custom - produits administrables
-   Stockage local pour prototype boutique statique
+   Macemay custom - produits administrables (boutique)
    ====================================================================== */
 (function() {
     'use strict';
 
     const STORAGE_KEY = 'macemay_shop_products';
     const MIGRATION_KEY = 'macemay_shop_products_empty_accessories_v2';
+    const CATEGORY_MIGRATION_KEY = 'macemay_shop_category_boutique_v3';
+    const BOUTIQUE_CATEGORY = 'boutique';
+    const LEGACY_BOUTIQUE_CATEGORIES = ['boutique', 'accessoire'];
     const LEGACY_DEFAULT_IDS = [
         'acc-rivets-noirs',
         'acc-kit-pose',
@@ -24,8 +26,15 @@
         return DEFAULT_PRODUCTS.map(product => ({ ...product }));
     }
 
+    function isBoutiqueCategory(category) {
+        return LEGACY_BOUTIQUE_CATEGORIES.includes(category);
+    }
+
     function normalizeProduct(product) {
         const normalized = { ...product };
+        if (normalized.category === 'accessoire') {
+            normalized.category = BOUTIQUE_CATEGORY;
+        }
         if (normalized.category === 'textile' && normalized.tag === 'Textile') {
             normalized.tag = 'Floquage';
         }
@@ -49,8 +58,33 @@
         return normalized;
     }
 
+    function migrateAccessoireCategory() {
+        if (localStorage.getItem(CATEGORY_MIGRATION_KEY) === 'done') return;
+
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+            try {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) {
+                    const migrated = parsed.map(product => {
+                        if (product.category === 'accessoire') {
+                            return { ...product, category: BOUTIQUE_CATEGORY };
+                        }
+                        return product;
+                    });
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+                }
+            } catch (error) {
+                /* ignore */
+            }
+        }
+
+        localStorage.setItem(CATEGORY_MIGRATION_KEY, 'done');
+    }
+
     function getAllProducts() {
         migrateLegacyDefaultProducts();
+        migrateAccessoireCategory();
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) return cloneDefaults();
         try {
@@ -67,6 +101,7 @@
 
     function ensureProductsSeeded() {
         migrateLegacyDefaultProducts();
+        migrateAccessoireCategory();
         if (!localStorage.getItem(STORAGE_KEY)) {
             saveAllProducts(cloneDefaults());
         }
@@ -95,7 +130,11 @@
     }
 
     function getProducts(category) {
-        return getAllProducts().filter(product => product.category === category && product.active !== false);
+        return getAllProducts().filter(product => {
+            if (product.active === false) return false;
+            if (category === BOUTIQUE_CATEGORY) return isBoutiqueCategory(product.category);
+            return product.category === category;
+        });
     }
 
     function formatPrice(price) {
@@ -131,15 +170,15 @@
             : `<span>${escapeHTML(initials(product.name))}</span>`;
         const action = mode === 'contact'
             ? `<a class="shop-contact-btn" href="${escapeHTML(contactHref)}">${escapeHTML(contactLabel)}</a>`
-            : `<button type="button" class="shop-add-btn" data-product-id="${escapeHTML(product.id)}">Ajouter</button>`;
-        const priceLabel = mode === 'contact' ? `À partir de ${formatPrice(product.price)}` : formatPrice(product.price);
+            : `<button type="button" class="shop-add-btn" data-product-id="${escapeHTML(product.id)}">Ajouter au panier</button>`;
+        const priceLabel = formatPrice(product.price);
 
         return `
             <article class="shop-product-card">
                 <div class="shop-product-media">${visual}</div>
                 <div class="shop-product-body">
                     <div class="shop-product-topline">
-                        <span>${escapeHTML(product.tag || (product.category === 'textile' ? 'Floquage' : 'Accessoire'))}</span>
+                        <span>${escapeHTML(product.tag || (product.category === 'textile' ? 'Floquage' : 'Boutique'))}</span>
                     </div>
                     <h3>${escapeHTML(product.name)}</h3>
                     <p>${escapeHTML(product.desc || '')}</p>
@@ -153,7 +192,7 @@
     }
 
     function addProductToCart(product) {
-        if (product.category !== 'plaque') {
+        if (!isBoutiqueCategory(product.category)) {
             if (typeof window.showNotification === 'function') {
                 window.showNotification('Cet article se commande en contactant le vendeur.', 'info');
             }
@@ -162,12 +201,13 @@
         }
 
         const item = {
-            id: `${product.category}_${product.id}_${Date.now()}`,
-            type: product.category,
+            id: `${BOUTIQUE_CATEGORY}_${product.id}_${Date.now()}`,
+            type: BOUTIQUE_CATEGORY,
             name: product.name,
             details: {
-                category: product.category,
-                tag: product.tag || ''
+                category: BOUTIQUE_CATEGORY,
+                tag: product.tag || '',
+                productId: product.id
             },
             price: Number(product.price || 0),
             quantity: 1
@@ -224,6 +264,7 @@
 
     window.MacemayShop = {
         STORAGE_KEY,
+        BOUTIQUE_CATEGORY,
         DEFAULT_PRODUCTS: cloneDefaults(),
         LEGACY_DEFAULT_IDS,
         ensureProductsSeeded,
@@ -233,6 +274,7 @@
         renderProducts,
         renderContactProducts,
         addProductToCart,
-        formatPrice
+        formatPrice,
+        isBoutiqueCategory
     };
 })();
