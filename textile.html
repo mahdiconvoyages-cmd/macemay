@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="configurateur.css">
-    <link rel="stylesheet" href="site-refonte.css?v=macemay-21">
+    <link rel="stylesheet" href="site-refonte.css?v=macemay-38">
     <script src="site-config.js?v=macemay-5"></script>
 </head>
 <body class="shop-page textile-page">
@@ -45,8 +45,14 @@
     </header>
 
     <main>
-        <section class="acc-hero shop-hero-dark shop-hero-split textile-hero">
-            <div class="container shop-hero-grid">
+        <section class="acc-hero shop-hero-dark textile-hero shop-hero-slideshow">
+            <div class="shop-hero-bg" aria-hidden="true">
+                <div class="shop-hero-slide is-active" style="background-image: url('images/textile-floquage/hero-1.png')"></div>
+                <div class="shop-hero-slide" style="background-image: url('images/textile-floquage/hero-2.png')"></div>
+                <div class="shop-hero-slide" style="background-image: url('images/textile-floquage/hero-3.png')"></div>
+            </div>
+            <div class="shop-hero-overlay" aria-hidden="true"></div>
+            <div class="container shop-hero-grid shop-hero-slideshow-grid">
                 <div class="shop-hero-copy">
                     <span class="section-badge">Floquage personnalisé</span>
                     <h1>Réalisations de floquage textile</h1>
@@ -62,14 +68,6 @@
                         <span>Bonnet</span>
                         <span>Logo client</span>
                     </div>
-                </div>
-                <div class="shop-hero-visual textile-visual" aria-hidden="true">
-                    <div class="textile-mockup textile-mockup-main">
-                        <span>MC</span>
-                        <strong>T-shirt floqué</strong>
-                    </div>
-                    <div class="textile-mockup textile-mockup-side">Veste</div>
-                    <div class="textile-mockup textile-mockup-cap">Casquette</div>
                 </div>
             </div>
         </section>
@@ -200,5 +198,20 @@
 
     <script src="floquage-gallery.js?v=macemay-2"></script>
     <script src="script.js?v=macemay-8"></script>
+    <script>
+        (function () {
+            const slides = document.querySelectorAll('.shop-hero-slide');
+            if (!slides.length) return;
+
+            let index = 0;
+            const durationMs = 5500;
+
+            window.setInterval(function () {
+                slides[index].classList.remove('is-active');
+                index = (index + 1) % slides.length;
+                slides[index].classList.add('is-active');
+            }, durationMs);
+        })();
+    </script>
 </body>
 </html>

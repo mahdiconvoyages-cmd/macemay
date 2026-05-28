@@ -12,23 +12,20 @@
     <link rel="stylesheet" href="configurateur.css">
     <link rel="stylesheet" href="configurateur-premium.css">
     <link rel="stylesheet" href="configurateur-wizard.css?v=macemay-3">
+    <link rel="stylesheet" href="configurateur-mesplaques.css?v=macemay-1">
     <link rel="stylesheet" href="site-refonte.css?v=macemay-21">
     <script src="site-config.js?v=macemay-5"></script>
 </head>
 <body class="configurator-page">
-    <header class="config-header">
+    <header class="config-header config-header-minimal">
         <a href="index.html" class="config-logo brand-logo-link">
             <img src="images/logo-macemay.png" alt="Macemay custom" class="brand-logo-img">
             <span>Macemay custom</span>
         </a>
-        <nav class="config-header-nav">
-            <a href="catalogue.html">Plaques</a>
-            <a href="boutique.html">Boutique</a>
-            <a href="textile.html">Floquage</a>
-            <a href="textile-entreprise.html">Textile d'entreprise</a>
-            <a href="pages/faq.html">FAQ</a>
-            <a href="pages/contact.html">Contact</a>
-        </nav>
+        <a href="catalogue.html" class="config-back-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            Revenir aux plaques
+        </a>
         <div class="config-header-actions">
             <button class="cart-btn" id="cartBtn" aria-label="Panier">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -46,9 +43,19 @@
         </div>
     </header>
 
-    <main class="wizard-layout">
+    <main class="wizard-layout configurator-mp-layout">
         <!-- APERÇU -->
-        <section class="wizard-preview bg-dark">
+        <section class="wizard-preview bg-dark configurator-mp-preview configurator-mp-preview-section" id="configPreviewSection">
+            <div class="homologation-sign" id="homologSign" aria-live="polite">
+                <p class="homologation-sign-letters-3d-notification" id="homolog3dHint" hidden>Effet relief 3D : non homologué route</p>
+                <div class="homologation-sign-container decorative" id="homologBanner" role="status">
+                    <span class="homologation-sign-icon" id="homologIcon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M12 2 2 22h20L12 2zm0 4.5 6.8 13.5H5.2L12 6.5zM11 10v5h2v-5h-2zm0 7v2h2v-2h-2z"/></svg>
+                    </span>
+                    <span class="homologation-sign-label" id="homologLabel">Vérification homologation…</span>
+                </div>
+            </div>
+            <div class="configurator-mp-preview-inner">
             <div class="preview-intro">
                 <div class="wizard-preview-badge">
                     <span class="badge-dot"></span>
@@ -130,11 +137,14 @@
                     <strong><span id="unitPriceDisplay">15,90 €</span> <em>TTC</em></strong>
                 </div>
             </div>
+            </div>
         </section>
+        <div class="configurator-mp-preview-spacer" id="previewSpacer" aria-hidden="true"></div>
 
+        <div class="configurator-mp-content">
         <!-- PANNEAU CONFIG -->
-        <section class="wizard-panel">
-            <div class="wizard-live-summary" aria-label="Résumé de configuration">
+        <section class="wizard-panel configurator-mp-details">
+            <div class="wizard-live-summary" aria-label="Résumé de configuration" hidden>
                 <div class="wizard-live-summary-item">
                     <span>Format</span>
                     <strong id="liveSummaryFormat">Auto</strong>
@@ -166,7 +176,12 @@
 
             <div class="wizard-body">
 
-                <!-- ÉTAPE 1 : CENTRE -->
+                <div class="mp-category open" data-category="plaque">
+                    <button type="button" class="mp-category-head" aria-expanded="true">
+                        Plaque &amp; immatriculation
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="mp-category-body">
                 <div class="wizard-pane active" data-pane="1">
                     <h2 class="wizard-pane-title" id="paneOneTitle">Type & immatriculation</h2>
                     <p class="wizard-pane-desc" id="paneOneDesc">Choisissez le format de votre plaque puis renseignez son texte central.</p>
@@ -263,8 +278,15 @@
                     </div>
 
                 </div>
+                    </div>
+                </div>
 
-                <!-- ÉTAPE 2 : ESTHÉTIQUE -->
+                <div class="mp-category open" data-category="esthetique">
+                    <button type="button" class="mp-category-head" aria-expanded="true">
+                        Région &amp; finitions
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="mp-category-body">
                 <div class="wizard-pane" data-pane="2">
                     <h2 class="wizard-pane-title" id="paneTwoTitle">Esthétique & Localisation</h2>
                     <p class="wizard-pane-desc" id="paneTwoDesc">Choisissez l'identité géographique de votre plaque et ajoutez des finitions haut de gamme.</p>
@@ -362,6 +384,35 @@
                         <span class="wizard-field-hint">Le texte s'affichera dans l'emplacement du logo régional à droite.</span>
                     </div>
 
+                    <div class="wizard-field" id="fontSizeField">
+                        <label class="wizard-field-label">Taille des caractères</label>
+                        <div class="font-size-control">
+                            <button type="button" id="fontSizeMinus" aria-label="Réduire la taille">−</button>
+                            <span id="fontSizeLabel">100%</span>
+                            <button type="button" id="fontSizePlus" aria-label="Augmenter la taille">+</button>
+                        </div>
+                        <span class="wizard-field-hint">Ajustez la taille de l'immatriculation sur l'aperçu (mode décoratif ou homologué).</span>
+                    </div>
+
+                    <div class="wizard-field" id="sideEffectField" hidden>
+                        <label class="wizard-field-label">Effet des bandes latérales (+3,00 €)</label>
+                        <p class="wizard-field-hint" style="margin-bottom: 8px;">Personnalisez les bandes bleues (plaques décoratives uniquement).</p>
+                        <div class="side-effect-grid" id="sideEffectGrid">
+                            <button type="button" class="side-effect-card selected" data-side="none">
+                                <div class="side-effect-preview none" aria-hidden="true"></div>
+                                <span>Standard</span>
+                            </button>
+                            <button type="button" class="side-effect-card" data-side="carbon">
+                                <div class="side-effect-preview carbon" aria-hidden="true"></div>
+                                <span>Carbone</span>
+                            </button>
+                            <button type="button" class="side-effect-card" data-side="camouflage">
+                                <div class="side-effect-preview camouflage" aria-hidden="true"></div>
+                                <span>Camouflage</span>
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="wizard-field" style="margin-top: 24px; border-top: 1px dashed #e2e8f0; padding-top: 24px;">
                         <label class="wizard-field-label">Liseré de couleur du contour (+2,00 €)</label>
                         <p class="wizard-field-hint" style="margin-bottom: 8px;">Ajoutez un liseré décoratif intérieur ou extérieur (non homologué à l'exception du blanc et noir selon législation).</p>
@@ -390,8 +441,15 @@
                         </div>
                     </div>
                 </div>
+                    </div>
+                </div>
 
-                <!-- ÉTAPE 3 : MESSAGE -->
+                <div class="mp-category" data-category="message">
+                    <button type="button" class="mp-category-head" aria-expanded="false">
+                        Message personnalisé
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="mp-category-body">
                 <div class="wizard-pane" data-pane="3">
                     <h2 class="wizard-pane-title">Message personnalisé</h2>
                     <p class="wizard-pane-desc" id="messagePaneDesc">Ajoutez un petit texte, slogan ou lien (ex: site internet, garage, réseau social) sous l'immatriculation (optionnel, 30 caractères max).</p>
@@ -402,9 +460,15 @@
                         <div class="wizard-char-counter" id="msgCounter">0 / 30</div>
                     </div>
                 </div>
+                    </div>
+                </div>
 
-                <!-- ÉTAPE 4 : CONTOUR -->
-                <!-- ÉTAPE 4 : RECAPITULATIF / VALIDATION -->
+                <div class="mp-category" data-category="options">
+                    <button type="button" class="mp-category-head" aria-expanded="false">
+                        Options &amp; validation
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="mp-category-body">
                 <div class="wizard-pane" data-pane="4">
                     <h2 class="wizard-pane-title">Récapitulatif</h2>
                     <p class="wizard-pane-desc">Vérifiez votre plaque avant de l'ajouter au panier.</p>
@@ -436,6 +500,8 @@
                         </div>
                     </div>
                 </div>
+                    </div>
+                </div>
 
             </div>
 
@@ -460,7 +526,57 @@
                 </button>
             </div>
         </section>
+
+        <aside class="configurator-mp-summary" aria-label="Résumé et commande">
+            <p class="configurator-summary-label">Votre configuration</p>
+            <div class="configurator-summary-content">
+                <strong id="summaryProductName">Plaque Auto Plexiglas</strong>
+                <span class="summary-base-price" id="summaryBasePrice">15,90 €</span>
+            </div>
+            <div class="configurator-summary-options" id="summaryOptionsList"></div>
+            <div class="configurator-summary-quantity">
+                <span class="label">Quantité</span>
+                <div class="configurator-summary-qty-controls">
+                    <button type="button" id="summaryQtyMinus" aria-label="Diminuer">−</button>
+                    <span id="summaryQtyValue">1</span>
+                    <button type="button" id="summaryQtyPlus" aria-label="Augmenter">+</button>
+                </div>
+            </div>
+            <div class="configurator-summary-total">
+                <span>Total <span class="ttc">TTC</span></span>
+                <span class="price" id="summaryTotalPrice">15,90 €</span>
+            </div>
+            <button type="button" class="configurator-summary-cta" id="addToCartBtnSummary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                Ajouter au panier
+            </button>
+            <div class="configurator-summary-reset">
+                <button type="button" id="configResetBtn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                    Réinitialiser
+                </button>
+            </div>
+            <div class="configurator-summary-shipping">
+                <span class="icon" aria-hidden="true">🚚</span>
+                <div>
+                    <p class="text">Livraison express 48h</p>
+                    <p>France métropolitaine · Point relais ou domicile</p>
+                </div>
+            </div>
+        </aside>
+        </div>
     </main>
+
+    <div class="configurator-mp-mobile-cta">
+        <div class="mobile-price">
+            <span id="mobileTotalPrice">15,90 €</span>
+            <small>TTC · <span id="mobileQtyLabel">1 plaque</span></small>
+        </div>
+        <button type="button" id="addToCartBtnMobile">Ajouter au panier</button>
+    </div>
 
     <!-- Cart Drawer -->
     <div class="cart-overlay" id="cartOverlay"></div>
@@ -491,7 +607,7 @@
     </div>
 
     <script src="script.js?v=macemay-8"></script>
-    <script src="configurateur.js?v=macemay-28"></script>
+    <script src="configurateur.js?v=macemay-29"></script>
     <script src="cookies.js"></script>
 </body>
 </html>

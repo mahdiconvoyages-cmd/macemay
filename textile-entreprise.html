@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="configurateur.css">
-    <link rel="stylesheet" href="site-refonte.css?v=macemay-21">
+    <link rel="stylesheet" href="site-refonte.css?v=macemay-37">
     <script src="site-config.js?v=macemay-5"></script>
 </head>
 <body class="shop-page company-quote-page">
@@ -45,8 +45,15 @@
     </header>
 
     <main>
-        <section class="acc-hero shop-hero-dark shop-hero-split company-hero">
-            <div class="container shop-hero-grid">
+        <section class="acc-hero shop-hero-dark company-hero shop-hero-slideshow">
+            <div class="shop-hero-bg" aria-hidden="true">
+                <div class="shop-hero-slide is-active" style="background-image: url('images/textile-entreprise/hero-1.png')"></div>
+                <div class="shop-hero-slide" style="background-image: url('images/textile-entreprise/hero-2.png')"></div>
+                <div class="shop-hero-slide" style="background-image: url('images/textile-entreprise/hero-3.png')"></div>
+                <div class="shop-hero-slide" style="background-image: url('images/textile-entreprise/hero-4.png')"></div>
+            </div>
+            <div class="shop-hero-overlay" aria-hidden="true"></div>
+            <div class="container shop-hero-grid shop-hero-slideshow-grid">
                 <div class="shop-hero-copy">
                     <span class="section-badge">Textile d'entreprise</span>
                     <h1>Vêtements professionnels avec votre logo</h1>
@@ -59,21 +66,6 @@
                         <span>Logo client</span>
                         <span>Tailles multiples</span>
                         <span>BAT avant production</span>
-                    </div>
-                </div>
-                <div class="shop-hero-visual company-logo-visual" aria-hidden="true">
-                    <div class="company-shirt-mockup">
-                        <div class="company-shirt-neck"></div>
-                        <span>VOTRE LOGO</span>
-                    </div>
-                    <div class="company-logo-card">
-                        <small>Marquage</small>
-                        <strong>Coeur, dos ou manche</strong>
-                    </div>
-                    <div class="company-swatch-row">
-                        <span></span>
-                        <span></span>
-                        <span></span>
                     </div>
                 </div>
             </div>
@@ -192,5 +184,20 @@
     </div>
 
     <script src="script.js?v=macemay-8"></script>
+    <script>
+        (function () {
+            const slides = document.querySelectorAll('.shop-hero-slide');
+            if (!slides.length) return;
+
+            let index = 0;
+            const durationMs = 5500;
+
+            window.setInterval(function () {
+                slides[index].classList.remove('is-active');
+                index = (index + 1) % slides.length;
+                slides[index].classList.add('is-active');
+            }, durationMs);
+        })();
+    </script>
 </body>
 </html>

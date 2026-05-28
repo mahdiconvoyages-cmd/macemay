@@ -165,17 +165,21 @@
         const contactBase = options.contactBase || 'pages/contact.html';
         const contactHref = `${contactBase}?subject=${encodeURIComponent(contactSubject)}&product=${encodeURIComponent(product.name || '')}`;
         const contactLabel = options.actionLabel || 'Contacter';
+        const isBoutique = isBoutiqueCategory(product.category);
         const visual = product.imageData
-            ? `<img src="${escapeHTML(product.imageData)}" alt="${escapeHTML(product.name)}">`
-            : `<span>${escapeHTML(initials(product.name))}</span>`;
+            ? `<img src="${escapeHTML(product.imageData)}" alt="${escapeHTML(product.name)}" loading="lazy" decoding="async">`
+            : `<span class="shop-product-placeholder" aria-hidden="true">${escapeHTML(initials(product.name))}</span>`;
         const action = mode === 'contact'
             ? `<a class="shop-contact-btn" href="${escapeHTML(contactHref)}">${escapeHTML(contactLabel)}</a>`
-            : `<button type="button" class="shop-add-btn" data-product-id="${escapeHTML(product.id)}">Ajouter au panier</button>`;
+            : `<button type="button" class="shop-add-btn${isBoutique ? ' shop-add-btn--gold' : ''}" data-product-id="${escapeHTML(product.id)}">Ajouter au panier</button>`;
         const priceLabel = formatPrice(product.price);
+        const cardClass = isBoutique ? 'shop-product-card shop-product-card--boutique' : 'shop-product-card';
 
         return `
-            <article class="shop-product-card">
-                <div class="shop-product-media">${visual}</div>
+            <article class="${cardClass}">
+                <div class="shop-product-media">
+                    <div class="shop-product-media-frame">${visual}</div>
+                </div>
                 <div class="shop-product-body">
                     <div class="shop-product-topline">
                         <span>${escapeHTML(product.tag || (product.category === 'textile' ? 'Floquage' : 'Boutique'))}</span>
@@ -183,7 +187,7 @@
                     <h3>${escapeHTML(product.name)}</h3>
                     <p>${escapeHTML(product.desc || '')}</p>
                     <div class="shop-product-bottom">
-                        <strong>${escapeHTML(priceLabel)}</strong>
+                        <strong class="shop-product-price">${escapeHTML(priceLabel)}</strong>
                         ${action}
                     </div>
                 </div>

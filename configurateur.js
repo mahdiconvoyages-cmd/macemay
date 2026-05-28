@@ -15,8 +15,12 @@
         wgarage: 15.90
     };
     const CONTOUR_EXTRA = 2.00;
+    const SIDE_EFFECT_EXTRA = 3.00;
     const RIVETS_UNIT_PRICE = 1.50;
     const FONT_EXTRA = { officiel: 0 };
+    const FONT_SIZE_MIN = 0.85;
+    const FONT_SIZE_MAX = 1.15;
+    const FONT_SIZE_STEP = 0.05;
     const TOTAL_STEPS = 4;
     const FORMAT_LABELS = { auto: 'Auto', moto: 'Moto', '4x4': 'SUV', usa: 'Collection noire', ww: 'Provisoire WW', wgarage: 'W garage' };
     const FORMAT_SIZES = { auto: '520 × 110 mm', moto: '210 × 130 mm', '4x4': '275 × 200 mm', usa: 'Look rétro', ww: '520 × 110 mm', wgarage: '520 × 110 mm' };
@@ -82,6 +86,8 @@
         quantity: 1,
         previewBg: 'dark',
         enable3D: false,
+        sideEffect: 'none',
+        fontSizeScale: 1,
         formatLocked: true,
         homologLocked: true
     };
@@ -307,16 +313,45 @@
             plaqueStage: document.querySelector('.wizard-plaque-stage'),
             plaqueReflection: document.querySelector('.plaque-reflection'),
 
-            cartBtn: document.getElementById('cartBtn')
+            cartBtn: document.getElementById('cartBtn'),
+
+            homologBanner: document.getElementById('homologBanner'),
+            homologLabel: document.getElementById('homologLabel'),
+            homologIcon: document.getElementById('homologIcon'),
+            homolog3dHint: document.getElementById('homolog3dHint'),
+            sideEffectField: document.getElementById('sideEffectField'),
+            sideEffectGrid: document.getElementById('sideEffectGrid'),
+            fontSizeField: document.getElementById('fontSizeField'),
+            fontSizeMinus: document.getElementById('fontSizeMinus'),
+            fontSizePlus: document.getElementById('fontSizePlus'),
+            fontSizeLabel: document.getElementById('fontSizeLabel'),
+            summaryProductName: document.getElementById('summaryProductName'),
+            summaryBasePrice: document.getElementById('summaryBasePrice'),
+            summaryOptionsList: document.getElementById('summaryOptionsList'),
+            summaryTotalPrice: document.getElementById('summaryTotalPrice'),
+            summaryQtyMinus: document.getElementById('summaryQtyMinus'),
+            summaryQtyPlus: document.getElementById('summaryQtyPlus'),
+            summaryQtyValue: document.getElementById('summaryQtyValue'),
+            addCartSummary: document.getElementById('addToCartBtnSummary'),
+            addCartMobile: document.getElementById('addToCartBtnMobile'),
+            configResetBtn: document.getElementById('configResetBtn'),
+            mobileTotalPrice: document.getElementById('mobileTotalPrice'),
+            mobileQtyLabel: document.getElementById('mobileQtyLabel'),
+            previewSection: document.getElementById('configPreviewSection'),
+            previewSpacer: document.getElementById('previewSpacer'),
+            mpCategories: document.querySelectorAll('.mp-category')
         };
 
         applyUrlParams();
         bindEvents();
+        bindMesplaquesUI();
         syncControlsFromState();
         buildDeptList('');
         updateDeptCurrent();
         updatePreview();
         updatePrice();
+        updateHomologBanner();
+        updateSummarySidebar();
         updateNavButtons();
     }
 
@@ -415,6 +450,15 @@
         updateLockedProductUI();
         updateDecorImageUI();
         updateHomologAvailability();
+        if ($.sideEffectGrid) {
+            $.sideEffectGrid.querySelectorAll('.side-effect-card').forEach(c => {
+                c.classList.toggle('selected', c.dataset.side === state.sideEffect);
+            });
+        }
+        if ($.fontSizeLabel) {
+            $.fontSizeLabel.textContent = Math.round(state.fontSizeScale * 100) + '%';
+        }
+        if ($.summaryQtyValue) $.summaryQtyValue.textContent = state.quantity;
     }
 
     function isDecorative() {
@@ -896,6 +940,10 @@
             state.customCarLogoText = '';
             if ($.customCarLogoField) $.customCarLogoField.style.display = 'none';
         }
+        setFieldVisible($.sideEffectField, decorative);
+        if (!decorative && state.sideEffect !== 'none') {
+            state.sideEffect = 'none';
+        }
         updateStepVisibility();
     }
 
@@ -928,13 +976,221 @@
         }
     }
 
+    function formatPrice(amount) {
+        return amount.toFixed(2).replace('.', ',') + ' €';
+    }
+
+    function isImmatValidForHomolog() {
+        if (isDecorative() || isCollectionPlate()) return false;
+        if (!state.immat) return false;
+        if (isProvisionalPlate()) {
+            const regex = state.format === 'wgarage' ? /^W-[0-9]{3}-[A-Z]{2}$/ : /^WW-[0-9]{3}-[A-Z]{2}$/;
+            return regex.test(state.immat);
+        }
+        if (state.homolog !== 'yes') return false;
+        const regex = state.immatMode === 'fni'
+            ? /^\d{1,4}\s[A-Z]{1,3}\s(?:2A|2B|\d{2,3})$/
+            : /^[A-Z]{2}-[0-9]{3}-[A-Z]{2}$/;
+        if (!regex.test(state.immat)) return false;
+        if (state.immatMode === 'fni' && !getFniDeptFromImmat(state.immat)) return false;
+        return state.sideEffect === 'none';
+    }
+
+    function isHomologatedRoadLegal() {
+        if (isDecorative()) return false;
+        if (isCollectionPlate() || isProvisionalPlate()) return Boolean(state.immat);
+        return state.homolog === 'yes' && isImmatValidForHomolog();
+    }
+
+    function updateHomologBanner() {
+        if (!$.homologBanner || !$.homologLabel) return;
+        const homologated = isHomologatedRoadLegal();
+        const decorative = isDecorative();
+        const collection = isCollectionPlate();
+        const provisional = isProvisionalPlate();
+
+        $.homologBanner.classList.remove('homologated', 'decorative');
+        if (homologated) {
+            $.homologBanner.classList.add('homologated');
+            $.homologLabel.textContent = collection
+                ? 'Plaque collection — homologuée'
+                : provisional
+                    ? 'Plaque provisoire — homologuée'
+                    : 'Plaque homologuée — utilisable sur la route';
+            if ($.homologIcon) {
+                $.homologIcon.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>';
+            }
+        } else {
+            $.homologBanner.classList.add('decorative');
+            if (decorative) {
+                $.homologLabel.textContent = 'Plaque décorative — non homologuée route';
+            } else if (state.homolog === 'yes' && state.immat && !isImmatValidForHomolog()) {
+                $.homologLabel.textContent = 'Immatriculation ou options non conformes';
+            } else if (state.homolog === 'yes') {
+                $.homologLabel.textContent = 'Renseignez une immatriculation valide';
+            } else {
+                $.homologLabel.textContent = 'Configuration non homologuée route';
+            }
+            if ($.homologIcon) {
+                $.homologIcon.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 2 2 22h20L12 2zm0 4.5 6.8 13.5H5.2L12 6.5zM11 10v5h2v-5h-2zm0 7v2h2v-2h-2z"/></svg>';
+            }
+        }
+
+        if ($.homolog3dHint) {
+            $.homolog3dHint.hidden = !(state.enable3D && homologated && !decorative);
+        }
+    }
+
+    function computePriceBreakdown() {
+        const base = PRICES[state.format] || 15.90;
+        const options = [];
+        if (state.contour !== 'none') {
+            options.push({ name: 'Liseré contour ' + (state.contour === 'int' ? 'intérieur' : 'extérieur'), price: CONTOUR_EXTRA });
+        }
+        if (state.sideEffect !== 'none' && isDecorative()) {
+            const labels = { carbon: 'Bandes carbone', camouflage: 'Bandes camouflage' };
+            options.push({ name: labels[state.sideEffect] || 'Effet bandes', price: SIDE_EFFECT_EXTRA });
+        }
+        if (state.rivets) {
+            options.push({ name: 'Lot 2 rivets blancs', price: RIVETS_UNIT_PRICE });
+        }
+        const unit = base + options.reduce((s, o) => s + o.price, 0);
+        return { base, options, unit, total: unit * state.quantity };
+    }
+
+    function updateSummarySidebar() {
+        const breakdown = computePriceBreakdown();
+        if ($.summaryProductName) $.summaryProductName.textContent = getProductLabel();
+        if ($.summaryBasePrice) $.summaryBasePrice.textContent = formatPrice(breakdown.base);
+        if ($.summaryOptionsList) {
+            $.summaryOptionsList.innerHTML = breakdown.options.length
+                ? breakdown.options.map(o => `
+                    <div class="option">
+                        <span class="option-name">${escapeHTML(o.name)}</span>
+                        <span class="option-price">+${formatPrice(o.price)}</span>
+                    </div>`).join('')
+                : '';
+        }
+        if ($.summaryTotalPrice) $.summaryTotalPrice.textContent = formatPrice(breakdown.total);
+        if ($.mobileTotalPrice) $.mobileTotalPrice.textContent = formatPrice(breakdown.total);
+        if ($.mobileQtyLabel) {
+            $.mobileQtyLabel.textContent = state.quantity === 1 ? '1 plaque' : state.quantity + ' plaques';
+        }
+        if ($.summaryQtyValue) $.summaryQtyValue.textContent = state.quantity;
+    }
+
+    function scrollToCategory(name) {
+        const cat = document.querySelector(`.mp-category[data-category="${name}"]`);
+        if (!cat) return;
+        cat.classList.add('open');
+        const head = cat.querySelector('.mp-category-head');
+        if (head) head.setAttribute('aria-expanded', 'true');
+        cat.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function bindMesplaquesUI() {
+        if ($.mpCategories) {
+            $.mpCategories.forEach(cat => {
+                const head = cat.querySelector('.mp-category-head');
+                if (!head) return;
+                head.addEventListener('click', () => {
+                    const open = cat.classList.toggle('open');
+                    head.setAttribute('aria-expanded', open ? 'true' : 'false');
+                });
+            });
+        }
+
+        if ($.summaryQtyMinus) $.summaryQtyMinus.addEventListener('click', () => changeQty(-1));
+        if ($.summaryQtyPlus) $.summaryQtyPlus.addEventListener('click', () => changeQty(1));
+        if ($.addCartSummary) $.addCartSummary.addEventListener('click', addToCart);
+        if ($.addCartMobile) $.addCartMobile.addEventListener('click', addToCart);
+        if ($.configResetBtn) $.configResetBtn.addEventListener('click', resetConfiguration);
+
+        if ($.homologBanner) {
+            $.homologBanner.addEventListener('click', () => {
+                if (isDecorative() || !isImmatValidForHomolog()) scrollToCategory('plaque');
+            });
+        }
+
+        if ($.fontSizeMinus) $.fontSizeMinus.addEventListener('click', () => changeFontSize(-1));
+        if ($.fontSizePlus) $.fontSizePlus.addEventListener('click', () => changeFontSize(1));
+
+        if ($.sideEffectGrid) {
+            $.sideEffectGrid.querySelectorAll('.side-effect-card').forEach(c => {
+                c.addEventListener('click', () => selectSideEffect(c.dataset.side));
+            });
+        }
+
+        if ($.previewSection && window.matchMedia('(max-width: 959px)').matches) {
+            const onScroll = () => {
+                const rect = $.previewSection.getBoundingClientRect();
+                const fixed = rect.top <= 64 && rect.bottom > 120;
+                $.previewSection.classList.toggle('is-fixed', fixed);
+                if ($.previewSpacer) {
+                    $.previewSpacer.style.display = fixed ? 'block' : 'none';
+                    $.previewSpacer.style.height = fixed ? ($.previewSection.offsetHeight + 'px') : '';
+                }
+            };
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+        }
+    }
+
+    function changeFontSize(delta) {
+        const next = Math.round((state.fontSizeScale + delta * FONT_SIZE_STEP) * 100) / 100;
+        state.fontSizeScale = Math.max(FONT_SIZE_MIN, Math.min(FONT_SIZE_MAX, next));
+        if ($.fontSizeLabel) $.fontSizeLabel.textContent = Math.round(state.fontSizeScale * 100) + '%';
+        updatePreview();
+    }
+
+    function selectSideEffect(value) {
+        if (!['none', 'carbon', 'camouflage'].includes(value)) return;
+        state.sideEffect = value;
+        if ($.sideEffectGrid) {
+            $.sideEffectGrid.querySelectorAll('.side-effect-card').forEach(c => {
+                c.classList.toggle('selected', c.dataset.side === value);
+            });
+        }
+        updatePreview();
+        updatePrice();
+        updateHomologBanner();
+    }
+
+    function resetConfiguration() {
+        state.immat = '';
+        state.message = '';
+        state.decorImageData = '';
+        state.decorImageName = '';
+        state.decorAdminMessage = '';
+        state.contour = 'none';
+        state.contourColor = '#c9a227';
+        state.rivets = false;
+        state.sideEffect = 'none';
+        state.fontSizeScale = 1;
+        state.quantity = 1;
+        state.carLogo = 'none';
+        state.customCarLogoText = '';
+        state.enable3D = false;
+        if ($.immat) $.immat.value = '';
+        if ($.message) $.message.value = '';
+        if ($.rivetsOption) $.rivetsOption.checked = false;
+        if ($.toggle3DBtn) $.toggle3DBtn.classList.remove('active');
+        if ($.preview) $.preview.classList.remove('mode-3d');
+        syncControlsFromState();
+        updatePreview();
+        updatePrice();
+        updateHomologBanner();
+        notify('Configuration réinitialisée', 'success');
+    }
+
     /* ---------- ÉVÉNEMENTS ---------- */
     function bindEvents() {
-        // Navigation étapes
-        $.steps.forEach(s => s.addEventListener('click', () => goToStep(parseInt(s.dataset.step))));
-        $.prev.addEventListener('click', () => goToStep(getAdjacentStep(-1)));
-        $.next.addEventListener('click', () => goToStep(getAdjacentStep(1)));
-        $.addCart.addEventListener('click', addToCart);
+        if ($.steps.length) {
+            $.steps.forEach(s => s.addEventListener('click', () => goToStep(parseInt(s.dataset.step))));
+        }
+        if ($.prev) $.prev.addEventListener('click', () => goToStep(getAdjacentStep(-1)));
+        if ($.next) $.next.addEventListener('click', () => goToStep(getAdjacentStep(1)));
+        if ($.addCart) $.addCart.addEventListener('click', addToCart);
 
         // Quantité
         $.qtyMinus.addEventListener('click', () => changeQty(-1));
@@ -1008,6 +1264,7 @@
                 state.enable3D = !state.enable3D;
                 $.toggle3DBtn.classList.toggle('active', state.enable3D);
                 $.preview.classList.toggle('mode-3d', state.enable3D);
+                updateHomologBanner();
                 if (!state.enable3D) {
                     $.preview.style.transform = '';
                     if ($.plaqueReflection) {
@@ -1142,6 +1399,8 @@
         updateHomologAvailability();
         syncControlsFromState();
         updatePreview();
+        updateHomologBanner();
+        updatePrice();
     }
 
     function selectImmatMode(mode) {
@@ -1156,6 +1415,7 @@
         }
         updateImmatModeUI();
         updatePreview();
+        updateHomologBanner();
     }
 
     function handleImmat(e) {
@@ -1189,6 +1449,7 @@
             }
         }
         updatePreview();
+        updateHomologBanner();
     }
 
     function handleDecorImage(e) {
@@ -1298,6 +1559,7 @@
         state.rivets = !!($.rivetsOption && $.rivetsOption.checked);
         updatePrice();
         if (state.step === 4) buildRecap();
+        updateSummarySidebar();
     }
 
     /* ---------- ÉTAPE 4 : CONTOUR ---------- */
@@ -1309,6 +1571,7 @@
         $.contourColorField.style.display = type === 'none' ? 'none' : '';
         updatePreview();
         updatePrice();
+        updateHomologBanner();
     }
 
     function selectContourColor(color) {
@@ -1385,23 +1648,21 @@
     /* ---------- QUANTITÉ ---------- */
     function changeQty(delta) {
         state.quantity = Math.max(1, Math.min(20, state.quantity + delta));
-        $.qtyValue.textContent = state.quantity;
+        if ($.qtyValue) $.qtyValue.textContent = state.quantity;
         if (state.step === 4) buildRecap();
+        updateSummarySidebar();
     }
 
     /* ---------- PRIX ---------- */
     function computeUnitPrice() {
-        let p = PRICES[state.format] || 15.90;
-        if (state.contour !== 'none') p += CONTOUR_EXTRA;
-        p += FONT_EXTRA[state.font] || 0;
-        if (state.rivets) p += RIVETS_UNIT_PRICE;
-        return p;
+        return computePriceBreakdown().unit;
     }
 
     function updatePrice() {
         const p = computeUnitPrice();
-        $.unitPrice.textContent = p.toFixed(2).replace('.', ',') + ' €';
+        if ($.unitPrice) $.unitPrice.textContent = formatPrice(p);
         updateLiveSummary();
+        updateSummarySidebar();
     }
 
     /* ---------- APERÇU ---------- */
@@ -1436,9 +1697,10 @@
         $.plaqueMsg.style.display = state.message ? '' : 'none';
         updateOfficialPlateSvg();
 
-        // Bandes bleues : plaques route uniquement
-        $.bandLeft.style.display = !isDecorative() && !isCollectionPlate() && state.euBand === 'yes' ? '' : 'none';
-        $.bandRight.style.display = isDecorative() || isCollectionPlate() ? 'none' : '';
+        // Bandes bleues : route ou déco avec effet latéral
+        const decorBands = isDecorative() && state.sideEffect !== 'none';
+        $.bandLeft.style.display = (!isDecorative() && !isCollectionPlate() && state.euBand === 'yes') || decorBands ? '' : 'none';
+        $.bandRight.style.display = (isDecorative() && !decorBands) || isCollectionPlate() ? 'none' : '';
 
         $.euStars.classList.remove('has-car-logo', 'is-custom-text');
         $.euStars.style.backgroundImage = '';
@@ -1454,6 +1716,12 @@
             p.classList.add('contour-' + state.contour);
             p.style.setProperty('--contour-color', state.contourColor);
         }
+
+        p.classList.remove('side-none', 'side-carbon', 'side-camouflage');
+        if (isDecorative() && state.sideEffect !== 'none') {
+            p.classList.add('side-' + state.sideEffect);
+        }
+        p.style.setProperty('--plaque-font-scale', state.fontSizeScale);
 
         // Badge aperçu
         const homo = isCollectionPlate() ? 'Homologuée collection' : (isProvisionalPlate() ? 'Homologuée provisoire' : (state.homolog === 'yes' ? 'Homologuée' : 'Décorative'));
@@ -1472,6 +1740,7 @@
                 ? (state.decorImageName || 'Image à importer')
                 : `${state.dept} · ${state.deptName}`;
         updateLiveSummary();
+        updateHomologBanner();
     }
 
     /* ---------- AJOUT PANIER ---------- */
@@ -1479,19 +1748,19 @@
         if (isDecorative()) {
             if (!state.decorImageData) {
                 notify('Veuillez importer votre image pour la plaque décorative', 'error');
-                goToStep(1);
+                scrollToCategory('plaque');
                 $.decorImageInput.focus();
                 return;
             }
             if (!state.message.trim()) {
                 notify('Veuillez ajouter votre texte pour la plaque décorative', 'error');
-                goToStep(3);
+                scrollToCategory('message');
                 $.message.focus();
                 return;
             }
         } else if (!state.immat) {
-            notify('Veuillez renseigner l\'immatriculation à l\'étape 1', 'error');
-            goToStep(1);
+            notify('Veuillez renseigner l\'immatriculation', 'error');
+            scrollToCategory('plaque');
             $.immat.focus();
             return;
         }
@@ -1501,7 +1770,7 @@
                 notify(state.format === 'wgarage'
                     ? 'Format W garage invalide (ex : W-123-AA)'
                     : 'Format WW invalide (ex : WW-123-AA)', 'error');
-                goToStep(1);
+                scrollToCategory('plaque');
                 $.immat.focus();
                 return;
             }
@@ -1513,13 +1782,13 @@
                 notify(state.immatMode === 'fni'
                     ? 'Ancien format invalide (ex : 123 AB 45)'
                     : 'Format SIV invalide (AB-123-CD)', 'error');
-                goToStep(1);
+                scrollToCategory('plaque');
                 $.immat.focus();
                 return;
             }
             if (state.immatMode === 'fni' && !getFniDeptFromImmat(state.immat)) {
                 notify('Département invalide dans l’ancien format', 'error');
-                goToStep(1);
+                scrollToCategory('plaque');
                 $.immat.focus();
                 return;
             }
@@ -1554,6 +1823,8 @@
                 decorAdminMessage: isDecorative() ? state.decorAdminMessage : '',
                 contour: state.contour,
                 contourColor: state.contourColor,
+                sideEffect: state.sideEffect,
+                fontSizeScale: state.fontSizeScale,
                 rivets: state.rivets,
                 rivetsUnitPrice: state.rivets ? RIVETS_UNIT_PRICE : 0
             },

@@ -5,6 +5,11 @@
 :root {
     --primary: #ffffff;
     --primary-dark: #d4d4d8;
+    --admin-gold: linear-gradient(135deg, #fff4bd 0%, #e8c96a 38%, #c8a54b 100%);
+    --admin-gold-hover: linear-gradient(135deg, #fff8d4 0%, #f0d57a 40%, #d7b45a 100%);
+    --admin-gold-text: #1a1206;
+    --admin-gold-border: rgba(255, 244, 189, 0.55);
+    --admin-gold-shadow: 0 12px 28px rgba(200, 165, 75, 0.28);
     --danger: #ef4444;
     --danger-dark: #dc2626;
     --success: #10b981;
@@ -128,23 +133,26 @@ body {
 .btn-login {
     width: 100%;
     padding: 0.875rem 1.5rem;
-    background: #ffffff;
-    color: #050505;
-    border: none;
+    background: var(--admin-gold);
+    color: var(--admin-gold-text);
+    border: 1px solid var(--admin-gold-border);
     border-radius: 8px;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 800;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: var(--admin-gold-shadow);
+    transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
 }
 
 .btn-login:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+    background: var(--admin-gold-hover);
+    box-shadow: 0 16px 36px rgba(215, 180, 90, 0.34);
+    filter: brightness(1.03);
 }
 
 .login-error {
@@ -233,8 +241,11 @@ body {
 }
 
 .nav-item.active {
-    background: #ffffff;
-    color: #050505;
+    background: var(--admin-gold);
+    color: var(--admin-gold-text);
+    border: 1px solid var(--admin-gold-border);
+    box-shadow: var(--admin-gold-shadow);
+    font-weight: 700;
 }
 
 .sidebar-footer {
@@ -291,19 +302,22 @@ body {
     align-items: center;
     gap: 0.5rem;
     padding: 0.625rem 1rem;
-    background: #0a0a0a;
-    border: 1px solid #242424;
+    background: var(--admin-gold);
+    border: 1px solid var(--admin-gold-border);
     border-radius: 8px;
-    color: #e5e7eb;
+    color: var(--admin-gold-text);
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 800;
     text-decoration: none;
-    transition: all 0.2s;
+    box-shadow: var(--admin-gold-shadow);
+    transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
 }
 
 .btn-view-site:hover {
-    background: var(--gray-50);
-    border-color: var(--gray-400);
+    background: var(--admin-gold-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 14px 32px rgba(215, 180, 90, 0.32);
+    filter: brightness(1.03);
 }
 
 /* Sections */
@@ -399,18 +413,20 @@ body {
 }
 
 .btn-icon-edit {
-    background: var(--gray-100);
-    color: var(--gray-600);
+    background: var(--admin-gold);
+    color: var(--admin-gold-text);
+    border: 1px solid var(--admin-gold-border);
 }
 
 .btn-icon-edit:hover {
-    background: var(--primary);
-    color: var(--white);
+    background: var(--admin-gold-hover);
+    color: var(--admin-gold-text);
 }
 
 .btn-icon-delete {
-    background: var(--gray-100);
-    color: var(--gray-600);
+    background: rgba(239, 68, 68, 0.12);
+    color: #fca5a5;
+    border: 1px solid rgba(239, 68, 68, 0.35);
 }
 
 .btn-icon-delete:hover {
@@ -518,18 +534,22 @@ body {
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1.25rem;
-    background: var(--primary);
-    color: var(--white);
-    border: none;
+    background: var(--admin-gold);
+    color: var(--admin-gold-text);
+    border: 1px solid var(--admin-gold-border);
     border-radius: 8px;
     font-size: 0.9rem;
-    font-weight: 500;
+    font-weight: 800;
     cursor: pointer;
-    transition: all 0.2s;
+    box-shadow: var(--admin-gold-shadow);
+    transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
 }
 
 .btn-save:hover {
-    background: var(--primary-dark);
+    background: var(--admin-gold-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 16px 36px rgba(215, 180, 90, 0.34);
+    filter: brightness(1.03);
 }
 
 .btn-save-all {
@@ -744,12 +764,20 @@ body {
 }
 
 .btn-secondary-admin {
-    border: 1px solid #2a2a2a;
-    background: #111111;
-    color: #ffffff;
+    border: 1px solid rgba(215, 180, 90, 0.35);
+    background: rgba(215, 180, 90, 0.08);
+    color: #f1d784;
     border-radius: 8px;
     padding: 0.75rem 1rem;
+    font-weight: 700;
     cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.btn-secondary-admin:hover {
+    background: rgba(215, 180, 90, 0.16);
+    border-color: rgba(215, 180, 90, 0.55);
+    color: #fff4bd;
 }
 
 .product-image-preview {
@@ -837,16 +865,34 @@ body {
 }
 
 .admin-product-actions button {
-    border: 1px solid #2a2a2a;
-    background: #111111;
-    color: #ffffff;
+    border: 1px solid var(--admin-gold-border);
+    background: var(--admin-gold);
+    color: var(--admin-gold-text);
     border-radius: 8px;
-    padding: 0.55rem 0.75rem;
+    padding: 0.55rem 0.85rem;
+    font-weight: 800;
     cursor: pointer;
+    box-shadow: 0 8px 20px rgba(200, 165, 75, 0.2);
+    transition: transform 0.18s, box-shadow 0.18s, filter 0.18s;
+}
+
+.admin-product-actions button:hover {
+    background: var(--admin-gold-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 12px 26px rgba(215, 180, 90, 0.28);
 }
 
 .admin-product-actions .danger {
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.35);
     color: #fca5a5;
+    box-shadow: none;
+}
+
+.admin-product-actions .danger:hover {
+    background: rgba(239, 68, 68, 0.22);
+    color: #fecaca;
+    transform: none;
 }
 
 .admin-empty {
@@ -1020,16 +1066,30 @@ body {
 
 .admin-order-actions button {
     margin-left: auto;
-    border: 1px solid #2a2a2a;
-    background: #111111;
-    color: #ffffff;
+    border: 1px solid var(--admin-gold-border);
+    background: var(--admin-gold);
+    color: var(--admin-gold-text);
     border-radius: 8px;
-    padding: 0.55rem 0.75rem;
+    padding: 0.55rem 0.85rem;
+    font-weight: 800;
     cursor: pointer;
+    box-shadow: 0 8px 20px rgba(200, 165, 75, 0.2);
+}
+
+.admin-order-actions button:hover {
+    background: var(--admin-gold-hover);
 }
 
 .admin-order-actions .danger {
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.35);
     color: #fca5a5;
+    box-shadow: none;
+}
+
+.admin-order-actions .danger:hover {
+    background: rgba(239, 68, 68, 0.22);
+    color: #fecaca;
 }
 
 .nav-item,
@@ -1044,12 +1104,38 @@ body {
     color: #d4d4d8;
 }
 
-.btn-view-site,
-.btn-icon-edit,
+.btn-view-site {
+    color: var(--admin-gold-text);
+    background: var(--admin-gold);
+    border: 1px solid var(--admin-gold-border);
+    font-weight: 800;
+    box-shadow: var(--admin-gold-shadow);
+}
+
+.btn-view-site:hover {
+    background: var(--admin-gold-hover);
+}
+
+.btn-icon-edit {
+    color: var(--admin-gold-text);
+    background: var(--admin-gold);
+    border: 1px solid var(--admin-gold-border);
+    font-weight: 700;
+}
+
+.btn-icon-edit:hover {
+    background: var(--admin-gold-hover);
+}
+
 .btn-icon-delete {
-    color: #ffffff;
-    background: #111111;
-    border: 1px solid #2a2a2a;
+    color: #fca5a5;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.btn-icon-delete:hover {
+    background: rgba(239, 68, 68, 0.22);
+    color: #fecaca;
 }
 
 .admin-header h1,
