@@ -1,4 +1,4 @@
-/* Paiement PayPal — boutique Macemay custom */
+/* Paiement PayPal — plaques et boutique Macemay custom */
 (function() {
     'use strict';
 

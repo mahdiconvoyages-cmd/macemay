@@ -825,7 +825,7 @@
             return;
         }
 
-        list.innerHTML = (!isServerSource && serverButton ? `<div class="admin-empty">Affichage local. Pour voir les commandes Mollie stockées sur IONOS, chargez les commandes serveur.${serverButton}</div>` : '') + orders.map(order => {
+        list.innerHTML = (!isServerSource && serverButton ? `<div class="admin-empty">Affichage local. Pour voir les commandes PayPal stockées sur IONOS, chargez les commandes serveur.${serverButton}</div>` : '') + orders.map(order => {
             const items = Array.isArray(order.items) ? order.items : [];
             const total = order.total ?? items.reduce((sum, item) => sum + ((Number(item.price) || 0) * (Number(item.quantity) || 1)), 0);
             return `

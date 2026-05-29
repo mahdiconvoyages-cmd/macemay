@@ -2330,8 +2330,13 @@ h4 { font-size: var(--font-size-xl); }
     color: #f1d784;
 }
 
+#paypal-payment-container,
 #mollie-payment-container {
     margin-top: 20px;
+}
+
+.paypal-payment-container {
+    min-height: 48px;
 }
 
 .mollie-pay-btn {

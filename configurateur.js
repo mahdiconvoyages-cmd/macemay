@@ -17,7 +17,20 @@
     const CONTOUR_EXTRA = 2.00;
     const SIDE_EFFECT_EXTRA = 3.00;
     const RIVETS_UNIT_PRICE = 1.50;
-    const FONT_EXTRA = { officiel: 0 };
+    const FONT_EXTRA = { official1: 0, official2: 1, official3: 1, official4: 1 };
+    const FONT_LABELS = {
+        official1: 'Official 1 [PPI]',
+        official2: 'Official 2',
+        official3: 'Official 3',
+        official4: 'Official 4'
+    };
+    const SVG_FONT_SCALE = {
+        official1: { sx: 1, sizeMul: 1 },
+        official2: { sx: 0.9, sizeMul: 0.84 },
+        official3: { sx: 0.94, sizeMul: 0.88 },
+        official4: { sx: 0.86, sizeMul: 0.78 }
+    };
+    const FONT_ALIASES = { officiel: 'official1', classic: 'official2', italic: 'official3' };
     const FONT_SIZE_MIN = 0.85;
     const FONT_SIZE_MAX = 1.15;
     const FONT_SIZE_STEP = 0.05;
@@ -56,10 +69,67 @@
         ferrari: 'Ferrari',
         custom: 'Logo personnalisé'
     };
-    const IMMAT_MODE_LABELS = {
-        siv: 'Format actuel SIV',
-        fni: 'Ancien format FNI'
-    };
+    const PLATE_COLOR_OPTIONS = [
+        { value: '#ffffff', label: 'Blanc' },
+        { value: '#1a1a1a', label: 'Noir' },
+        { value: '#f5c518', label: 'Jaune' },
+        { value: '#003399', label: 'Bleu' },
+        { value: '#cc0000', label: 'Rouge' },
+        { value: '#006633', label: 'Vert' },
+        { value: '#ec4899', label: 'Rose' },
+        { value: '#9333ea', label: 'Violet' },
+        { value: '#c9a227', label: 'Or' },
+        { value: '#06b6d4', label: 'Cyan' }
+    ];
+    const BAND_COLOR_OPTIONS = [
+        { value: '#003399', label: 'Bleu EU' },
+        { value: '#1a1a1a', label: 'Noir' },
+        { value: '#cc0000', label: 'Rouge' },
+        { value: '#c9a227', label: 'Or' },
+        { value: '#ffffff', label: 'Blanc' },
+        { value: '#006633', label: 'Vert' }
+    ];
+    const CONTOUR_COLOR_OPTIONS = [
+        { value: '#c9a227', label: 'Or' },
+        { value: '#1a1a2e', label: 'Noir' },
+        { value: '#ffffff', label: 'Blanc' },
+        { value: '#cc0000', label: 'Rouge' },
+        { value: '#003399', label: 'Bleu' },
+        { value: '#006633', label: 'Vert' },
+        { value: '#f5c518', label: 'Jaune' },
+        { value: '#ff6b00', label: 'Orange' },
+        { value: '#9333ea', label: 'Violet' },
+        { value: '#ec4899', label: 'Rose' },
+        { value: '#06b6d4', label: 'Cyan' },
+        { value: '#a3a3a3', label: 'Argent' }
+    ];
+    const DECOR_CAR_OPTIONS = [
+        { value: 'none', label: 'Aucun' },
+        { value: 'peugeot', label: 'Peugeot' },
+        { value: 'renault', label: 'Renault' },
+        { value: 'citroen', label: 'Citroën' },
+        { value: 'audi', label: 'Audi' },
+        { value: 'bmw', label: 'BMW' },
+        { value: 'mercedes', label: 'Mercedes' },
+        { value: 'volkswagen', label: 'Volkswagen' },
+        { value: 'porsche', label: 'Porsche' },
+        { value: 'tesla', label: 'Tesla' },
+        { value: 'toyota', label: 'Toyota' },
+        { value: 'ford', label: 'Ford' },
+        { value: 'opel', label: 'Opel' },
+        { value: 'fiat', label: 'Fiat' },
+        { value: 'nissan', label: 'Nissan' },
+        { value: 'honda', label: 'Honda' },
+        { value: 'alfa-romeo', label: 'Alfa Romeo' },
+        { value: 'alpine', label: 'Alpine' },
+        { value: 'ferrari', label: 'Ferrari' },
+        { value: 'custom', label: 'Texte personnalisé' }
+    ];
+    const SIDE_EFFECT_OPTIONS = [
+        { value: 'none', label: 'Standard (sans supplément)' },
+        { value: 'carbon', label: 'Carbone (+3,00 €)' },
+        { value: 'camouflage', label: 'Camouflage (+3,00 €)' }
+    ];
 
     /* ---------- STATE ---------- */
     const state = {
@@ -69,13 +139,17 @@
         decorativeUsa: false,
         immatMode: 'siv',      // siv | fni
         immat: '',
-        font: 'officiel',      // officiel | classic | italic
+        font: 'official1',      // official1 | official2 | official3 | official4
         dept: '75',
         deptName: 'Paris',
         regionName: 'Île-de-France',
         euBand: 'yes',
-        carLogo: 'none',       // none | peugeot | renault | citroen | audi | bmw | ... | custom
-        customCarLogoText: '', // Texte libre si carLogo === 'custom'
+        carLogo: 'none',
+        carLogoLeft: 'none',
+        carLogoRight: 'none',
+        customCarLogoText: '',
+        customCarLogoLeft: '',
+        customCarLogoRight: '',
         message: '',
         decorImageData: '',
         decorImageName: '',
@@ -88,6 +162,11 @@
         enable3D: false,
         sideEffect: 'none',
         fontSizeScale: 1,
+        plateBgColor: '#ffffff',
+        decorBandMode: 'none',
+        leftBandColor: '#003399',
+        rightBandColor: '#003399',
+        carLogoSide: 'right',
         formatLocked: true,
         homologLocked: true
     };
@@ -255,6 +334,9 @@
             decorImageRemove: document.getElementById('decorImageRemove'),
             decorAdminMessage: document.getElementById('decorAdminMessageInput'),
             decorAdminMsgCounter: document.getElementById('decorAdminMsgCounter'),
+            fontField: document.getElementById('fontField'),
+            fontSelect: document.getElementById('fontSelect'),
+            fontHint: document.getElementById('fontHint'),
 
             // Étape 2
             deptToggleBtn: document.getElementById('deptToggleBtn'),
@@ -265,19 +347,29 @@
             deptList: document.getElementById('deptList'),
             euBandToggle: document.getElementById('euBandToggle'),
             carLogoField: document.getElementById('carLogoField'),
-            carLogoGrid: document.getElementById('carLogoGrid'),
-            customCarLogoField: document.getElementById('customCarLogoField'),
-            customCarLogoInput: document.getElementById('customCarLogoInput'),
+            carLogoLeftSelect: document.getElementById('carLogoLeftSelect'),
+            carLogoRightSelect: document.getElementById('carLogoRightSelect'),
+            customCarLogoLeftField: document.getElementById('customCarLogoLeftField'),
+            customCarLogoLeftInput: document.getElementById('customCarLogoLeftInput'),
+            customCarLogoRightField: document.getElementById('customCarLogoRightField'),
+            customCarLogoRightInput: document.getElementById('customCarLogoRightInput'),
+            decorStyleBlock: document.getElementById('decorStyleBlock'),
+            decorPlateBgSelect: document.getElementById('decorPlateBgSelect'),
+            decorBandModeSelect: document.getElementById('decorBandModeSelect'),
+            decorBandColorsField: document.getElementById('decorBandColorsField'),
+            leftBandColorSelect: document.getElementById('leftBandColorSelect'),
+            rightBandColorSelect: document.getElementById('rightBandColorSelect'),
 
             // Étape 3
             message: document.getElementById('messageInput'),
             msgCounter: document.getElementById('msgCounter'),
             messagePaneDesc: document.getElementById('messagePaneDesc'),
+            homologOptionsHint: document.getElementById('homologOptionsHint'),
 
             // Étape 4
             contourTypeToggle: document.getElementById('contourTypeToggle'),
             contourColorField: document.getElementById('contourColorField'),
-            contourPalette: document.getElementById('contourPalette'),
+            contourColorSelect: document.getElementById('contourColorSelect'),
             rivetsOption: document.getElementById('rivetsOption'),
 
             // Étape 5
@@ -295,9 +387,14 @@
             plaqueMsg: document.getElementById('plaqueMsg'),
             bandLeft: document.getElementById('bandLeft'),
             bandRight: document.getElementById('bandRight'),
+            bandEuLeft: document.getElementById('bandEuLeft'),
+            bandCarLogoLeft: document.getElementById('bandCarLogoLeft'),
+            decorLogoSlotLeft: document.getElementById('decorLogoSlotLeft'),
+            decorLogoSlotRight: document.getElementById('decorLogoSlotRight'),
             deptLogo: document.getElementById('deptLogo'),
             deptNum: document.getElementById('deptNum'),
-            euStars: document.querySelector('.eu-stars'),
+            euStars: document.getElementById('euStars'),
+            euLetter: document.getElementById('euLetter'),
             unitPrice: document.getElementById('unitPriceDisplay'),
             previewFormatMeta: document.getElementById('previewFormatMeta'),
             previewPrimaryMetaLabel: document.getElementById('previewPrimaryMetaLabel'),
@@ -320,7 +417,7 @@
             homologIcon: document.getElementById('homologIcon'),
             homolog3dHint: document.getElementById('homolog3dHint'),
             sideEffectField: document.getElementById('sideEffectField'),
-            sideEffectGrid: document.getElementById('sideEffectGrid'),
+            sideEffectSelect: document.getElementById('sideEffectSelect'),
             fontSizeField: document.getElementById('fontSizeField'),
             fontSizeMinus: document.getElementById('fontSizeMinus'),
             fontSizePlus: document.getElementById('fontSizePlus'),
@@ -337,12 +434,18 @@
             configResetBtn: document.getElementById('configResetBtn'),
             mobileTotalPrice: document.getElementById('mobileTotalPrice'),
             mobileQtyLabel: document.getElementById('mobileQtyLabel'),
+            mobileQtyMinus: document.getElementById('mobileQtyMinus'),
+            mobileQtyPlus: document.getElementById('mobileQtyPlus'),
+            mobileQtyValue: document.getElementById('mobileQtyValue'),
+            previewPriceLabel: document.getElementById('previewPriceLabel'),
             previewSection: document.getElementById('configPreviewSection'),
             previewSpacer: document.getElementById('previewSpacer'),
             mpCategories: document.querySelectorAll('.mp-category')
         };
 
         applyUrlParams();
+        migrateLegacyCarLogos();
+        initCompactControls();
         bindEvents();
         bindMesplaquesUI();
         syncControlsFromState();
@@ -352,7 +455,7 @@
         updatePrice();
         updateHomologBanner();
         updateSummarySidebar();
-        updateNavButtons();
+        goToStep(1);
     }
 
     function applyUrlParams() {
@@ -375,7 +478,10 @@
             state.homolog = 'yes';
         }
         state.homologLocked = true;
-        if (font && Object.prototype.hasOwnProperty.call(FONT_EXTRA, font)) state.font = font;
+        if (font) {
+            const mapped = FONT_ALIASES[font] || font;
+            if (Object.prototype.hasOwnProperty.call(FONT_EXTRA, mapped)) state.font = mapped;
+        }
         if (immatMode === 'fni' || immatMode === 'ancien' || immatMode === 'old') state.immatMode = 'fni';
         if (dept && DEPT_DATA[dept]) {
             state.dept = dept;
@@ -397,8 +503,248 @@
 
         if (isProvisionalFormat(state.format)) state.homolog = 'yes';
         if (state.format === 'usa') state.homolog = 'no';
-        if (state.homolog === 'yes' && state.font !== 'officiel') state.font = 'officiel';
+        if (state.format === 'usa') state.homolog = 'no';
         if (state.homolog !== 'yes' || state.format === 'usa' || isProvisionalFormat(state.format)) state.immatMode = 'siv';
+    }
+
+    function fillSelectOptions(select, options, selectedValue) {
+        if (!select) return;
+        select.innerHTML = options.map(o => {
+            const sel = o.value === selectedValue ? ' selected' : '';
+            return `<option value="${escapeSvgAttr(o.value)}"${sel}>${escapeHTML(o.label)}</option>`;
+        }).join('');
+        select.value = selectedValue;
+    }
+
+    function migrateLegacyCarLogos() {
+        if (state.carLogo && state.carLogo !== 'none') {
+            if (state.carLogoSide === 'left' && state.carLogoLeft === 'none') {
+                state.carLogoLeft = state.carLogo;
+                state.customCarLogoLeft = state.customCarLogoText || '';
+            } else if (state.carLogoRight === 'none') {
+                state.carLogoRight = state.carLogo;
+                state.customCarLogoRight = state.customCarLogoText || '';
+            }
+        }
+        syncLegacyCarLogoFromSides();
+    }
+
+    function syncLegacyCarLogoFromSides() {
+        state.carLogo = state.carLogoRight !== 'none' ? state.carLogoRight : state.carLogoLeft;
+        state.customCarLogoText = state.carLogoRight === 'custom'
+            ? state.customCarLogoRight
+            : (state.carLogoLeft === 'custom' ? state.customCarLogoLeft : '');
+    }
+
+    function initCompactControls() {
+        fillSelectOptions($.decorPlateBgSelect, PLATE_COLOR_OPTIONS, state.plateBgColor);
+        fillSelectOptions($.leftBandColorSelect, BAND_COLOR_OPTIONS, state.leftBandColor);
+        fillSelectOptions($.rightBandColorSelect, BAND_COLOR_OPTIONS, state.rightBandColor);
+        fillSelectOptions($.carLogoLeftSelect, DECOR_CAR_OPTIONS, state.carLogoLeft);
+        fillSelectOptions($.carLogoRightSelect, DECOR_CAR_OPTIONS, state.carLogoRight);
+        fillSelectOptions($.contourColorSelect, CONTOUR_COLOR_OPTIONS, state.contourColor);
+        fillSelectOptions($.sideEffectSelect, SIDE_EFFECT_OPTIONS, state.sideEffect);
+        if ($.decorBandModeSelect) $.decorBandModeSelect.value = state.decorBandMode;
+        if ($.fontSelect) $.fontSelect.value = state.font;
+        if ($.customCarLogoLeftInput) $.customCarLogoLeftInput.value = state.customCarLogoLeft;
+        if ($.customCarLogoRightInput) $.customCarLogoRightInput.value = state.customCarLogoRight;
+    }
+
+    function getCarLogoLabelFor(carKey, customText) {
+        if (carKey === 'custom') return customText ? `Personnalisé (${customText})` : 'Logo personnalisé';
+        return CAR_LOGO_LABELS[carKey] || carKey;
+    }
+
+    function renderHomologPlateMessage(centerX, bottomY, format) {
+        const msg = (state.message || '').trim();
+        if (!msg || isDecorative() || isCollectionPlate() || isProvisionalPlate()) return '';
+        let fontSize = format === 'moto' ? 7 : (format === '4x4' ? 9 : 10);
+        if (msg.length > 24) fontSize -= 2;
+        else if (msg.length > 16) fontSize -= 1;
+        return `<text x="${centerX}" y="${bottomY}" fill="#111111" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="700" text-anchor="middle" letter-spacing="0.4">${escapeSvgText(msg)}</text>`;
+    }
+
+    function getPlateFontStyle() {
+        const styles = {
+            official1: {
+                family: "'Caractères L1', 'Caractères', 'Impact', sans-serif",
+                letterSpacing: 4,
+                scale: 1
+            },
+            official2: {
+                family: "'Arial Black', 'Helvetica Neue', sans-serif",
+                letterSpacing: 3,
+                scale: 1.346
+            },
+            official3: {
+                family: "'Oswald', 'Arial Narrow', sans-serif",
+                letterSpacing: 5,
+                scale: 1.428
+            },
+            official4: {
+                family: "'Archivo Black', 'Arial Black', sans-serif",
+                letterSpacing: 3,
+                scale: 1.428
+            }
+        };
+        return styles[state.font] || styles.official1;
+    }
+
+    function getSvgPlateTextAttrs(baseSize, baseLetterSpacing) {
+        const style = getPlateFontStyle();
+        const letterSpacing = state.font === 'official3' ? 5 : (baseLetterSpacing || style.letterSpacing);
+        return `font-family="${style.family}" font-size="${baseSize}" letter-spacing="${letterSpacing}"`;
+    }
+
+    function renderSvgPlateText(x, y, baseSize, baseLetterSpacing, text, fill, clipId) {
+        const style = getPlateFontStyle();
+        const conf = SVG_FONT_SCALE[state.font] || SVG_FONT_SCALE.official1;
+        const letterSpacing = state.font === 'official3' ? 4 : (baseLetterSpacing || style.letterSpacing);
+        const fontSize = Math.round(baseSize * conf.sizeMul * state.fontSizeScale * 10) / 10;
+        const scaleX = conf.sx;
+        const color = fill || '#000000';
+        const clip = clipId ? ` clip-path="url(#${clipId})"` : '';
+        return `<g${clip} transform="translate(${x} ${y}) scale(${scaleX} 0.95) translate(${-x} ${-y})"><text x="${x}" y="${y}" fill="${color}" font-family="${style.family}" font-size="${fontSize}" letter-spacing="${letterSpacing}" text-anchor="middle">${text}</text></g>`;
+    }
+
+    function getDecorPlateText() {
+        if (state.immat.trim()) return state.immat.trim();
+        if (!state.decorImageData && state.message.trim()) return state.message.trim();
+        return 'AB-123-CD';
+    }
+
+    function getDecorSvgTextColor(bg) {
+        return isLightColor(bg) ? '#111111' : '#ffffff';
+    }
+
+    function renderDecorCarLogoSvg(carKey, customText, x, y, w, h) {
+        if (!carKey || carKey === 'none') return '';
+        if (carKey === 'custom') {
+            const label = escapeSvgText(customText || '?');
+            const fontSize = Math.max(6, Math.min(11, w / Math.max(1, label.length) * 1.6));
+            return `<text x="${x + w / 2}" y="${y + h / 2 + fontSize / 3}" fill="#ffffff" font-family="Arial, sans-serif" font-size="${fontSize}" font-weight="900" text-anchor="middle">${label}</text>`;
+        }
+        const inset = Math.max(2, w * 0.12);
+        return `<image href="images/cars/${escapeSvgAttr(carKey)}.svg" x="${x + inset}" y="${y + inset}" width="${w - inset * 2}" height="${h - inset * 2}" preserveAspectRatio="xMidYMid meet"/>`;
+    }
+
+    function renderDecorSidePatternDefs(id, effect) {
+        if (effect === 'carbon') {
+            return `<pattern id="${id}" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="#111"/><rect width="4" height="8" fill="#333"/></pattern>`;
+        }
+        if (effect === 'camouflage') {
+            return `<pattern id="${id}" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#4a6741"/><path d="M0 0h6v6H0zm6 6h6v6H6z" fill="#3d5c3a"/><path d="M6 0h6v6H6zm0 6H0V6h6z" fill="#5a4a32"/></pattern>`;
+        }
+        return '';
+    }
+
+    function renderDecorativePlateSvg(format) {
+        const specs = {
+            auto: { w: 520, h: 110, band: 50, textY: 82, textSize: 76, spacing: 4, clip: 'decor-clip-auto' },
+            moto: { w: 210, h: 130, band: 25, textY1: 62, textY2: 118, textSize: 48, spacing: 2, clip: 'decor-clip-moto' },
+            '4x4': { w: 275, h: 200, band: 30, textY1: 90, textY2: 180, textSize1: 68, textSize2: 72, spacing: 3, clip: 'decor-clip-suv' }
+        };
+        const spec = specs[format] || specs.auto;
+        const showLeft = ['left', 'both'].includes(state.decorBandMode);
+        const showRight = ['right', 'both'].includes(state.decorBandMode);
+        const leftX = 2;
+        const rightX = spec.w - spec.band - 2;
+        const innerLeft = showLeft ? spec.band + 6 : 8;
+        const innerRight = showRight ? spec.w - spec.band - 6 : spec.w - 8;
+        const innerWidth = innerRight - innerLeft;
+        const innerTop = 8;
+        const innerHeight = spec.h - 16;
+        const centerX = innerLeft + innerWidth / 2;
+        const plateText = escapeSvgText(getDecorPlateText());
+        const textColor = getDecorSvgTextColor(state.plateBgColor);
+        const msgColor = isLightColor(state.plateBgColor) ? 'rgba(17,17,17,0.55)' : 'rgba(255,255,255,0.65)';
+        const sideFx = state.sideEffect !== 'none' && state.decorBandMode !== 'none' ? state.sideEffect : '';
+        const leftFill = sideFx ? `url(#decor-side-${sideFx}-left)` : state.leftBandColor;
+        const rightFill = sideFx ? `url(#decor-side-${sideFx}-right)` : state.rightBandColor;
+        const tall = format === 'moto' || format === '4x4';
+        const lines = tall ? splitPlateText(getDecorPlateText()) : null;
+        const line1 = escapeSvgText(lines ? lines.first : plateText);
+        const line2 = lines ? escapeSvgText(lines.second) : '';
+
+        let defs = `<clipPath id="${spec.clip}"><rect x="${innerLeft}" y="${innerTop}" width="${innerWidth}" height="${innerHeight}" rx="2"/></clipPath>`;
+        if (sideFx) {
+            defs += renderDecorSidePatternDefs(`decor-side-${sideFx}-left`, sideFx);
+            defs += renderDecorSidePatternDefs(`decor-side-${sideFx}-right`, sideFx);
+        }
+
+        let bands = '';
+        if (showLeft) {
+            bands += `<rect x="${leftX}" y="2" width="${spec.band}" height="${spec.h - 4}" fill="${leftFill}"/>`;
+            if (state.carLogoLeft !== 'none') {
+                bands += renderDecorCarLogoSvg(state.carLogoLeft, state.customCarLogoLeft, leftX + 4, spec.h * 0.22, spec.band - 8, spec.h * 0.56);
+            }
+        }
+        if (showRight) {
+            bands += `<rect x="${rightX}" y="2" width="${spec.band}" height="${spec.h - 4}" fill="${rightFill}"/>`;
+            if (state.carLogoRight !== 'none') {
+                bands += renderDecorCarLogoSvg(state.carLogoRight, state.customCarLogoRight, rightX + 4, spec.h * 0.22, spec.band - 8, spec.h * 0.56);
+            }
+        }
+
+        let floatingLogos = '';
+        if (state.carLogoLeft !== 'none' && !showLeft) {
+            floatingLogos += renderDecorCarLogoSvg(state.carLogoLeft, state.customCarLogoLeft, innerLeft, spec.h * 0.28, 36, spec.h * 0.44);
+        }
+        if (state.carLogoRight !== 'none' && !showRight) {
+            floatingLogos += renderDecorCarLogoSvg(state.carLogoRight, state.customCarLogoRight, innerRight - 36, spec.h * 0.28, 36, spec.h * 0.44);
+        }
+
+        let centerContent = '';
+        if (state.decorImageData) {
+            centerContent = `<image href="${escapeSvgAttr(state.decorImageData)}" x="${innerLeft}" y="${innerTop}" width="${innerWidth}" height="${innerHeight}" preserveAspectRatio="xMidYMid meet" clip-path="url(#${spec.clip})"/>`;
+        } else if (tall) {
+            centerContent = renderSvgPlateText(centerX, spec.textY1, spec.textSize, spec.spacing, line1, textColor, spec.clip)
+                + renderSvgPlateText(centerX, spec.textY2, spec.textSize, spec.spacing, line2, textColor, spec.clip);
+        } else {
+            const len = getDecorPlateText().length;
+            const adaptiveSize = len > 10 ? spec.textSize * 0.78 : (len > 8 ? spec.textSize * 0.88 : spec.textSize);
+            centerContent = renderSvgPlateText(centerX, spec.textY, adaptiveSize, spec.spacing, plateText, textColor, spec.clip);
+        }
+
+        let bottomMsg = '';
+        if (state.message.trim() && (state.immat.trim() || state.decorImageData)) {
+            bottomMsg = `<text x="${centerX}" y="${spec.h - 8}" fill="${msgColor}" font-family="Arial, sans-serif" font-size="11" font-weight="700" text-anchor="middle" letter-spacing="1">${escapeSvgText(state.message.trim())}</text>`;
+        }
+
+        let contour = '';
+        if (state.contour === 'int') {
+            contour = `<rect x="6" y="6" width="${spec.w - 12}" height="${spec.h - 12}" rx="4" fill="none" stroke="${state.contourColor}" stroke-width="2"/>`;
+        } else if (state.contour === 'ext') {
+            contour = `<rect x="1" y="1" width="${spec.w - 2}" height="${spec.h - 2}" rx="7" fill="none" stroke="${state.contourColor}" stroke-width="3"/>`;
+        }
+
+        return `
+            <svg class="plate-svg plate-svg-decor plate-svg-${format}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${spec.w} ${spec.h}" role="img" aria-label="Plaque décorative ${format}">
+                <defs>${defs}</defs>
+                <rect x="2" y="2" width="${spec.w - 4}" height="${spec.h - 4}" rx="6" fill="${state.plateBgColor}" stroke="#222222" stroke-width="3"/>
+                ${bands}
+                ${centerContent}
+                ${floatingLogos}
+                ${bottomMsg}
+                ${contour}
+            </svg>`;
+    }
+
+    function getCarLogoRecapLabel() {
+        return getCarLogoLabel();
+    }
+
+    function isLightColor(hex) {
+        const clean = String(hex || '').replace('#', '');
+        if (clean.length !== 6) return true;
+        const r = parseInt(clean.slice(0, 2), 16);
+        const g = parseInt(clean.slice(2, 4), 16);
+        const b = parseInt(clean.slice(4, 6), 16);
+        return (r * 299 + g * 587 + b * 114) / 1000 > 150;
+    }
+
+    function getDecorBandModeLabel(mode) {
+        return { none: 'Aucune', left: 'Gauche', right: 'Droite', both: 'Les deux' }[mode] || mode;
     }
 
     function syncControlsFromState() {
@@ -418,15 +764,18 @@
                 b.classList.toggle('active', b.dataset.immatMode === state.immatMode);
             });
         }
-        $.carLogoGrid.querySelectorAll('.wizard-card').forEach(c => {
-            c.classList.toggle('selected', c.dataset.car === state.carLogo);
-        });
         $.contourTypeToggle.querySelectorAll('.wizard-toggle-btn').forEach(b => {
             b.classList.toggle('active', b.dataset.contour === state.contour);
         });
-        $.contourPalette.querySelectorAll('.wizard-color-swatch').forEach(s => {
-            s.classList.toggle('selected', s.dataset.color === state.contourColor);
-        });
+        if ($.fontSelect) $.fontSelect.value = state.font;
+        if ($.contourColorSelect) $.contourColorSelect.value = state.contourColor;
+        if ($.sideEffectSelect) $.sideEffectSelect.value = state.sideEffect;
+        if ($.decorPlateBgSelect) $.decorPlateBgSelect.value = state.plateBgColor;
+        if ($.decorBandModeSelect) $.decorBandModeSelect.value = state.decorBandMode;
+        if ($.leftBandColorSelect) $.leftBandColorSelect.value = state.leftBandColor;
+        if ($.rightBandColorSelect) $.rightBandColorSelect.value = state.rightBandColor;
+        if ($.carLogoLeftSelect) $.carLogoLeftSelect.value = state.carLogoLeft;
+        if ($.carLogoRightSelect) $.carLogoRightSelect.value = state.carLogoRight;
 
         $.immat.value = state.immat;
         updateImmatModeUI();
@@ -434,35 +783,59 @@
         $.msgCounter.textContent = `${state.message.length} / 30`;
         if ($.decorAdminMessage) $.decorAdminMessage.value = state.decorAdminMessage;
         if ($.decorAdminMsgCounter) $.decorAdminMsgCounter.textContent = `${state.decorAdminMessage.length} / 300`;
-        $.contourColorField.style.display = state.contour === 'none' ? 'none' : '';
-        $.qtyValue.textContent = state.quantity;
+        if ($.contourColorField) $.contourColorField.style.display = state.contour === 'none' ? 'none' : '';
+        if ($.qtyValue) $.qtyValue.textContent = state.quantity;
         if ($.rivetsOption) $.rivetsOption.checked = state.rivets;
-
-        // Afficher ou masquer le champ texte personnalisé voiture
-        if (state.carLogo === 'custom') {
-            $.customCarLogoField.style.display = '';
-            $.customCarLogoInput.value = state.customCarLogoText || '';
-        } else {
-            $.customCarLogoField.style.display = 'none';
-        }
+        if ($.customCarLogoLeftInput) $.customCarLogoLeftInput.value = state.customCarLogoLeft;
+        if ($.customCarLogoRightInput) $.customCarLogoRightInput.value = state.customCarLogoRight;
 
         updateModeUI();
         updateLockedProductUI();
         updateDecorImageUI();
         updateHomologAvailability();
-        if ($.sideEffectGrid) {
-            $.sideEffectGrid.querySelectorAll('.side-effect-card').forEach(c => {
-                c.classList.toggle('selected', c.dataset.side === state.sideEffect);
-            });
-        }
+        updateFontFieldUI();
         if ($.fontSizeLabel) {
             $.fontSizeLabel.textContent = Math.round(state.fontSizeScale * 100) + '%';
         }
         if ($.summaryQtyValue) $.summaryQtyValue.textContent = state.quantity;
+        updateDecorStyleUI();
+    }
+
+    function updateDecorStyleUI() {
+        const decorative = isDecorative();
+        setFieldVisible($.decorStyleBlock, decorative);
+        if ($.decorBandColorsField) {
+            $.decorBandColorsField.hidden = !decorative || state.decorBandMode === 'none';
+        }
+        if ($.customCarLogoLeftField) {
+            $.customCarLogoLeftField.hidden = !decorative || state.carLogoLeft !== 'custom';
+        }
+        if ($.customCarLogoRightField) {
+            $.customCarLogoRightField.hidden = !decorative || state.carLogoRight !== 'custom';
+        }
+        if ($.homologOptionsHint) {
+            $.homologOptionsHint.hidden = decorative || isCollectionPlate() || isProvisionalPlate();
+        }
+    }
+
+    function getDecorCarLogoHtml(carKey, customText) {
+        if (!carKey || carKey === 'none') return '';
+        if (carKey === 'custom') {
+            return `<span class="custom-car-logo">${escapeSvgText(customText || '?')}</span>`;
+        }
+        return `<img class="car-region-logo" src="images/cars/${escapeSvgAttr(carKey)}.svg" alt="${escapeSvgAttr(getCarLogoLabelFor(carKey, customText))}">`;
     }
 
     function isDecorative() {
         return state.homolog === 'no' && !isCollectionPlate();
+    }
+
+    function allowCarLogoOnRight() {
+        return isDecorative();
+    }
+
+    function isHomologatedRoutePlate() {
+        return !isDecorative() && !isCollectionPlate() && state.homolog === 'yes';
     }
 
     function isCollectionPlate() {
@@ -507,11 +880,14 @@
     }
 
     function getCarLogoLabel() {
-        if (state.carLogo === 'custom') {
-            return state.customCarLogoText ? `Personnalisé (${state.customCarLogoText})` : 'Logo personnalisé';
+        const parts = [];
+        if (state.carLogoLeft !== 'none') {
+            parts.push(`G: ${getCarLogoLabelFor(state.carLogoLeft, state.customCarLogoLeft)}`);
         }
-
-        return CAR_LOGO_LABELS[state.carLogo] || 'Logo régional SIV';
+        if (state.carLogoRight !== 'none') {
+            parts.push(`D: ${getCarLogoLabelFor(state.carLogoRight, state.customCarLogoRight)}`);
+        }
+        return parts.length ? parts.join(' · ') : 'Aucun';
     }
 
     function getProductDescription() {
@@ -526,40 +902,29 @@
     }
 
     function updateLockedProductUI() {
-        if ($.formatGrid) $.formatGrid.hidden = true;
+        if ($.formatField) $.formatField.hidden = true;
+        if ($.homologField) $.homologField.hidden = true;
+        if ($.selectedProductCard) $.selectedProductCard.hidden = true;
+        if ($.selectedModeCard) $.selectedModeCard.hidden = true;
         if ($.homologToggle) $.homologToggle.hidden = true;
         if ($.homologHint) $.homologHint.hidden = true;
-
-        if ($.selectedProductCard) {
-            $.selectedProductCard.hidden = false;
-            $.selectedProductCard.innerHTML = `
-                <div class="selected-product-icon" aria-hidden="true">${escapeSvgText(getProductIconLabel())}</div>
-                <div class="selected-product-copy">
-                    <strong>${escapeSvgText(getProductLabel())}</strong>
-                    <span>${escapeSvgText(FORMAT_SIZES[state.format])} · ${escapeSvgText(getProductDescription())}</span>
-                </div>
-                <a href="catalogue.html" class="selected-product-change">Changer</a>
-            `;
-        }
-
-        if ($.selectedModeCard) {
-            $.selectedModeCard.hidden = false;
-            $.selectedModeCard.innerHTML = `
-                <strong>${escapeSvgText(getModeLabel())}</strong>
-                <span>${isCollectionPlate()
-                    ? 'Réservée aux véhicules avec mention « véhicule de collection » sur la carte grise.'
+        if ($.paneOneDesc) $.paneOneDesc.hidden = true;
+        if ($.paneOneTitle) {
+            $.paneOneTitle.textContent = isDecorative()
+                ? 'Personnalisation décorative'
+                : isCollectionPlate()
+                    ? 'Plaque collection noire'
                     : isProvisionalPlate()
-                        ? 'Plaque provisoire homologuée avec fond rose dédié.'
-                    : isDecorative()
-                        ? 'Usage privé, décoration ou événementiel.'
-                        : 'Configuration route verrouillée pour éviter les mélanges de produit.'}</span>
-            `;
+                        ? 'Plaque provisoire'
+                        : 'Immatriculation & police';
         }
     }
 
     function shouldUseOfficialPlateSvg() {
-        return !isDecorative()
-            && !isCollectionPlate()
+        if (isDecorative()) {
+            return ['auto', 'moto', '4x4'].includes(state.format);
+        }
+        return !isCollectionPlate()
             && (isProvisionalPlate() || (state.euBand === 'yes' && ['auto', 'moto', '4x4'].includes(state.format)));
     }
 
@@ -631,7 +996,9 @@
                 : 'Format actuel : AB-123-CD.';
         }
         if ($.immatHint) {
-            $.immatHint.textContent = isProvisionalPlate()
+            $.immatHint.textContent = isDecorative()
+                ? 'Texte libre affiché au centre de la plaque (30 caractères max). Ex : AB-123-CD, GARAGE DU MIDI…'
+                : isProvisionalPlate()
                 ? (state.format === 'wgarage' ? 'Format W garage : W-123-AA.' : 'Format provisoire WW : WW-123-AA.')
                 : isCollectionPlate()
                 ? 'Texte libre conseillé : chiffres, lettres et département.'
@@ -640,8 +1007,8 @@
                     : 'Format SIV : AB-123-CD';
         }
         if ($.immat) {
-            $.immat.placeholder = getImmatPlaceholder();
-            $.immat.maxLength = isProvisionalPlate() ? (state.format === 'wgarage' ? 8 : 9) : (isCollectionPlate() ? 12 : (state.immatMode === 'fni' ? 11 : 9));
+            $.immat.placeholder = isDecorative() ? 'VOTRE TEXTE' : getImmatPlaceholder();
+            $.immat.maxLength = isDecorative() ? 30 : (isProvisionalPlate() ? (state.format === 'wgarage' ? 8 : 9) : (isCollectionPlate() ? 12 : (state.immatMode === 'fni' ? 11 : 9)));
         }
     }
 
@@ -678,11 +1045,11 @@
         const deptText = escapeSvgText(dept || '35');
         const modeText = format === 'wgarage' ? 'W GARAGE' : 'PROVISOIRE WW';
         const regionLogo = getRegionInfo(dept)?.img || '';
-        const hasCarLogo = state.carLogo && state.carLogo !== 'none' && state.carLogo !== 'custom';
-        const regionSlotLogo = state.carLogo && state.carLogo !== 'none' && state.carLogo !== 'custom'
+        const hasCarLogo = allowCarLogoOnRight() && state.carLogo && state.carLogo !== 'none' && state.carLogo !== 'custom';
+        const regionSlotLogo = hasCarLogo
             ? `images/cars/${state.carLogo}.svg`
             : regionLogo;
-        const customRegionSlotText = state.carLogo === 'custom'
+        const customRegionSlotText = allowCarLogoOnRight() && state.carLogo === 'custom'
             ? escapeSvgText(state.customCarLogoText || '?')
             : '';
         const deptFontSize = deptText.length > 2 ? 29 : 36;
@@ -726,7 +1093,7 @@
                 <rect x="476" y="10" width="34" height="34" fill="#ffffff" rx="3"/>
                 ${renderRegionImage(479, 12, 28, 30)}
                 <text x="493" y="92" fill="#ffffff" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="${deptFontSize}" font-weight="bold" text-anchor="middle">${deptText}</text>
-                <text x="260" y="82" fill="#111111" font-family="'Caractères L1', 'Caractères', 'Impact', sans-serif" font-size="76" text-anchor="middle" letter-spacing="4" transform="scale(1, 0.95)">${plateText}</text>
+                ${renderSvgPlateText(260, 82, 76, 4, plateText, '#111111')}
                 <text x="260" y="24" fill="rgba(17,17,17,.52)" font-family="Arial, sans-serif" font-size="11" font-weight="900" text-anchor="middle" letter-spacing="3">${modeText}</text>
             </svg>`;
     }
@@ -740,11 +1107,11 @@
         const firstLine = escapeSvgText(tallText.first);
         const secondLine = escapeSvgText(tallText.second);
         const regionLogo = getRegionInfo(dept)?.img || '';
-        const hasCarLogo = state.carLogo && state.carLogo !== 'none' && state.carLogo !== 'custom';
-        const regionSlotLogo = state.carLogo && state.carLogo !== 'none' && state.carLogo !== 'custom'
+        const hasCarLogo = allowCarLogoOnRight() && state.carLogo && state.carLogo !== 'none' && state.carLogo !== 'custom';
+        const regionSlotLogo = hasCarLogo
             ? `images/cars/${state.carLogo}.svg`
             : regionLogo;
-        const customRegionSlotText = state.carLogo === 'custom'
+        const customRegionSlotText = allowCarLogoOnRight() && state.carLogo === 'custom'
             ? escapeSvgText(state.customCarLogoText || '?')
             : '';
 
@@ -783,8 +1150,9 @@
                     <rect x="186.5" y="8" width="18" height="18" fill="#ffffff" rx="2"/>
                     ${renderRegionImage(187.5, 9, 16, 16)}
                     <text x="195.5" y="58" fill="#ffffff" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="${deptFontSize}" font-weight="bold" text-anchor="middle">${deptText}</text>
-                    <text x="105" y="62" fill="#000000" font-family="'Caractères L1', 'Caractères', 'Impact', sans-serif" font-size="${motoTextSize}" text-anchor="middle" letter-spacing="2" transform="scale(1, 0.95)">${firstLine}</text>
-                    <text x="105" y="118" fill="#000000" font-family="'Caractères L1', 'Caractères', 'Impact', sans-serif" font-size="${motoTextSize}" text-anchor="middle" letter-spacing="2" transform="scale(1, 0.95)">${secondLine}</text>
+                    ${renderSvgPlateText(105, 62, motoTextSize, 2, firstLine)}
+                    ${renderSvgPlateText(105, 118, motoTextSize, 2, secondLine)}
+                    ${renderHomologPlateMessage(105, 126, 'moto')}
                 </svg>`;
         }
 
@@ -805,17 +1173,24 @@
                     <rect x="247" y="15" width="22" height="22" fill="#ffffff" rx="2"/>
                     ${renderRegionImage(249, 17, 18, 18)}
                     <text x="258" y="85" fill="#ffffff" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="${deptFontSize}" font-weight="bold" text-anchor="middle">${deptText}</text>
-                    <text x="137.5" y="90" fill="#000000" font-family="'Caractères L1', 'Caractères', 'Impact', sans-serif" font-size="${suvFirstSize}" text-anchor="middle" letter-spacing="3" transform="scale(1, 0.95)">${firstLine}</text>
-                    <text x="137.5" y="180" fill="#000000" font-family="'Caractères L1', 'Caractères', 'Impact', sans-serif" font-size="${suvSecondSize}" text-anchor="middle" letter-spacing="3" transform="scale(1, 0.95)">${secondLine}</text>
+                    ${renderSvgPlateText(137.5, 90, suvFirstSize, 3, firstLine)}
+                    ${renderSvgPlateText(137.5, 180, suvSecondSize, 3, secondLine)}
+                    ${renderHomologPlateMessage(137.5, 192, '4x4')}
                 </svg>`;
         }
 
         const deptFontSize = deptText.length > 2 ? 29 : 36;
-        const autoTextFontSize = state.immatMode === 'fni' ? 70 : 80;
+        const autoTextFontSize = state.immatMode === 'fni' ? 68 : 74;
         const autoLetterSpacing = state.immatMode === 'fni' ? 2 : 4;
+        const textClipId = 'plate-text-clip-auto';
+        const hasMsg = Boolean(state.message.trim());
+        const immatY = hasMsg ? 74 : 82;
         return `
             <svg class="plate-svg plate-svg-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 110" role="img" aria-label="Plaque auto 520 par 110 millimètres">
-                <defs><clipPath id="plate-clip-auto-preview"><rect x="2" y="2" width="516" height="106" rx="6" /></clipPath></defs>
+                <defs>
+                    <clipPath id="plate-clip-auto-preview"><rect x="2" y="2" width="516" height="106" rx="6" /></clipPath>
+                    <clipPath id="${textClipId}"><rect x="58" y="8" width="404" height="${hasMsg ? 72 : 88}" rx="2" /></clipPath>
+                </defs>
                 <rect x="2" y="2" width="516" height="106" rx="6" fill="#ffffff" stroke="#222222" stroke-width="3"/>
                 <g clip-path="url(#plate-clip-auto-preview)">
                     <rect x="2" y="2" width="50" height="106" fill="#003399"/>
@@ -826,7 +1201,8 @@
                 <rect x="476" y="10" width="34" height="34" fill="#ffffff" rx="3"/>
                 ${renderRegionImage(479, 12, 28, 30)}
                 <text x="493" y="92" fill="#ffffff" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="${deptFontSize}" font-weight="bold" text-anchor="middle">${deptText}</text>
-                <text x="260" y="82" fill="#000000" font-family="'Caractères L1', 'Caractères', 'Impact', sans-serif" font-size="${autoTextFontSize}" text-anchor="middle" letter-spacing="${autoLetterSpacing}" transform="scale(1, 0.95)">${plateText}</text>
+                ${renderSvgPlateText(260, immatY, autoTextFontSize, autoLetterSpacing, plateText, '#000000', textClipId)}
+                ${renderHomologPlateMessage(260, 100, 'auto')}
             </svg>`;
     }
 
@@ -836,19 +1212,59 @@
         const enabled = shouldUseOfficialPlateSvg();
         $.preview.classList.toggle('svg-plate-mode', enabled);
         $.officialPlateSvg.hidden = !enabled;
-        $.officialPlateSvg.innerHTML = enabled ? renderOfficialPlateSvg(state.format, state.immat, state.dept) : '';
+        if (!enabled) {
+            $.officialPlateSvg.innerHTML = '';
+            return;
+        }
+        $.officialPlateSvg.innerHTML = isDecorative()
+            ? renderDecorativePlateSvg(state.format)
+            : renderOfficialPlateSvg(state.format, state.immat, state.dept);
+    }
+
+    function applyDecorCarLogoPlacement() {
+        const showLeftBand = ['left', 'both'].includes(state.decorBandMode);
+        const showRightBand = ['right', 'both'].includes(state.decorBandMode);
+        const leftHtml = getDecorCarLogoHtml(state.carLogoLeft, state.customCarLogoLeft);
+        const rightHtml = getDecorCarLogoHtml(state.carLogoRight, state.customCarLogoRight);
+
+        if ($.bandCarLogoLeft) {
+            const inLeftBand = state.carLogoLeft !== 'none' && showLeftBand;
+            $.bandCarLogoLeft.hidden = !inLeftBand;
+            $.bandCarLogoLeft.innerHTML = inLeftBand ? leftHtml : '';
+        }
+        if ($.decorLogoSlotLeft) {
+            const floatLeft = state.carLogoLeft !== 'none' && !showLeftBand;
+            $.decorLogoSlotLeft.hidden = !floatLeft;
+            $.decorLogoSlotLeft.innerHTML = floatLeft ? leftHtml : '';
+        }
+        if ($.decorLogoSlotRight) {
+            const floatRight = state.carLogoRight !== 'none' && !showRightBand;
+            $.decorLogoSlotRight.hidden = !floatRight;
+            $.decorLogoSlotRight.innerHTML = floatRight ? rightHtml : '';
+        }
+        if ($.deptLogo) {
+            if (state.carLogoRight !== 'none' && showRightBand) {
+                $.deptLogo.innerHTML = rightHtml;
+            } else if (!isDecorative()) {
+                $.deptLogo.innerHTML = getRegionLogo(state.dept);
+            } else {
+                $.deptLogo.innerHTML = '';
+            }
+        }
     }
 
     function getRightLogoMarkup() {
-        if (state.carLogo === 'custom') {
-            return `<span class="custom-right-logo">${escapeSvgText(state.customCarLogoText || '?')}</span>`;
-        }
-
-        if (state.carLogo && state.carLogo !== 'none') {
-            return `<img class="car-region-logo" src="images/cars/${escapeSvgAttr(state.carLogo)}.svg" alt="${escapeSvgAttr(getCarLogoLabel())}">`;
-        }
-
         return getRegionLogo(state.dept);
+    }
+
+    function updateFontFieldUI() {
+        const showFont = !isCollectionPlate();
+        setFieldVisible($.fontField, showFont);
+        if ($.fontHint) {
+            $.fontHint.textContent = isDecorative()
+                ? 'Choisissez la police d’affichage (4 styles officiels).'
+                : '4 polices homologuées route — Official 1 incluse, 2 à 4 : +1,00 €.';
+        }
     }
 
     function updateLiveSummary() {
@@ -863,7 +1279,7 @@
                     : getRegionName(state.dept);
         }
         if ($.liveSummaryPrice) {
-            $.liveSummaryPrice.textContent = computeUnitPrice().toFixed(2).replace('.', ',') + ' €';
+            $.liveSummaryPrice.textContent = formatPrice(computePriceBreakdown().total);
         }
         if ($.previewRegionLogo) {
             const showRegionLogo = !isDecorative() && !isCollectionPlate();
@@ -900,13 +1316,17 @@
         const provisional = isProvisionalPlate();
         const routePlate = !decorative && !collection;
         const immatModePlate = routePlate && !provisional;
-        $.immatField.hidden = decorative;
+        $.immatField.hidden = false;
+        const immatLabel = $.immatField?.querySelector('.wizard-field-label');
+        if (immatLabel) {
+            immatLabel.textContent = decorative ? 'Texte principal de la plaque' : 'Immatriculation';
+        }
         $.decorUploadField.hidden = !decorative;
         $.paneOneTitle.textContent = collection ? 'Votre plaque noire collection' : getProductLabel();
         $.paneOneDesc.textContent = collection
             ? 'Cette configuration est dédiée aux véhicules avec mention « véhicule de collection » sur la carte grise.'
             : decorative
-            ? 'Importez votre image, ajoutez votre texte, puis choisissez la finition.'
+            ? 'Saisissez votre texte, importez une image optionnelle, puis personnalisez couleurs et finitions.'
             : provisional
             ? 'Renseignez le numéro provisoire, le fond rose est appliqué automatiquement.'
             : 'Renseignez l’immatriculation et la région SIV de cette plaque, sans changer de format.';
@@ -934,14 +1354,19 @@
         setFieldVisible($.deptSearch?.closest('.wizard-field'), routePlate);
         state.euBand = routePlate ? 'yes' : 'no';
         setFieldVisible($.euBandToggle?.closest('.wizard-field'), false);
-        setFieldVisible($.carLogoField, routePlate);
-        if (!routePlate) {
+        setFieldVisible($.carLogoField, allowCarLogoOnRight());
+        if (!allowCarLogoOnRight()) {
             state.carLogo = 'none';
             state.customCarLogoText = '';
             if ($.customCarLogoField) $.customCarLogoField.style.display = 'none';
         }
-        setFieldVisible($.sideEffectField, decorative);
+        updateDecorStyleUI();
+        updateFontFieldUI();
+        setFieldVisible($.sideEffectField, decorative && state.decorBandMode !== 'none');
         if (!decorative && state.sideEffect !== 'none') {
+            state.sideEffect = 'none';
+        }
+        if (decorative && state.decorBandMode === 'none' && state.sideEffect !== 'none') {
             state.sideEffect = 'none';
         }
         updateStepVisibility();
@@ -1003,42 +1428,7 @@
     }
 
     function updateHomologBanner() {
-        if (!$.homologBanner || !$.homologLabel) return;
-        const homologated = isHomologatedRoadLegal();
-        const decorative = isDecorative();
-        const collection = isCollectionPlate();
-        const provisional = isProvisionalPlate();
-
-        $.homologBanner.classList.remove('homologated', 'decorative');
-        if (homologated) {
-            $.homologBanner.classList.add('homologated');
-            $.homologLabel.textContent = collection
-                ? 'Plaque collection — homologuée'
-                : provisional
-                    ? 'Plaque provisoire — homologuée'
-                    : 'Plaque homologuée — utilisable sur la route';
-            if ($.homologIcon) {
-                $.homologIcon.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>';
-            }
-        } else {
-            $.homologBanner.classList.add('decorative');
-            if (decorative) {
-                $.homologLabel.textContent = 'Plaque décorative — non homologuée route';
-            } else if (state.homolog === 'yes' && state.immat && !isImmatValidForHomolog()) {
-                $.homologLabel.textContent = 'Immatriculation ou options non conformes';
-            } else if (state.homolog === 'yes') {
-                $.homologLabel.textContent = 'Renseignez une immatriculation valide';
-            } else {
-                $.homologLabel.textContent = 'Configuration non homologuée route';
-            }
-            if ($.homologIcon) {
-                $.homologIcon.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 2 2 22h20L12 2zm0 4.5 6.8 13.5H5.2L12 6.5zM11 10v5h2v-5h-2zm0 7v2h2v-2h-2z"/></svg>';
-            }
-        }
-
-        if ($.homolog3dHint) {
-            $.homolog3dHint.hidden = !(state.enable3D && homologated && !decorative);
-        }
+        /* Bandeau retiré — le produit est choisi depuis le catalogue */
     }
 
     function computePriceBreakdown() {
@@ -1047,9 +1437,13 @@
         if (state.contour !== 'none') {
             options.push({ name: 'Liseré contour ' + (state.contour === 'int' ? 'intérieur' : 'extérieur'), price: CONTOUR_EXTRA });
         }
-        if (state.sideEffect !== 'none' && isDecorative()) {
+        if (state.sideEffect !== 'none' && isDecorative() && state.decorBandMode !== 'none') {
             const labels = { carbon: 'Bandes carbone', camouflage: 'Bandes camouflage' };
             options.push({ name: labels[state.sideEffect] || 'Effet bandes', price: SIDE_EFFECT_EXTRA });
+        }
+        const fontExtra = FONT_EXTRA[state.font] || 0;
+        if (fontExtra > 0) {
+            options.push({ name: FONT_LABELS[state.font] || 'Police', price: fontExtra });
         }
         if (state.rivets) {
             options.push({ name: 'Lot 2 rivets blancs', price: RIVETS_UNIT_PRICE });
@@ -1077,6 +1471,18 @@
             $.mobileQtyLabel.textContent = state.quantity === 1 ? '1 plaque' : state.quantity + ' plaques';
         }
         if ($.summaryQtyValue) $.summaryQtyValue.textContent = state.quantity;
+        if ($.qtyValue) $.qtyValue.textContent = state.quantity;
+        if ($.mobileQtyValue) $.mobileQtyValue.textContent = state.quantity;
+        if ($.unitPrice) {
+            if (state.quantity > 1) {
+                $.unitPrice.textContent = formatPrice(breakdown.unit) + ' × ' + state.quantity;
+            } else {
+                $.unitPrice.textContent = formatPrice(breakdown.unit);
+            }
+        }
+        if ($.previewPriceLabel) {
+            $.previewPriceLabel.textContent = state.quantity > 1 ? 'Total TTC' : 'Prix unitaire';
+        }
     }
 
     function scrollToCategory(name) {
@@ -1102,24 +1508,20 @@
 
         if ($.summaryQtyMinus) $.summaryQtyMinus.addEventListener('click', () => changeQty(-1));
         if ($.summaryQtyPlus) $.summaryQtyPlus.addEventListener('click', () => changeQty(1));
+        if ($.mobileQtyMinus) $.mobileQtyMinus.addEventListener('click', () => changeQty(-1));
+        if ($.mobileQtyPlus) $.mobileQtyPlus.addEventListener('click', () => changeQty(1));
         if ($.addCartSummary) $.addCartSummary.addEventListener('click', addToCart);
         if ($.addCartMobile) $.addCartMobile.addEventListener('click', addToCart);
         if ($.configResetBtn) $.configResetBtn.addEventListener('click', resetConfiguration);
 
         if ($.homologBanner) {
             $.homologBanner.addEventListener('click', () => {
-                if (isDecorative() || !isImmatValidForHomolog()) scrollToCategory('plaque');
+                if (!isImmatValidForHomolog()) goToStep(1);
             });
         }
 
         if ($.fontSizeMinus) $.fontSizeMinus.addEventListener('click', () => changeFontSize(-1));
         if ($.fontSizePlus) $.fontSizePlus.addEventListener('click', () => changeFontSize(1));
-
-        if ($.sideEffectGrid) {
-            $.sideEffectGrid.querySelectorAll('.side-effect-card').forEach(c => {
-                c.addEventListener('click', () => selectSideEffect(c.dataset.side));
-            });
-        }
 
         if ($.previewSection && window.matchMedia('(max-width: 959px)').matches) {
             const onScroll = () => {
@@ -1146,11 +1548,7 @@
     function selectSideEffect(value) {
         if (!['none', 'carbon', 'camouflage'].includes(value)) return;
         state.sideEffect = value;
-        if ($.sideEffectGrid) {
-            $.sideEffectGrid.querySelectorAll('.side-effect-card').forEach(c => {
-                c.classList.toggle('selected', c.dataset.side === value);
-            });
-        }
+        if ($.sideEffectSelect) $.sideEffectSelect.value = value;
         updatePreview();
         updatePrice();
         updateHomologBanner();
@@ -1169,7 +1567,14 @@
         state.fontSizeScale = 1;
         state.quantity = 1;
         state.carLogo = 'none';
+        state.carLogoLeft = 'none';
+        state.carLogoRight = 'none';
         state.customCarLogoText = '';
+        state.customCarLogoLeft = '';
+        state.customCarLogoRight = '';
+        state.plateBgColor = '#ffffff';
+        state.decorBandMode = 'none';
+        state.sideEffect = 'none';
         state.enable3D = false;
         if ($.immat) $.immat.value = '';
         if ($.message) $.message.value = '';
@@ -1193,8 +1598,8 @@
         if ($.addCart) $.addCart.addEventListener('click', addToCart);
 
         // Quantité
-        $.qtyMinus.addEventListener('click', () => changeQty(-1));
-        $.qtyPlus.addEventListener('click', () => changeQty(1));
+        if ($.qtyMinus) $.qtyMinus.addEventListener('click', () => changeQty(-1));
+        if ($.qtyPlus) $.qtyPlus.addEventListener('click', () => changeQty(1));
 
         // Étape 1 - format
         $.formatGrid.querySelectorAll('.wizard-card').forEach(c => {
@@ -1208,6 +1613,9 @@
             $.immatModeToggle.querySelectorAll('.wizard-toggle-btn').forEach(b => {
                 b.addEventListener('click', () => selectImmatMode(b.dataset.immatMode));
             });
+        }
+        if ($.fontSelect) {
+            $.fontSelect.addEventListener('change', () => selectFont($.fontSelect.value));
         }
         // Étape 1 - immat
         $.immat.addEventListener('input', handleImmat);
@@ -1232,17 +1640,41 @@
                 b.addEventListener('click', () => selectEuBand(b.dataset.eu));
             });
         }
-        $.carLogoGrid.querySelectorAll('.wizard-card').forEach(c => {
-            c.addEventListener('click', () => {
-                state.carLogo = c.dataset.car;
-                syncControlsFromState();
+        if ($.carLogoLeftSelect) {
+            $.carLogoLeftSelect.addEventListener('change', () => selectCarLogoLeft($.carLogoLeftSelect.value));
+        }
+        if ($.carLogoRightSelect) {
+            $.carLogoRightSelect.addEventListener('change', () => selectCarLogoRight($.carLogoRightSelect.value));
+        }
+        if ($.customCarLogoLeftInput) {
+            $.customCarLogoLeftInput.addEventListener('input', e => {
+                state.customCarLogoLeft = e.target.value.toUpperCase();
+                syncLegacyCarLogoFromSides();
                 updatePreview();
             });
-        });
-        $.customCarLogoInput.addEventListener('input', e => {
-            state.customCarLogoText = e.target.value.toUpperCase();
-            updatePreview();
-        });
+        }
+        if ($.customCarLogoRightInput) {
+            $.customCarLogoRightInput.addEventListener('input', e => {
+                state.customCarLogoRight = e.target.value.toUpperCase();
+                syncLegacyCarLogoFromSides();
+                updatePreview();
+            });
+        }
+        if ($.decorPlateBgSelect) {
+            $.decorPlateBgSelect.addEventListener('change', () => selectPlateBgColor($.decorPlateBgSelect.value));
+        }
+        if ($.decorBandModeSelect) {
+            $.decorBandModeSelect.addEventListener('change', () => selectDecorBandMode($.decorBandModeSelect.value));
+        }
+        if ($.leftBandColorSelect) {
+            $.leftBandColorSelect.addEventListener('change', () => selectLeftBandColor($.leftBandColorSelect.value));
+        }
+        if ($.rightBandColorSelect) {
+            $.rightBandColorSelect.addEventListener('change', () => selectRightBandColor($.rightBandColorSelect.value));
+        }
+        if ($.sideEffectSelect) {
+            $.sideEffectSelect.addEventListener('change', () => selectSideEffect($.sideEffectSelect.value));
+        }
 
         // Étape 3 - message
         $.message.addEventListener('input', handleMessage);
@@ -1254,9 +1686,9 @@
         $.contourTypeToggle.querySelectorAll('.wizard-toggle-btn').forEach(b => {
             b.addEventListener('click', () => selectContour(b.dataset.contour));
         });
-        $.contourPalette.querySelectorAll('.wizard-color-swatch').forEach(s => {
-            s.addEventListener('click', () => selectContourColor(s.dataset.color));
-        });
+        if ($.contourColorSelect) {
+            $.contourColorSelect.addEventListener('change', () => selectContourColor($.contourColorSelect.value));
+        }
 
         // Contrôles premium (Effet 3D & arrière-plans réalistes)
         if ($.toggle3DBtn) {
@@ -1343,15 +1775,23 @@
         $.panes.forEach(p => p.classList.toggle('active', parseInt(p.dataset.pane) === n));
         if (n === 4) buildRecap();
         updateNavButtons();
+        updateSummarySidebar();
+        const activePane = document.querySelector(`.wizard-pane.active[data-pane="${n}"]`);
+        if (activePane && window.matchMedia('(min-width: 960px)').matches) {
+            activePane.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
     }
 
     function updateNavButtons() {
         const visibleSteps = getVisibleSteps();
         $.prev.style.visibility = state.step === visibleSteps[0] ? 'hidden' : 'visible';
         const isLast = state.step === TOTAL_STEPS;
+        const mpLayout = document.querySelector('.configurator-mp-layout');
         $.next.style.display = isLast ? 'none' : '';
         $.addCart.style.display = isLast ? '' : 'none';
-        $.qtyWrap.style.display = isLast ? '' : 'none';
+        if ($.qtyWrap) {
+            $.qtyWrap.style.display = mpLayout ? '' : (isLast ? '' : 'none');
+        }
     }
 
     /* ---------- ÉTAPE 1 : FORMAT / HOMOLOG / IMMAT / POLICE ---------- */
@@ -1387,13 +1827,13 @@
             if (state.step === 2) goToStep(3);
         }
         // Si décorative, débloquer toutes les polices ; sinon forcer officielle
-        if (value === 'yes' && state.font !== 'officiel') {
-            selectFont('officiel');
-        }
-        if ($.fontHint) {
-            $.fontHint.textContent = value === 'yes'
-                ? 'Police FE-Schrift requise pour les plaques homologuées.'
-                : 'Toutes les polices disponibles en mode décoratif.';
+        if (!allowCarLogoOnRight()) {
+            state.carLogo = 'none';
+            state.carLogoLeft = 'none';
+            state.carLogoRight = 'none';
+            state.customCarLogoText = '';
+            state.customCarLogoLeft = '';
+            state.customCarLogoRight = '';
         }
         updateModeUI();
         updateHomologAvailability();
@@ -1420,8 +1860,9 @@
 
     function handleImmat(e) {
         if (isDecorative()) {
-            state.immat = '';
-            $.immat.value = '';
+            const value = ($.immat.value || '').toUpperCase().replace(/[^A-Z0-9 \-]/g, '').slice(0, 30);
+            $.immat.value = value;
+            state.immat = value;
             updatePreview();
             return;
         }
@@ -1492,10 +1933,15 @@
         if (state.step === 4) buildRecap();
     }
 
-    function selectFont(font) {
-        state.font = 'officiel';
+    function selectFont(font, options = {}) {
+        const mapped = FONT_ALIASES[font] || font;
+        if (!Object.prototype.hasOwnProperty.call(FONT_EXTRA, mapped)) return;
+        state.font = mapped;
+        if ($.fontSelect) $.fontSelect.value = mapped;
         updatePreview();
         updatePrice();
+        updateSummarySidebar();
+        if (!options.silent && state.step === 4) buildRecap();
     }
 
     /* ---------- ÉTAPE 2 : DÉPARTEMENT ---------- */
@@ -1576,17 +2022,74 @@
 
     function selectContourColor(color) {
         state.contourColor = color;
-        $.contourPalette.querySelectorAll('.wizard-color-swatch').forEach(s => {
-            s.classList.toggle('selected', s.dataset.color === color);
-        });
+        if ($.contourColorSelect) $.contourColorSelect.value = color;
         updatePreview();
+    }
+
+    function selectPlateBgColor(color) {
+        state.plateBgColor = color;
+        if ($.decorPlateBgSelect) $.decorPlateBgSelect.value = color;
+        updatePreview();
+        if (state.step === 4) buildRecap();
+    }
+
+    function selectDecorBandMode(mode) {
+        state.decorBandMode = mode;
+        if ($.decorBandModeSelect) $.decorBandModeSelect.value = mode;
+        if (mode === 'none' && state.sideEffect !== 'none') {
+            state.sideEffect = 'none';
+            if ($.sideEffectSelect) $.sideEffectSelect.value = 'none';
+        }
+        updateDecorStyleUI();
+        updateModeUI();
+        updatePreview();
+        updatePrice();
+        if (state.step === 4) buildRecap();
+    }
+
+    function selectLeftBandColor(color) {
+        state.leftBandColor = color;
+        if ($.leftBandColorSelect) $.leftBandColorSelect.value = color;
+        updatePreview();
+        if (state.step === 4) buildRecap();
+    }
+
+    function selectRightBandColor(color) {
+        state.rightBandColor = color;
+        if ($.rightBandColorSelect) $.rightBandColorSelect.value = color;
+        updatePreview();
+        if (state.step === 4) buildRecap();
+    }
+
+    function selectCarLogoLeft(value) {
+        if (!DECOR_CAR_OPTIONS.some(o => o.value === value)) return;
+        state.carLogoLeft = value;
+        if ($.carLogoLeftSelect) $.carLogoLeftSelect.value = value;
+        if (value !== 'custom') state.customCarLogoLeft = '';
+        if ($.customCarLogoLeftInput) $.customCarLogoLeftInput.value = state.customCarLogoLeft;
+        syncLegacyCarLogoFromSides();
+        updateDecorStyleUI();
+        updatePreview();
+        if (state.step === 4) buildRecap();
+    }
+
+    function selectCarLogoRight(value) {
+        if (!DECOR_CAR_OPTIONS.some(o => o.value === value)) return;
+        state.carLogoRight = value;
+        if ($.carLogoRightSelect) $.carLogoRightSelect.value = value;
+        if (value !== 'custom') state.customCarLogoRight = '';
+        if ($.customCarLogoRightInput) $.customCarLogoRightInput.value = state.customCarLogoRight;
+        syncLegacyCarLogoFromSides();
+        updateDecorStyleUI();
+        updatePreview();
+        if (state.step === 4) buildRecap();
     }
 
     /* ---------- ÉTAPE 5 : RÉCAP ---------- */
     function buildRecap() {
         const labels = {
             format: { auto: 'Auto 520×110', moto: 'Moto 210×130', '4x4': 'SUV 275×200', usa: 'Collection noire', ww: 'Provisoire WW 520×110', wgarage: 'W garage 520×110' },
-            font:   { officiel: 'Officielle (FE-Schrift)' },
+            font: FONT_LABELS,
             contour:{ none: 'Aucun', int: 'Intérieur', ext: 'Extérieur' }
         };
         const unitPrice = computeUnitPrice();
@@ -1594,7 +2097,17 @@
             ? [
                 ['Format', getProductLabel()],
                 ['Type', 'Décorative'],
+                ['Texte plaque', state.immat || '—'],
+                ['Fond plaque', state.plateBgColor],
+                ['Bandes', getDecorBandModeLabel(state.decorBandMode)],
+                ...(state.decorBandMode !== 'none' ? [
+                    ['Couleur bande gauche', state.leftBandColor],
+                    ['Couleur bande droite', state.rightBandColor],
+                    ...(state.sideEffect !== 'none' ? [['Texture bandes', state.sideEffect === 'carbon' ? 'Carbone' : 'Camouflage']] : [])
+                ] : []),
                 ['Image', getDecorImageLabel()],
+                ['Police', labels.font[state.font]],
+                ['Logos', getCarLogoLabel()],
                 ['Message', state.message || '—'],
                 ['Message atelier', state.decorAdminMessage || '—'],
                 ['Contour', labels.contour[state.contour] + (state.contour !== 'none' ? ' (+2€)' : '')]
@@ -1648,9 +2161,8 @@
     /* ---------- QUANTITÉ ---------- */
     function changeQty(delta) {
         state.quantity = Math.max(1, Math.min(20, state.quantity + delta));
-        if ($.qtyValue) $.qtyValue.textContent = state.quantity;
         if (state.step === 4) buildRecap();
-        updateSummarySidebar();
+        updatePrice();
     }
 
     /* ---------- PRIX ---------- */
@@ -1659,8 +2171,6 @@
     }
 
     function updatePrice() {
-        const p = computeUnitPrice();
-        if ($.unitPrice) $.unitPrice.textContent = formatPrice(p);
         updateLiveSummary();
         updateSummarySidebar();
     }
@@ -1678,37 +2188,90 @@
         p.classList.toggle('provisional-mode', isProvisionalPlate());
 
         // Police
-        p.classList.remove('font-officiel', 'font-classic', 'font-italic');
+        p.classList.remove('font-official1', 'font-official2', 'font-official3', 'font-official4', 'font-officiel', 'font-classic', 'font-italic');
         p.classList.add('font-' + state.font);
 
         // Texte (gestion moto/4x4 sur 2 lignes pour formats carrés)
-        let txt = isDecorative() ? '' : (state.immat || getImmatPlaceholder());
+        let txt = isDecorative() ? getDecorPlateText() : (state.immat || getImmatPlaceholder());
         if (state.format === 'moto' || state.format === '4x4') {
             const parts = splitPlateText(txt);
             txt = parts.first + '\n' + parts.second;
         }
+        const decorTextOnly = isDecorative() && !state.decorImageData && !shouldUseOfficialPlateSvg() && Boolean(state.immat.trim() || state.message.trim());
+        p.classList.toggle('decor-text-only', Boolean(decorTextOnly));
+        if (decorTextOnly && !state.immat.trim() && state.message.trim()) {
+            txt = state.message.trim();
+        }
         $.plaqueText.textContent = txt;
         $.plaqueText.style.whiteSpace = 'pre-line';
-        $.plaqueText.style.display = isDecorative() ? 'none' : '';
+        $.plaqueText.style.display = (isDecorative() && !shouldUseOfficialPlateSvg() && (state.immat.trim() || decorTextOnly)) ? '' : (isDecorative() ? 'none' : '');
         updateDecorImageUI();
 
-        // Message
+        // Message (HTML fallback si pas rendu dans le SVG)
+        const svgPlate = shouldUseOfficialPlateSvg();
+        const messageInSvg = Boolean(state.message.trim()) && svgPlate && (
+            (isDecorative() && (state.immat.trim() || state.decorImageData)) || !isDecorative()
+        );
         $.plaqueMsg.textContent = state.message;
-        $.plaqueMsg.style.display = state.message ? '' : 'none';
+        $.plaqueMsg.style.display = (state.message && !decorTextOnly && !messageInSvg) ? '' : 'none';
         updateOfficialPlateSvg();
 
-        // Bandes bleues : route ou déco avec effet latéral
-        const decorBands = isDecorative() && state.sideEffect !== 'none';
-        $.bandLeft.style.display = (!isDecorative() && !isCollectionPlate() && state.euBand === 'yes') || decorBands ? '' : 'none';
-        $.bandRight.style.display = (isDecorative() && !decorBands) || isCollectionPlate() ? 'none' : '';
+        if (isDecorative()) {
+            const showLeftBand = ['left', 'both'].includes(state.decorBandMode);
+            const showRightBand = ['right', 'both'].includes(state.decorBandMode);
+            $.bandLeft.style.display = showLeftBand ? '' : 'none';
+            $.bandRight.style.display = showRightBand ? '' : 'none';
+            if ($.bandEuLeft) $.bandEuLeft.style.display = 'none';
+            if ($.bandLeft) {
+                $.bandLeft.style.background = state.leftBandColor;
+                $.bandLeft.classList.toggle('band-light', isLightColor(state.leftBandColor));
+            }
+            if ($.bandRight) {
+                $.bandRight.style.background = state.rightBandColor;
+                $.bandRight.classList.toggle('band-light', isLightColor(state.rightBandColor));
+            }
+            $.deptNum.style.display = 'none';
+            if ($.euLetter) $.euLetter.style.display = 'none';
+            if ($.euStars) $.euStars.style.display = 'none';
+            p.style.setProperty('--decor-plate-bg', state.plateBgColor);
+            p.classList.add('decor-custom-bg');
+            const lightBg = isLightColor(state.plateBgColor);
+            p.style.setProperty('--decor-text-color', lightBg ? '#111111' : '#ffffff');
+            p.style.setProperty('--decor-msg-color', lightBg ? '#444444' : '#cccccc');
+            if ($.plaqueMsg) $.plaqueMsg.style.color = lightBg ? '' : '#ddd';
+            applyDecorCarLogoPlacement();
+        } else {
+            p.classList.remove('decor-custom-bg', 'decor-text-only');
+            p.style.removeProperty('--decor-plate-bg');
+            p.style.removeProperty('--decor-text-color');
+            if ($.bandEuLeft) $.bandEuLeft.style.display = '';
+            if ($.euLetter) $.euLetter.style.display = '';
+            if ($.euStars) $.euStars.style.display = '';
+            if ($.bandCarLogoLeft) $.bandCarLogoLeft.hidden = true;
+            if ($.decorLogoSlotLeft) $.decorLogoSlotLeft.hidden = true;
+            if ($.decorLogoSlotRight) $.decorLogoSlotRight.hidden = true;
+            $.deptNum.style.display = '';
 
-        $.euStars.classList.remove('has-car-logo', 'is-custom-text');
-        $.euStars.style.backgroundImage = '';
-        $.euStars.textContent = '';
+            // Bandes bleues : route ou déco avec effet latéral (legacy)
+            const decorBands = false;
+            $.bandLeft.style.display = (!isCollectionPlate() && state.euBand === 'yes') ? '' : 'none';
+            $.bandRight.style.display = isCollectionPlate() ? 'none' : '';
+            if ($.bandLeft) $.bandLeft.style.background = '';
+            if ($.bandRight) $.bandRight.style.background = '';
 
-        // Bande droite (département)
-        $.deptLogo.innerHTML = getRightLogoMarkup();
-        $.deptNum.textContent = state.dept;
+            $.euStars.classList.remove('has-car-logo', 'is-custom-text');
+            $.euStars.style.backgroundImage = '';
+            $.euStars.textContent = '';
+
+            // Bande droite (département)
+            $.deptLogo.innerHTML = getRightLogoMarkup();
+        }
+
+        if (!isDecorative()) {
+            $.deptNum.textContent = state.dept;
+        } else {
+            $.deptNum.textContent = '';
+        }
 
         // Contour
         p.classList.remove('contour-int', 'contour-ext');
@@ -1718,7 +2281,7 @@
         }
 
         p.classList.remove('side-none', 'side-carbon', 'side-camouflage');
-        if (isDecorative() && state.sideEffect !== 'none') {
+        if (isDecorative() && state.sideEffect !== 'none' && state.decorBandMode !== 'none') {
             p.classList.add('side-' + state.sideEffect);
         }
         p.style.setProperty('--plaque-font-scale', state.fontSizeScale);
@@ -1746,21 +2309,16 @@
     /* ---------- AJOUT PANIER ---------- */
     function addToCart() {
         if (isDecorative()) {
-            if (!state.decorImageData) {
-                notify('Veuillez importer votre image pour la plaque décorative', 'error');
-                scrollToCategory('plaque');
-                $.decorImageInput.focus();
-                return;
-            }
-            if (!state.message.trim()) {
-                notify('Veuillez ajouter votre texte pour la plaque décorative', 'error');
-                scrollToCategory('message');
-                $.message.focus();
+            if (!state.decorImageData && !state.immat.trim() && !state.message.trim()) {
+                notify('Saisissez un texte ou importez une image pour votre plaque décorative', 'error');
+                goToStep(1);
+                if (!state.immat.trim()) $.immat.focus();
+                else $.decorImageInput.focus();
                 return;
             }
         } else if (!state.immat) {
             notify('Veuillez renseigner l\'immatriculation', 'error');
-            scrollToCategory('plaque');
+            goToStep(1);
             $.immat.focus();
             return;
         }
@@ -1770,7 +2328,7 @@
                 notify(state.format === 'wgarage'
                     ? 'Format W garage invalide (ex : W-123-AA)'
                     : 'Format WW invalide (ex : WW-123-AA)', 'error');
-                scrollToCategory('plaque');
+                goToStep(1);
                 $.immat.focus();
                 return;
             }
@@ -1782,13 +2340,13 @@
                 notify(state.immatMode === 'fni'
                     ? 'Ancien format invalide (ex : 123 AB 45)'
                     : 'Format SIV invalide (AB-123-CD)', 'error');
-                scrollToCategory('plaque');
+                goToStep(1);
                 $.immat.focus();
                 return;
             }
             if (state.immatMode === 'fni' && !getFniDeptFromImmat(state.immat)) {
                 notify('Département invalide dans l’ancien format', 'error');
-                scrollToCategory('plaque');
+                goToStep(1);
                 $.immat.focus();
                 return;
             }
@@ -1799,7 +2357,7 @@
             id: 'plaque_' + Date.now(),
             type: 'plaque',
             name: isDecorative()
-                ? `Plaque ${state.format.toUpperCase()} Déco - ${state.decorImageName}`
+                ? `Plaque ${state.format.toUpperCase()} Déco - ${state.immat || state.decorImageName || state.message || 'personnalisée'}`
                 : isProvisionalPlate()
                     ? `${getProductLabel()} - ${state.immat}`
                 : isCollectionPlate()
@@ -1809,18 +2367,26 @@
                 format: state.format,
                 homolog: isCollectionPlate() ? 'collection' : (isProvisionalPlate() ? 'provisional' : state.homolog),
                 immatMode: isDecorative() ? '' : state.immatMode,
-                immat: isDecorative() ? '' : state.immat,
+                immat: state.immat,
                 font: state.font,
                 dept: isDecorative() ? '' : state.dept,
                 deptName: isDecorative() ? '' : state.deptName,
                 euBand: isDecorative() ? 'no' : state.euBand,
                 carLogo: state.carLogo,
+                carLogoLeft: isDecorative() ? state.carLogoLeft : '',
+                carLogoRight: isDecorative() ? state.carLogoRight : '',
                 customCarLogoText: state.carLogo === 'custom' ? state.customCarLogoText : '',
+                customCarLogoLeft: isDecorative() && state.carLogoLeft === 'custom' ? state.customCarLogoLeft : '',
+                customCarLogoRight: isDecorative() && state.carLogoRight === 'custom' ? state.customCarLogoRight : '',
                 message: state.message,
                 decorImageName: isDecorative() ? state.decorImageName : '',
                 decorImageData: isDecorative() ? state.decorImageData : '',
                 decorImageSource: isDecorative() ? 'upload' : '',
                 decorAdminMessage: isDecorative() ? state.decorAdminMessage : '',
+                plateBgColor: isDecorative() ? state.plateBgColor : '',
+                decorBandMode: isDecorative() ? state.decorBandMode : '',
+                leftBandColor: isDecorative() ? state.leftBandColor : '',
+                rightBandColor: isDecorative() ? state.rightBandColor : '',
                 contour: state.contour,
                 contourColor: state.contourColor,
                 sideEffect: state.sideEffect,
@@ -1829,19 +2395,25 @@
                 rivetsUnitPrice: state.rivets ? RIVETS_UNIT_PRICE : 0
             },
             price: unitPrice,
-            quantity: state.quantity
+            quantity: Math.max(1, Math.min(20, parseInt(String(state.quantity), 10) || 1))
         };
 
-        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-        cart.push(item);
-        localStorage.setItem('cart', JSON.stringify(cart));
-
-        if (typeof window.updateCartUI === 'function') window.updateCartUI();
+        if (typeof window.pushMacemayCartItem === 'function') {
+            window.pushMacemayCartItem(item);
+        } else {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            cart.push(item);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            if (typeof window.updateCartUI === 'function') window.updateCartUI();
+        }
         if ($.cartBtn) {
             $.cartBtn.classList.add('pulse');
             setTimeout(() => $.cartBtn.classList.remove('pulse'), 400);
         }
-        notify(`Plaque ajoutée au panier (${state.quantity} × ${unitPrice.toFixed(2).replace('.', ',')}€)`, 'success');
+        const qtyAdded = item.quantity;
+        notify(`Plaque ajoutée au panier (${qtyAdded} × ${unitPrice.toFixed(2).replace('.', ',')}€)`, 'success');
+        state.quantity = 1;
+        updatePrice();
     }
 
     function notify(msg, type) {

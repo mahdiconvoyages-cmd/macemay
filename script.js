@@ -621,8 +621,7 @@ function escapeHTML(value) {
         .replace(/'/g, '&#039;');
 }
 
-const NON_PAYABLE_CART_MESSAGE = 'Cet article ne peut pas être payé en ligne. Utilisez la boutique (PayPal) ou le configurateur plaques (Mollie), ou contactez le vendeur.';
-const MIXED_CART_MESSAGE = 'Panier mixte impossible : payez les plaques (Mollie) et la boutique (PayPal) en deux commandes séparées.';
+const NON_PAYABLE_CART_MESSAGE = 'Cet article ne peut pas être payé en ligne. Ajoutez des plaques (configurateur) ou des articles boutique, ou contactez le vendeur.';
 
 function isBoutiqueCartItem(item) {
     if (!item || typeof item !== 'object') return false;
@@ -671,8 +670,9 @@ function getNonPayableCartItems() {
 }
 
 function hasOnlyPayableItems() {
-    const mode = getCartPaymentMode();
-    return mode === 'plaque' || mode === 'boutique';
+    syncCartFromStorage();
+    if (!cart.length) return false;
+    return getNonPayableCartItems().length === 0;
 }
 
 function initCart() {
@@ -703,11 +703,6 @@ function initCart() {
             syncCartFromStorage();
             if (cart.length === 0) {
                 showNotification('Votre panier est vide', 'error');
-                return;
-            }
-            const paymentMode = getCartPaymentMode();
-            if (paymentMode === 'mixed') {
-                showNotification(MIXED_CART_MESSAGE, 'error');
                 return;
             }
             if (!hasOnlyPayableItems()) {
@@ -754,8 +749,12 @@ function updateCartUI() {
     let html = '';
     let total = 0;
     
+    let totalUnits = 0;
+
     cart.forEach((item, index) => {
-        const itemTotal = item.price * item.quantity;
+        const qty = Math.max(1, parseInt(String(item.quantity), 10) || 1);
+        totalUnits += qty;
+        const itemTotal = (Number(item.price) || 0) * qty;
         total += itemTotal;
         const title = item.name || (item.type === 'textile'
             ? 'Article floqué'
@@ -783,7 +782,7 @@ function updateCartUI() {
                     <div class="cart-item-details">${escapeHTML(details)}</div>
                     ${plateMessage ? `<div class="cart-item-details">Message plaque: ${escapeHTML(plateMessage)}</div>` : ''}
                     ${adminMessage ? `<div class="cart-item-details">Message atelier: ${escapeHTML(adminMessage)}</div>` : ''}
-                    <div class="cart-item-qty">Qté: ${escapeHTML(item.quantity)}</div>
+                    <div class="cart-item-qty">Qté: ${escapeHTML(qty)}</div>
                 </div>
                 <div class="cart-item-price">${itemTotal.toFixed(2).replace('.', ',')}€</div>
                 <button class="cart-item-remove" onclick="removeFromCart(${index})">&times;</button>
@@ -793,8 +792,19 @@ function updateCartUI() {
     
     cartItems.innerHTML = html;
     if (cartTotal) cartTotal.textContent = total.toFixed(2).replace('.', ',') + '€';
-    if (cartCount) cartCount.textContent = cart.length.toString();
+    if (cartCount) cartCount.textContent = String(totalUnits);
 }
+
+window.pushMacemayCartItem = function(item) {
+    const normalized = { ...item };
+    normalized.quantity = Math.max(1, Math.min(99, parseInt(String(item.quantity), 10) || 1));
+    normalized.price = Number(item.price) || 0;
+
+    syncCartFromStorage();
+    cart.push(normalized);
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    updateCartUI();
+};
 
 function removeFromCart(index) {
     cart.splice(index, 1);
@@ -812,12 +822,13 @@ window.addToCart = function(item) {
     }
 
     syncCartFromStorage();
-    const currentMode = getCartPaymentMode();
-    if (currentMode && currentMode !== incomingMode) {
-        showNotification(MIXED_CART_MESSAGE, 'error');
+    if (typeof window.pushMacemayCartItem === 'function') {
+        window.pushMacemayCartItem(item);
+        showNotification('Article ajouté au panier !', 'success');
         return;
     }
 
+    item.quantity = Math.max(1, parseInt(String(item.quantity), 10) || 1);
     cart.push(item);
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
     updateCartUI();
@@ -893,6 +904,9 @@ function updatePlaqueWithAnimation(element, newValue) {
    QUANTITY SELECTOR
    ============================================ */
 function initQuantitySelector() {
+    if (document.querySelector('.configurator-mp-layout')) {
+        return;
+    }
     const qtyMinus = document.getElementById('qtyMinus');
     const qtyPlus = document.getElementById('qtyPlus');
     const quantityInput = document.getElementById('quantity');
@@ -1088,18 +1102,18 @@ function initForms() {
 }
 
 /* ============================================
-   PAYMENT MODAL & MOLLIE
+   PAYMENT MODAL & PAYPAL
    ============================================ */
+
+function getPaymentContainer() {
+    return document.getElementById('paypal-payment-container')
+        || document.getElementById('mollie-payment-container');
+}
 
 function openPaymentModal() {
     syncCartFromStorage();
     const modal = document.getElementById('paymentModal');
-    const paymentMode = getCartPaymentMode();
 
-    if (paymentMode === 'mixed') {
-        showNotification(MIXED_CART_MESSAGE, 'error');
-        return;
-    }
     if (!hasOnlyPayableItems()) {
         showNotification(NON_PAYABLE_CART_MESSAGE, 'error');
         return;
@@ -1129,20 +1143,15 @@ function openPaymentModal() {
     }
     
     if (modal) modal.style.display = 'flex';
-    
-    const container = document.getElementById('mollie-payment-container');
+
+    const container = getPaymentContainer();
     if (!container) return;
 
-    if (paymentMode === 'boutique') {
-        if (window.MacemayPaypal && typeof window.MacemayPaypal.renderPayPalButtons === 'function') {
-            window.MacemayPaypal.renderPayPalButtons(container);
-        } else {
-            container.innerHTML = '<p class="payment-error">Ouvrez la page boutique pour payer avec PayPal.</p>';
-        }
-        return;
+    if (window.MacemayPaypal && typeof window.MacemayPaypal.renderPayPalButtons === 'function') {
+        window.MacemayPaypal.renderPayPalButtons(container);
+    } else {
+        container.innerHTML = '<p class="payment-error">PayPal indisponible : rechargez la page ou vérifiez la configuration.</p>';
     }
-
-    renderMolliePaymentButton(container, totalString);
 }
 
 function saveCompletedOrder(paymentData, paymentDetails) {
@@ -1157,7 +1166,7 @@ function saveCompletedOrder(paymentData, paymentDetails) {
         id: orderId,
         date: new Date().toISOString(),
         status: paymentDetails?.status || 'paid',
-        paymentProvider: paymentDetails?.paymentProvider || 'Mollie',
+        paymentProvider: paymentDetails?.paymentProvider || 'PayPal',
         paymentId,
         payerName,
         payerEmail: payer.email_address || '',
@@ -1175,61 +1184,6 @@ function saveCompletedOrder(paymentData, paymentDetails) {
         console.error('Commande non enregistrée', error);
         if (previousCartStorage) localStorage.setItem(CART_STORAGE_KEY, previousCartStorage);
         return false;
-    }
-}
-
-function renderMolliePaymentButton(container, totalPriceString) {
-    container.innerHTML = `
-        <button type="button" class="btn btn-primary btn-large mollie-pay-btn" id="molliePayBtn">
-            Payer ${escapeHTML(totalPriceString)} avec Mollie
-        </button>
-        <p class="payment-secure-copy">Carte bancaire et moyens de paiement activés dans Mollie.</p>
-    `;
-
-    const button = container.querySelector('#molliePayBtn');
-    if (button) button.addEventListener('click', () => startMolliePayment(button));
-}
-
-async function startMolliePayment(button) {
-    syncCartFromStorage();
-    if (!cart.length) {
-        showNotification('Votre panier est vide', 'error');
-        return;
-    }
-    if (getCartPaymentMode() !== 'plaque') {
-        showNotification('Le paiement Mollie concerne uniquement les plaques configurées.', 'error');
-        return;
-    }
-
-    const config = window.MACEMAY_CONFIG || {};
-    const endpoint = config.mollieCreatePaymentUrl || 'api/create-mollie-payment.php';
-    const previousText = button.textContent;
-    button.disabled = true;
-    button.textContent = 'Redirection vers le paiement...';
-
-    try {
-        const response = await fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ items: cart })
-        });
-        const data = await response.json().catch(() => ({}));
-
-        if (!response.ok || !data.checkoutUrl) {
-            throw new Error(data.error || 'Paiement Mollie indisponible');
-        }
-
-        localStorage.setItem('macemay_pending_mollie_order', JSON.stringify({
-            orderId: data.orderId,
-            paymentId: data.paymentId,
-            createdAt: new Date().toISOString()
-        }));
-        window.location.href = data.checkoutUrl;
-    } catch (error) {
-        console.error(error);
-        button.disabled = false;
-        button.textContent = previousText;
-        showNotification('Le paiement Mollie est indisponible pour le moment.', 'error');
     }
 }
 

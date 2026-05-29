@@ -11,15 +11,15 @@
     <main class="payment-return-page">
         <section class="payment-return-card">
             <img src="images/logo-macemay.png" alt="Macemay custom" class="payment-return-logo">
-            <p class="payment-return-kicker">Paiement Mollie</p>
-            <h1 id="paymentReturnTitle">Verification du paiement</h1>
-            <p id="paymentReturnStatus">Nous verifions le statut de votre commande.</p>
-            <a href="index.html" class="btn btn-primary">Retour a l'accueil</a>
+            <p class="payment-return-kicker">Paiement PayPal</p>
+            <h1 id="paymentReturnTitle">Vérification du paiement</h1>
+            <p id="paymentReturnStatus">Nous vérifions le statut de votre commande.</p>
+            <a href="index.html" class="btn btn-primary">Retour à l'accueil</a>
         </section>
     </main>
 
-    <script src="site-config.js?v=macemay-5"></script>
-    <script src="script.js?v=macemay-8"></script>
+    <script src="site-config.js?v=macemay-6"></script>
+    <script src="script.js?v=macemay-10"></script>
     <script>
         (async function () {
             const title = document.getElementById('paymentReturnTitle');
@@ -29,12 +29,12 @@
 
             if (!orderId) {
                 title.textContent = 'Commande introuvable';
-                status.textContent = 'Le retour Mollie ne contient pas de numero de commande.';
+                status.textContent = 'Aucun numéro de commande n\'a été transmis.';
                 return;
             }
 
             const config = window.MACEMAY_CONFIG || {};
-            const endpoint = config.mollieOrderStatusUrl || 'api/order-status.php';
+            const endpoint = config.orderStatusUrl || 'api/order-status.php';
 
             try {
                 const response = await fetch(endpoint + '?order=' + encodeURIComponent(orderId));
@@ -43,18 +43,18 @@
 
                 if (order.status === 'paid') {
                     localStorage.removeItem('cart');
-                    localStorage.removeItem('macemay_pending_mollie_order');
-                    title.textContent = 'Paiement confirme';
-                    status.textContent = 'Votre commande ' + order.id + ' a bien ete enregistree.';
+                    localStorage.removeItem('macemay_pending_paypal_order');
+                    title.textContent = 'Paiement confirmé';
+                    status.textContent = 'Votre commande ' + order.id + ' a bien été enregistrée.';
                     return;
                 }
 
                 title.textContent = 'Paiement en cours de validation';
-                status.textContent = 'Votre commande ' + order.id + ' est en statut "' + order.status + '". Mollie peut necessiter quelques instants pour confirmer le paiement.';
+                status.textContent = 'Votre commande ' + order.id + ' est en statut « ' + order.status + ' ». PayPal peut nécessiter quelques instants pour confirmer le paiement.';
             } catch (error) {
                 console.error(error);
-                title.textContent = 'Verification indisponible';
-                status.textContent = 'Le paiement peut avoir ete accepte, mais le statut de commande n\'est pas encore disponible. Contactez-nous avec la reference ' + orderId + '.';
+                title.textContent = 'Vérification indisponible';
+                status.textContent = 'Le paiement peut avoir été accepté, mais le statut n\'est pas encore disponible. Contactez-nous avec la référence ' + orderId + '.';
             }
         })();
     </script>

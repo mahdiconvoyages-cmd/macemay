@@ -141,7 +141,7 @@ echo ""
 echo "⚙️  4. Vérification API PHP"
 echo "---------------------------"
 
-API_FILES=("api/_bootstrap.php" "api/config.sample.php" "api/create-mollie-payment.php" "api/mollie-webhook.php" "api/create-paypal-order.php" "api/capture-paypal-order.php" "api/order-status.php" "api/admin-orders.php")
+API_FILES=("api/_bootstrap.php" "api/config.sample.php" "api/create-paypal-order.php" "api/capture-paypal-order.php" "api/order-status.php" "api/admin-orders.php")
 
 for file in "${API_FILES[@]}"; do
     if [ -f "$file" ]; then
@@ -208,10 +208,10 @@ if [ -f "site-config.js" ]; then
     if grep -q "MACEMAY_CONFIG" "site-config.js"; then
         log_success "site-config.js contient MACEMAY_CONFIG"
         
-        if grep -q "mollieCreatePaymentUrl.*api/" "site-config.js"; then
-            log_success "URLs Mollie utilisent URLs relatives (bon pour Ionos)"
+        if grep -q "paypalCreateOrderUrl.*api/" "site-config.js"; then
+            log_success "URLs PayPal utilisent URLs relatives (bon pour Ionos)"
         else
-            log_warning "URLs Mollie peuvent être absolues - à vérifier"
+            log_warning "URLs PayPal peuvent être absolues - à vérifier"
         fi
     else
         log_error "site-config.js ne contient pas MACEMAY_CONFIG"

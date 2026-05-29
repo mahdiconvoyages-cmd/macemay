@@ -83,7 +83,7 @@
                                 <rect x="2" y="5" width="20" height="14" rx="2"/>
                                 <path d="M2 10h20"/>
                             </svg>
-                            <span>Paiement plaques via Mollie</span>
+                            <span>Paiement sécurisé via PayPal</span>
                         </div>
                         <div class="trust-item">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -219,7 +219,7 @@
                     <article class="home-process-card">
                         <span>02</span>
                         <h3>Payer les plaques</h3>
-                        <p>Seules les plaques passent au panier et au paiement sécurisé Mollie.</p>
+                        <p>Plaques et boutique : ajoutez au panier puis payez en ligne via PayPal.</p>
                     </article>
                     <article class="home-process-card">
                         <span>03</span>
@@ -288,7 +288,7 @@
                             </svg>
                         </button>
                         <div class="faq-answer">
-                            <p>Le paiement en ligne passe par Mollie pour les plaques et par PayPal pour la boutique. Le floquage et le textile d'entreprise sont traités par contact vendeur.</p>
+                            <p>Le paiement en ligne (plaques et boutique) passe par PayPal. Le floquage et le textile d'entreprise sont traités par contact vendeur.</p>
                         </div>
                     </div>
                 </div>
@@ -322,7 +322,7 @@
                 <p><strong>Quantité:</strong> <span id="summaryQty"></span></p>
                 <p class="summary-total">Total à payer: <span id="summaryTotal"></span></p>
             </div>
-            <div id="mollie-payment-container"></div>
+            <div id="paypal-payment-container" class="paypal-payment-container"></div>
         </div>
     </div>
     <!-- Footer -->
@@ -409,7 +409,8 @@
         </svg>
     </button>
 
-    <script src="script.js?v=macemay-8"></script>
+    <script src="paypal-checkout.js?v=macemay-2"></script>
+    <script src="script.js?v=macemay-10"></script>
     <script src="cookies.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-# Boutique + PayPal (Ionos)
+# Paiement PayPal (plaques + boutique, Ionos)
 
 ## Côté admin (navigateur)
 
@@ -37,8 +37,8 @@ Ne jamais mettre le **Secret** dans `site-config.js`.
 - `api/create-paypal-order.php` — crée la commande PayPal avec le détail des articles et prix.
 - `api/capture-paypal-order.php` — valide le paiement après approbation client.
 
-## Plaques vs boutique
+## Plaques et boutique
 
-- **Plaques** : paiement **Mollie** (inchangé).
-- **Boutique** : paiement **PayPal** uniquement.
-- Impossible de mélanger plaques et boutique dans le même panier.
+- **Plaques** (configurateur) et **boutique** : paiement **PayPal** uniquement.
+- Un même panier peut contenir plaques et articles boutique (un seul paiement PayPal).
+- Mollie n’est plus utilisé sur le site.

@@ -19,8 +19,8 @@ if (!is_array($input)) {
     macemay_json_response(['error' => 'Requete JSON invalide'], 400);
 }
 
-$cart = macemay_normalize_boutique_items(is_array($input['items'] ?? null) ? $input['items'] : []);
-$orderId = 'MB-' . date('Ymd-His') . '-' . strtoupper(bin2hex(random_bytes(3)));
+$cart = macemay_normalize_cart_items(is_array($input['items'] ?? null) ? $input['items'] : []);
+$orderId = 'MC-' . date('Ymd-His') . '-' . strtoupper(bin2hex(random_bytes(3)));
 $currency = strtoupper((string)($config['currency'] ?? 'EUR'));
 
 $order = [

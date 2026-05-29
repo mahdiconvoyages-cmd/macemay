@@ -25,7 +25,7 @@ $publicItems = array_map(static function (array $item): array {
 macemay_json_response([
     'id' => $order['id'] ?? $orderId,
     'status' => $order['status'] ?? 'pending',
-    'paymentProvider' => $order['paymentProvider'] ?? 'Mollie',
+    'paymentProvider' => $order['paymentProvider'] ?? 'PayPal',
     'paymentId' => $order['paymentId'] ?? '',
     'total' => $order['total'] ?? 0,
     'currency' => $order['currency'] ?? 'EUR',
